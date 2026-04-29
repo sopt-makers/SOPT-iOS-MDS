@@ -1,18 +1,16 @@
-
+//
+//  MDSSemanticColor.swift
+//  MDS
+//
+//  Created by 최주리 on 4/30/26.
+//
 
 import UIKit
-
-public enum MDSState {
-    case `default`
-    case pressed
-    case hover
-    case disabled
-}
 
 public struct MDSSemanticColor {
     public struct Background {
         public struct Brand {
-            public static func bold(state: MDSState = .default) -> UIColor {
+            public static func bold(state: SemanticColorState = .default) -> UIColor {
                 switch state {
                 case .default:
                         .blue100
@@ -24,7 +22,7 @@ public struct MDSSemanticColor {
                         .blue100
                 }
             }
-            public static func subtle(state: MDSState) -> UIColor { .blue100 }
+            public static func subtle(state: SemanticColorState) -> UIColor { .blue100 }
             public static let ghost = UIColor.clear
         }
         public struct Neutral { }
