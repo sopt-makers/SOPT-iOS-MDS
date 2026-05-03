@@ -5,9 +5,6 @@
 //  Created by 최주리 on 4/21/26.
 //
 
-
-// 직접 사용하지 않으니 internal로 선언
-
 import UIKit
 
 // MARK: - Base Color (Internal Only)
