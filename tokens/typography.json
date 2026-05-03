@@ -1,0 +1,34 @@
+{
+  "typography": {
+    "weight": {
+      "bold":     { "$value": 700, "$type": "number" },
+      "semibold": { "$value": 600, "$type": "number" },
+      "regular":  { "$value": 400, "$type": "number" }
+    },
+    "size": {
+      "12": { "$value": 12, "$type": "number" },
+      "14": { "$value": 14, "$type": "number" },
+      "16": { "$value": 16, "$type": "number" },
+      "18": { "$value": 18, "$type": "number" },
+      "20": { "$value": 20, "$type": "number" },
+      "24": { "$value": 24, "$type": "number" },
+      "28": { "$value": 28, "$type": "number" },
+      "32": { "$value": 32, "$type": "number" }
+    },
+    "lineHeight": {
+      "16": { "$value": 16, "$type": "number" },
+      "18": { "$value": 18, "$type": "number" },
+      "22": { "$value": 22, "$type": "number" },
+      "24": { "$value": 24, "$type": "number" },
+      "26": { "$value": 26, "$type": "number" },
+      "30": { "$value": 30, "$type": "number" },
+      "36": { "$value": 36, "$type": "number" },
+      "42": { "$value": 42, "$type": "number" },
+      "48": { "$value": 48, "$type": "number" }
+    },
+    "letterSpacing": {
+      "wide":    { "$value": -1.5, "$type": "number" },
+      "default": { "$value": -2.0, "$type": "number" }
+    }
+  }
+}
