@@ -2,7 +2,7 @@ name: Build Design Tokens
 
 on:
   push:
-    branches: [default]
+    branches: [token-sync]
     paths:
       - 'tokens/**'
   workflow_dispatch:
@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: token-sync
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -27,8 +31,85 @@ jobs:
       - name: Build tokens
         run: npm run build
 
+      - name: Generate token diff
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: |
+          node << 'EOF'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+
+          function flattenTokens(obj, prefix = '') {
+            const result = {};
+            for (const [key, val] of Object.entries(obj)) {
+              const path = prefix ? `${prefix}.${key}` : key;
+              if (val && typeof val === 'object' && '$value' in val) {
+                result[path] = String(val['$value']);
+              } else if (val && typeof val === 'object') {
+                Object.assign(result, flattenTokens(val, path));
+              }
+            }
+            return result;
+          }
+
+          function parseTokenFile(content) {
+            try { return flattenTokens(JSON.parse(content)); } catch { return {}; }
+          }
+
+          const beforeSha = process.env.BEFORE_SHA;
+          const afterSha = process.env.AFTER_SHA;
+
+          const changedFiles = execSync(
+            `git diff --name-only ${beforeSha} ${afterSha} -- tokens/`
+          ).toString().trim().split('\n').filter(f => f.endsWith('.json'));
+
+          const rows = [];
+          for (const file of changedFiles) {
+            let before = {}, after = {};
+            try { before = parseTokenFile(execSync(`git show ${beforeSha}:${file}`).toString()); } catch {}
+            try { after = parseTokenFile(fs.readFileSync(file, 'utf-8')); } catch {}
+
+            const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
+            for (const key of keys) {
+              const b = before[key], a = after[key];
+              if (b === a) continue;
+              const status = !b ? '✅ 추가' : !a ? '🗑 삭제' : '✏️ 변경';
+              rows.push(`| ${status} | \`${key}\` | ${b ?? '_(없음)_'} | ${a ?? '_(삭제됨)_'} |`);
+            }
+          }
+
+          const table = rows.length === 0
+            ? '_Swift 파일만 업데이트되었습니다._'
+            : `| 상태 | 토큰 | 이전 값 | 변경 값 |\n|---|---|---|---|\n${rows.join('\n')}`;
+
+          fs.writeFileSync('/tmp/token_diff.md', table);
+          EOF
+
       - name: Commit generated Swift files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '[Style Dictionary] Update generated Swift token files'
           file_pattern: 'MDS/Sources/MDS/Foundation/Base/Base*.swift'
+
+      - name: Create Pull Request if not exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DIFF=$(cat /tmp/token_diff.md)
+          EXISTING=$(gh pr list --head token-sync --base default --state open --json number --jq '.[0].number')
+
+          if [ -z "$EXISTING" ]; then
+            gh pr create \
+              --base default \
+              --head token-sync \
+              --title '[Style Dictionary] 디자인 토큰 업데이트' \
+              --body "## 디자인 토큰 변경 사항
+
+          $DIFF
+
+          ---
+          > 🤖 이 PR은 GitHub Actions에 의해 자동 생성되었습니다."
+          else
+            echo "PR #$EXISTING already exists. Skipping creation."
+          fi

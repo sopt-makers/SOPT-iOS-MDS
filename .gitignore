@@ -61,5 +61,8 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+# macOS
+.DS_Store
+
 # Node.js
 node_modules/
