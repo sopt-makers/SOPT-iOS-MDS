@@ -80,6 +80,52 @@ StyleDictionary.registerFormat({
   }
 });
 
+const fontNameMap = {
+  '700': 'Pretendard-Bold',
+  '600': 'Pretendard-SemiBold',
+  '400': 'Pretendard-Regular',
+};
+
+const swiftWeightMap = {
+  '700': '.bold',
+  '600': '.semibold',
+  '400': '.regular',
+};
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-typography-semantic',
+  format: ({ dictionary }) => {
+    let output = fileHeader('Typography.swift');
+    output += '// MARK: - Semantic Typography\n\n';
+    output += 'public enum Typography {\n';
+
+    for (const token of dictionary.allTokens) {
+      const cat = token.path[1];
+      const num = token.path[2];
+      const name = `${cat}${num}`;
+      const val = token.$value ?? token.value;
+
+      const weightKey = String(toNumber(val.fontWeight));
+      const fontSize = toNumber(val.fontSize);
+      const lineHeight = toNumber(val.lineHeight);
+      const letterSpacingPercent = toNumber(val.letterSpacing);
+      const letterSpacing = parseFloat((fontSize * (letterSpacingPercent / 100)).toFixed(2));
+
+      const fontName = fontNameMap[weightKey] ?? 'Pretendard-Regular';
+      const swiftWeight = swiftWeightMap[weightKey] ?? '.regular';
+
+      output += `    public static let ${name} = MDSFont(\n`;
+      output += `        font: UIFont(name: "${fontName}", size: ${fontSize}) ?? .systemFont(ofSize: ${fontSize}, weight: ${swiftWeight}),\n`;
+      output += `        lineHeight: ${lineHeight},\n`;
+      output += `        letterSpacing: ${letterSpacing}\n`;
+      output += `    )\n`;
+    }
+
+    output += '}\n';
+    return output;
+  }
+});
+
 const sd = new StyleDictionary({
   usesDtcg: true,
   log: { warnings: 'disabled' },
@@ -92,12 +138,23 @@ const sd = new StyleDictionary({
         {
           destination: 'BaseTypography.swift',
           format: 'ios/swift-typography',
-          filter: (token) => token.path[0] === 'typography'
+          filter: (token) => token.path[0] === 'typography' && typeof (token.$value ?? token.value) !== 'object'
         },
         {
           destination: 'BaseSpacing.swift',
           format: 'ios/swift-spacing',
           filter: (token) => token.path[0] === 'spacing'
+        }
+      ]
+    },
+    swiftSemantic: {
+      transforms: [],
+      buildPath: 'MDS/Sources/MDS/Tokens/',
+      files: [
+        {
+          destination: 'Typography.swift',
+          format: 'ios/swift-typography-semantic',
+          filter: (token) => token.path[0] === 'typography' && typeof (token.$value ?? token.value) === 'object'
         }
       ]
     }
