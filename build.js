@@ -2,6 +2,9 @@ import StyleDictionary from 'style-dictionary';
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
+// Strips "px" or "%" units from token values and returns a plain number string.
+const toNumber = (val) => parseFloat(String(val).replace('px', '').replace('%', ''));
+
 const fileHeader = (filename) =>
 `//
 //  ${filename}
@@ -38,7 +41,7 @@ StyleDictionary.registerFormat({
         else if (cat === 'lineHeight') name = `lineHeight${last}`;
         else if (last === 'default') name = '`default`';
         else name = last;
-        output += `        static let ${name}: CGFloat = ${token.$value ?? token.value}\n`;
+        output += `        static let ${name}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
     }
@@ -67,7 +70,7 @@ StyleDictionary.registerFormat({
       output += `    enum ${capitalize(cat)} {\n`;
       for (const token of tokens) {
         const last = token.path[token.path.length - 1];
-        output += `        static let size${last}: CGFloat = ${token.$value ?? token.value}\n`;
+        output += `        static let size${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
     }
