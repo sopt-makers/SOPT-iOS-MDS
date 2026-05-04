@@ -48,6 +48,41 @@ StyleDictionary.registerFormat({
   }
 });
 
+function hexToUIColor(hex) {
+  const r = (parseInt(hex.slice(1, 3), 16) / 255).toFixed(3);
+  const g = (parseInt(hex.slice(3, 5), 16) / 255).toFixed(3);
+  const b = (parseInt(hex.slice(5, 7), 16) / 255).toFixed(3);
+  return `UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1.0)`;
+}
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-base-color',
+  format: ({ dictionary }) => {
+    let output = fileHeader('BaseColor.swift');
+    output += '// MARK: - Base Color (Internal Only)\n\n';
+    output += 'internal extension UIColor {\n';
+
+    const groups = {};
+    for (const token of dictionary.allTokens) {
+      const family = token.path[1]; // gray, blue, etc.
+      if (!groups[family]) groups[family] = [];
+      groups[family].push(token);
+    }
+
+    for (const [family, tokens] of Object.entries(groups)) {
+      output += `\n    // ${capitalize(family)}\n`;
+      for (const token of tokens) {
+        const scale = token.path[token.path.length - 1];
+        const hex = token.$value;
+        output += `    static var ${family}${scale}: UIColor { ${hexToUIColor(hex)} }\n`;
+      }
+    }
+
+    output += '}\n';
+    return output;
+  }
+});
+
 StyleDictionary.registerFormat({
   name: 'ios/swift-spacing',
   format: ({ dictionary }) => {
@@ -95,6 +130,11 @@ const sd = new StyleDictionary({
           destination: 'BaseSpacing.swift',
           format: 'ios/swift-spacing',
           filter: (token) => token.path[0] === 'spacing'
+        },
+        {
+          destination: 'BaseColorGenerated.swift',
+          format: 'ios/swift-base-color',
+          filter: (token) => token.path[0] === 'color' && token.path.length === 3
         }
       ]
     }

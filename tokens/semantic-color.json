@@ -1,0 +1,38 @@
+{
+	"color": {
+		"bg": {
+			"neutral": {
+				"bold": {
+					"$description": "",
+					"$value": "{color.gray.500}",
+					"$type": "color"
+				},
+				"inverse": {
+					"$description": "",
+					"$value": "{color.gray.10}",
+					"$type": "color",
+					"$extensions": {
+						"studio.tokens": {
+							"modify": null
+						}
+					}
+				},
+				"inverse-hover": {
+					"$description": "",
+					"$value": "{color.gray.100}",
+					"$type": "color"
+				},
+				"inverse-pressed": {
+					"$description": "",
+					"$value": "{color.gray.100}",
+					"$type": "color"
+				},
+				"bold-disabled": {
+					"$description": "",
+					"$value": "{color.gray.700}",
+					"$type": "color"
+				}
+			}
+		}
+	}
+}
