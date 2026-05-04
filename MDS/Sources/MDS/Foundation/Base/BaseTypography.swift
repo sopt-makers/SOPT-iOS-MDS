@@ -20,14 +20,14 @@ internal enum BaseTypography {
 
     // MARK: Size
     enum Size {
-        static let size12: CGFloat = 12
+        static let size12: CGFloat = 13
         static let size14: CGFloat = 14
         static let size16: CGFloat = 16
         static let size18: CGFloat = 18
         static let size20: CGFloat = 20
         static let size24: CGFloat = 24
-        static let size28: CGFloat = 28
         static let size32: CGFloat = 32
+        static let size36: CGFloat = 36
     }
 
     // MARK: LineHeight
