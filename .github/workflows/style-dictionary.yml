@@ -60,11 +60,14 @@ jobs:
           const beforeSha = process.env.BEFORE_SHA;
           const afterSha = process.env.AFTER_SHA;
 
-          // force push(rebase) 시 before SHA가 히스토리에 없을 수 있으므로 fallback
+          // force push / workflow_dispatch 시 SHA가 없거나 유효하지 않을 수 있으므로 fallback
           function isValidSha(sha) {
+            if (!sha || sha === '') return false;
             try { execSync(`git cat-file -e ${sha}`); return true; } catch { return false; }
           }
-          const diffBase = isValidSha(beforeSha) ? beforeSha : `${afterSha}^`;
+          const diffBase = isValidSha(beforeSha) ? beforeSha
+            : isValidSha(`${afterSha}^`) ? `${afterSha}^`
+            : 'HEAD^';
 
           const changedFiles = execSync(
             `git diff --name-only ${diffBase} ${afterSha} -- tokens/`
