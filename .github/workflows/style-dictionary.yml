@@ -60,14 +60,20 @@ jobs:
           const beforeSha = process.env.BEFORE_SHA;
           const afterSha = process.env.AFTER_SHA;
 
+          // force push(rebase) 시 before SHA가 히스토리에 없을 수 있으므로 fallback
+          function isValidSha(sha) {
+            try { execSync(`git cat-file -e ${sha}`); return true; } catch { return false; }
+          }
+          const diffBase = isValidSha(beforeSha) ? beforeSha : `${afterSha}^`;
+
           const changedFiles = execSync(
-            `git diff --name-only ${beforeSha} ${afterSha} -- tokens/`
+            `git diff --name-only ${diffBase} ${afterSha} -- tokens/`
           ).toString().trim().split('\n').filter(f => f.endsWith('.json'));
 
           const rows = [];
           for (const file of changedFiles) {
             let before = {}, after = {};
-            try { before = parseTokenFile(execSync(`git show ${beforeSha}:${file}`).toString()); } catch {}
+            try { before = parseTokenFile(execSync(`git show ${diffBase}:${file}`).toString()); } catch {}
             try { after = parseTokenFile(fs.readFileSync(file, 'utf-8')); } catch {}
 
             const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
