@@ -91,6 +91,7 @@ jobs:
         with:
           commit_message: '[Style Dictionary] Update generated Swift token files'
           file_pattern: 'MDS/Sources/MDS/Foundation/Base/Base*.swift MDS/Sources/MDS/Tokens/Typography.swift MDS/Sources/MDS/Tokens/SemanticColor.swift'
+          add_options: '--force'
 
       - name: Create Pull Request if not exists
         env:
