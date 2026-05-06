@@ -5,6 +5,15 @@ const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 // Strips "px" or "%" units from token values and returns a plain number string.
 const toNumber = (val) => parseFloat(String(val).replace('px', '').replace('%', ''));
 
+const hexToRGB = (hex) => {
+  const h = hex.replace('#', '');
+  return {
+    r: (parseInt(h.slice(0, 2), 16) / 255).toFixed(3),
+    g: (parseInt(h.slice(2, 4), 16) / 255).toFixed(3),
+    b: (parseInt(h.slice(4, 6), 16) / 255).toFixed(3),
+  };
+};
+
 const fileHeader = (filename) =>
 `//
 //  ${filename}
@@ -16,6 +25,41 @@ const fileHeader = (filename) =>
 import UIKit
 
 `;
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-color-base',
+  format: ({ dictionary }) => {
+    let output = fileHeader('BaseColor.swift');
+    output += '// MARK: - Base Color (Internal Only)\n\n';
+    output += 'internal enum BaseColor {\n';
+
+    const groups = {};
+    for (const token of dictionary.allTokens) {
+      const colorName = token.path[2]; // gray, blue ...
+      if (!groups[colorName]) groups[colorName] = [];
+      groups[colorName].push(token);
+    }
+
+    for (const [colorName, tokens] of Object.entries(groups)) {
+      output += `\n    // MARK: ${capitalize(colorName)}\n`;
+      output += `    enum ${capitalize(colorName)} {\n`;
+
+      for (const token of tokens) {
+        const colorName = token.path[2];
+        const shade = token.path[token.path.length - 1];
+        const hex = token.$value ?? token.value;
+        const { r, g, b } = hexToRGB(hex);
+
+        output += `        static let ${colorName}${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
+      }
+
+      output += `    }\n`;
+    }
+
+    output += '}\n';
+    return output;
+  }
+});
 
 StyleDictionary.registerFormat({
   name: 'ios/swift-typography',
@@ -129,6 +173,72 @@ StyleDictionary.registerFormat({
   }
 });
 
+const toSwiftName = (str) => {
+  const camel = str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+  return camel === 'default' ? '`default`' : camel;
+};
+
+const resolveBaseColorReference = (value) => {
+  if (typeof value !== 'string') return null;
+
+    const match = value.match(/^\{color\.base\.([^.]+)\.([^.}]+)\}$/);
+    if (!match) return null;
+    const colorName = match[1];
+    const shade = match[2];
+    return `BaseColor.${colorName}${memberName}`;
+};
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-color-semantic',
+  format: ({ dictionary }) => {
+    let output = fileHeader('SemanticColor.swift');
+    output += '// MARK: - Semantic Color\n\n';
+    output += 'public enum SemanticColor {\n';
+
+    const level1Groups = {};
+    for (const token of dictionary.allTokens) {
+      const level1 = token.path[1]; // fg
+      if (!level1Groups[level1]) level1Groups[level1] = [];
+      level1Groups[level1].push(token);
+    }
+
+    for (const [level1, tokens] of Object.entries(level1Groups)) {
+      output += `\n    public enum ${capitalize(level1)} {\n`;
+
+      const level2Groups = {};
+      for (const token of tokens) {
+        const level2 = token.path[2]; // neutral, brand...
+        if (!level2Groups[level2]) level2Groups[level2] = [];
+        level2Groups[level2].push(token);
+      }
+
+      for (const [level2, innerTokens] of Object.entries(level2Groups)) {
+        output += `\n        public enum ${capitalize(level2)} {\n`;
+
+        for (const token of innerTokens) {
+          const variant = token.path[3];
+          const name = toSwiftName(variant);
+
+          const rawValue = token.$value ?? token.value;
+          const baseRef = resolveBaseColorReference(rawValue);
+
+            if (!baseRef) {
+                throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
+            }
+            output += `            public static let ${name} = ${baseRef}\n`;
+        }
+
+        output += `        }\n`;
+      }
+
+      output += `    }\n`;
+    }
+
+    output += '}\n';
+    return output;
+  }
+});
+
 const sd = new StyleDictionary({
   usesDtcg: true,
   log: { warnings: 'disabled' },
@@ -147,6 +257,11 @@ const sd = new StyleDictionary({
           destination: 'BaseSpacing.swift',
           format: 'ios/swift-spacing',
           filter: (token) => token.path[0] === 'spacing'
+        },
+        {
+          destination: 'BaseColor.swift',
+          format: 'ios/swift-color-base',
+          filter: (token) => token.path[0] === 'color' && token.path[1] === 'base'
         }
       ]
     },
@@ -158,6 +273,11 @@ const sd = new StyleDictionary({
           destination: 'Typography.swift',
           format: 'ios/swift-typography-semantic',
           filter: (token) => token.path[0] === 'typography' && typeof (token.$value ?? token.value) === 'object'
+        },
+        {
+          destination: 'SemanticColor.swift',
+          format: 'ios/swift-color-semantic',
+          filter: (token) => token.path[0] === 'color' && token.path[1] !== 'base'
         }
       ]
     }
