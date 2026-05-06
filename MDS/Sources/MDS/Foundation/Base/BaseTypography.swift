@@ -20,27 +20,27 @@ internal enum BaseTypography {
 
     // MARK: Size
     enum Size {
-        static let size12: CGFloat = 12
-        static let size14: CGFloat = 14
-        static let size16: CGFloat = 16
-        static let size18: CGFloat = 18
-        static let size20: CGFloat = 20
-        static let size24: CGFloat = 24
-        static let size28: CGFloat = 28
-        static let size32: CGFloat = 32
+        static let t12: CGFloat = 12
+        static let t14: CGFloat = 14
+        static let t16: CGFloat = 16
+        static let t18: CGFloat = 18
+        static let t20: CGFloat = 20
+        static let t24: CGFloat = 24
+        static let t28: CGFloat = 28
+        static let t32: CGFloat = 32
     }
 
     // MARK: LineHeight
     enum LineHeight {
-        static let lineHeight16: CGFloat = 16
-        static let lineHeight18: CGFloat = 18
-        static let lineHeight22: CGFloat = 22
-        static let lineHeight24: CGFloat = 24
-        static let lineHeight26: CGFloat = 26
-        static let lineHeight30: CGFloat = 30
-        static let lineHeight36: CGFloat = 36
-        static let lineHeight42: CGFloat = 42
-        static let lineHeight48: CGFloat = 48
+        static let t16: CGFloat = 16
+        static let t18: CGFloat = 18
+        static let t22: CGFloat = 22
+        static let t24: CGFloat = 24
+        static let t26: CGFloat = 26
+        static let t30: CGFloat = 30
+        static let t36: CGFloat = 36
+        static let t42: CGFloat = 42
+        static let t48: CGFloat = 48
     }
 
     // MARK: LetterSpacing
