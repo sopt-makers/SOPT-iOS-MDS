@@ -180,13 +180,12 @@ const toSwiftName = (str) => {
 const resolveBaseColorReference = (value) => {
   if (typeof value !== 'string') return null;
 
-  const match = value.match(/\{color\.base\.([^.]+)\.(\d+)\}/);
-  if (!match) return null;
-
-  const color = capitalize(match[1]);
-  const shade = match[2];
-
-  return `BaseColor.${color}.c${shade}`;
+    const match = value.match(/^\{color\.base\.([^.]+)\.([^.}]+)\}$/);
+    if (!match) return null;
+    const color = capitalize(match[1]);
+    const shade = match[2];
+    const memberName = /^\d+$/.test(shade) ? `c${shade}` : toSwiftName(shade);
+    return `BaseColor.${color}.${memberName}`;
 };
 
 StyleDictionary.registerFormat({
@@ -223,7 +222,10 @@ StyleDictionary.registerFormat({
           const rawValue = token.$value ?? token.value;
           const baseRef = resolveBaseColorReference(rawValue);
 
-          output += `            public static let ${name} = ${baseRef}\n`;
+            if (!baseRef) {
+                throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
+            }
+            output += `            public static let ${name} = ${baseRef}\n`;
         }
 
         output += `        }\n`;
