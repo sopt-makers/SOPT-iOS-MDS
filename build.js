@@ -45,11 +45,12 @@ StyleDictionary.registerFormat({
       output += `    enum ${capitalize(colorName)} {\n`;
 
       for (const token of tokens) {
+        const colorName = token.path[2];
         const shade = token.path[token.path.length - 1];
         const hex = token.$value ?? token.value;
         const { r, g, b } = hexToRGB(hex);
 
-        output += `        static let c${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
+        output += `        static let ${colorName}${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
       }
 
       output += `    }\n`;
@@ -182,10 +183,9 @@ const resolveBaseColorReference = (value) => {
 
     const match = value.match(/^\{color\.base\.([^.]+)\.([^.}]+)\}$/);
     if (!match) return null;
-    const color = capitalize(match[1]);
+    const colorName = match[1];
     const shade = match[2];
-    const memberName = /^\d+$/.test(shade) ? `c${shade}` : toSwiftName(shade);
-    return `BaseColor.${color}.${memberName}`;
+    return `BaseColor.${colorName}${memberName}`;
 };
 
 StyleDictionary.registerFormat({
