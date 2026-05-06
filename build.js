@@ -26,7 +26,7 @@ StyleDictionary.registerFormat({
 
     const groups = {};
     for (const token of dictionary.allTokens) {
-      const cat = token.path[1];
+      const cat = token.path[2];
       if (!groups[cat]) groups[cat] = [];
       groups[cat].push(token);
     }
@@ -37,10 +37,13 @@ StyleDictionary.registerFormat({
       for (const token of tokens) {
         const last = token.path[token.path.length - 1];
         let name;
-        if (cat === 'size') name = `size${last}`;
-        else if (cat === 'lineHeight') name = `lineHeight${last}`;
-        else if (last === 'default') name = '`default`';
-        else name = last;
+        if (cat === 'size' || cat === 'lineHeight') {
+          name = last;
+        } else if (last === 'default') {
+          name = '`default`';
+        } else {
+          name = last;
+        }
         output += `        static let ${name}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
@@ -70,7 +73,7 @@ StyleDictionary.registerFormat({
       output += `    enum ${capitalize(cat)} {\n`;
       for (const token of tokens) {
         const last = token.path[token.path.length - 1];
-        output += `        static let size${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
+        output += `        static let ${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
     }
