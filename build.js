@@ -125,6 +125,14 @@ const swiftWeightMap = {
   '400': '.regular',
 };
 
+const refToBaseTypography = (ref) => {
+  const path = ref.slice(1, -1).split('.');
+  // e.g. '{typography.base.size.t32}' → ['typography', 'base', 'size', 't32']
+  const cat = capitalize(path[2]);
+  const key = path[3] === 'default' ? '`default`' : path[3];
+  return `BaseTypography.${cat}.${key}`;
+};
+
 StyleDictionary.registerFormat({
   name: 'ios/swift-typography-semantic',
   format: ({ dictionary }) => {
@@ -137,20 +145,20 @@ StyleDictionary.registerFormat({
       const num = token.path[2];
       const name = `${cat}${num}`;
       const val = token.$value ?? token.value;
+      const orig = token.original.$value ?? token.original.value;
 
       const weightKey = String(toNumber(val.fontWeight));
-      const fontSize = toNumber(val.fontSize);
-      const lineHeight = toNumber(val.lineHeight);
-      const letterSpacingPercent = toNumber(val.letterSpacing);
-      const letterSpacing = parseFloat((fontSize * (letterSpacingPercent / 100)).toFixed(2));
-
       const fontName = fontNameMap[weightKey] ?? 'Pretendard-Regular';
       const swiftWeight = swiftWeightMap[weightKey] ?? '.regular';
 
+      const fontSizeRef = refToBaseTypography(orig.fontSize);
+      const lineHeightRef = refToBaseTypography(orig.lineHeight);
+      const letterSpacingRef = refToBaseTypography(orig.letterSpacing);
+
       output += `    public static let ${name} = MDSFont(\n`;
-      output += `        font: UIFont(name: "${fontName}", size: ${fontSize}) ?? .systemFont(ofSize: ${fontSize}, weight: ${swiftWeight}),\n`;
-      output += `        lineHeight: ${lineHeight},\n`;
-      output += `        letterSpacing: ${letterSpacing}\n`;
+      output += `        font: UIFont(name: "${fontName}", size: ${fontSizeRef}) ?? .systemFont(ofSize: ${fontSizeRef}, weight: ${swiftWeight}),\n`;
+      output += `        lineHeight: ${lineHeightRef},\n`;
+      output += `        letterSpacing: ${fontSizeRef} * (${letterSpacingRef} / 100)\n`;
       output += `    )\n`;
     }
 
