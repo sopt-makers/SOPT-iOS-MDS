@@ -1,0 +1,36 @@
+{
+  "typography": {
+    "base": {
+      "weight": {
+        "bold":     { "$value": 700, "$type": "number" },
+        "semibold": { "$value": 600, "$type": "number" },
+        "regular":  { "$value": 400, "$type": "number" }
+      },
+      "size": {
+        "t12": { "$value": 12, "$type": "number" },
+        "t14": { "$value": 14, "$type": "number" },
+        "t16": { "$value": 16, "$type": "number" },
+        "t18": { "$value": 18, "$type": "number" },
+        "t20": { "$value": 20, "$type": "number" },
+        "t24": { "$value": 24, "$type": "number" },
+        "t28": { "$value": 28, "$type": "number" },
+        "t32": { "$value": 32, "$type": "number" }
+      },
+      "lineHeight": {
+        "t16": { "$value": 16, "$type": "number" },
+        "t18": { "$value": 18, "$type": "number" },
+        "t22": { "$value": 22, "$type": "number" },
+        "t24": { "$value": 24, "$type": "number" },
+        "t26": { "$value": 26, "$type": "number" },
+        "t30": { "$value": 30, "$type": "number" },
+        "t36": { "$value": 36, "$type": "number" },
+        "t42": { "$value": 42, "$type": "number" },
+        "t48": { "$value": 48, "$type": "number" }
+      },
+      "letterSpacing": {
+        "wide":    { "$value": -1.5, "$type": "number" },
+        "default": { "$value": -2.0, "$type": "number" }
+      }
+    }
+  }
+}

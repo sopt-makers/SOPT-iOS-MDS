@@ -1,0 +1,27 @@
+{
+  "spacing": {
+    "base": {
+      "s0":   { "$value": 0,   "$type": "number" },
+      "s2":   { "$value": 2,   "$type": "number" },
+      "s4":   { "$value": 4,   "$type": "number" },
+      "s6":   { "$value": 6,   "$type": "number" },
+      "s8":   { "$value": 8,   "$type": "number" },
+      "s10":  { "$value": 10,  "$type": "number" },
+      "s12":  { "$value": 12,  "$type": "number" },
+      "s14":  { "$value": 14,  "$type": "number" },
+      "s16":  { "$value": 16,  "$type": "number" },
+      "s20":  { "$value": 20,  "$type": "number" },
+      "s24":  { "$value": 24,  "$type": "number" },
+      "s28":  { "$value": 28,  "$type": "number" },
+      "s32":  { "$value": 32,  "$type": "number" },
+      "s36":  { "$value": 36,  "$type": "number" },
+      "s40":  { "$value": 40,  "$type": "number" },
+      "s48":  { "$value": 48,  "$type": "number" },
+      "s64":  { "$value": 64,  "$type": "number" },
+      "s72":  { "$value": 72,  "$type": "number" },
+      "s80":  { "$value": 80,  "$type": "number" },
+      "s120": { "$value": 120, "$type": "number" },
+      "s160": { "$value": 160, "$type": "number" }
+    }
+  }
+}
