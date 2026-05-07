@@ -219,7 +219,7 @@ StyleDictionary.registerFormat({
           const variant = token.path[3];
           const name = toSwiftName(variant);
 
-          const rawValue = token.$value ?? token.value;
+          const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
           const baseRef = resolveBaseColorReference(rawValue);
 
             if (!baseRef) {

@@ -60,6 +60,11 @@ jobs:
           const beforeSha = process.env.BEFORE_SHA;
           const afterSha = process.env.AFTER_SHA;
 
+            if (!beforeSha || !afterSha || beforeSha === '0000000000000000000000000000000000000000') {
+                fs.writeFileSync('/tmp/token_diff.md', '_수동 실행으로 인해 diff를 생성할 수 없습니다._');
+                process.exit(0);
+            }
+            
           const changedFiles = execSync(
             `git diff --name-only ${beforeSha} ${afterSha} -- tokens/`
           ).toString().trim().split('\n').filter(f => f.endsWith('.json'));
