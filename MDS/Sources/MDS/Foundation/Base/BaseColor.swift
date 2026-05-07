@@ -60,7 +60,7 @@ internal enum BaseColor {
     static let red950 = UIColor(red: 0.169, green: 0.098, blue: 0.114, alpha: 1)
     static let green50 = UIColor(red: 0.800, green: 1.000, blue: 0.925, alpha: 1)
     static let green100 = UIColor(red: 0.510, green: 0.965, blue: 0.796, alpha: 1)
-    static let green200 = UIColor(red: 0.510, green: 0.965, blue: 0.796, alpha: 1)
+    static let green200 = UIColor(red: 0.306, green: 0.894, blue: 0.678, alpha: 1)
     static let green300 = UIColor(red: 0.149, green: 0.812, blue: 0.569, alpha: 1)
     static let green400 = UIColor(red: 0.086, green: 0.749, blue: 0.506, alpha: 1)
     static let green500 = UIColor(red: 0.075, green: 0.627, blue: 0.424, alpha: 1)
