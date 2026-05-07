@@ -45,7 +45,8 @@ jobs:
             for (const [key, val] of Object.entries(obj)) {
               const path = prefix ? `${prefix}.${key}` : key;
               if (val && typeof val === 'object' && '$value' in val) {
-                result[path] = String(val['$value']);
+                const v = val['$value'];
+                result[path] = typeof v === 'object' && v !== null ? JSON.stringify(v) : String(v);
               } else if (val && typeof val === 'object') {
                 Object.assign(result, flattenTokens(val, path));
               }
