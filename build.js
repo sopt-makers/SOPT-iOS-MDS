@@ -125,11 +125,18 @@ const swiftWeightMap = {
   '400': '.regular',
 };
 
-const refToBaseTypography = (ref) => {
-  const path = ref.slice(1, -1).split('.');
-  // e.g. '{typography.base.size.t32}' → ['typography', 'base', 'size', 't32']
-  const cat = capitalize(path[2]);
-  const key = path[3] === 'default' ? '`default`' : path[3];
+const TYPOGRAPHY_REF_PATTERN = /^\{typography\.base\.([^.]+)\.([^.}]+)\}$/;
+
+const refToBaseTypography = (ref, tokenPath, fieldName) => {
+  const match = typeof ref === 'string' && ref.match(TYPOGRAPHY_REF_PATTERN);
+  if (!match) {
+    throw new Error(
+      `Token "${tokenPath}": "${fieldName}" 참조가 유효하지 않음 (값: ${JSON.stringify(ref)})\n` +
+      `  예상 형식: {typography.base.<category>.<key>}`
+    );
+  }
+  const cat = capitalize(match[1]);
+  const key = match[2] === 'default' ? '`default`' : match[2];
   return `BaseTypography.${cat}.${key}`;
 };
 
@@ -151,9 +158,10 @@ StyleDictionary.registerFormat({
       const fontName = fontNameMap[weightKey] ?? 'Pretendard-Regular';
       const swiftWeight = swiftWeightMap[weightKey] ?? '.regular';
 
-      const fontSizeRef = refToBaseTypography(orig.fontSize);
-      const lineHeightRef = refToBaseTypography(orig.lineHeight);
-      const letterSpacingRef = refToBaseTypography(orig.letterSpacing);
+      const tokenPath = token.path.join('.');
+      const fontSizeRef = refToBaseTypography(orig.fontSize, tokenPath, 'fontSize');
+      const lineHeightRef = refToBaseTypography(orig.lineHeight, tokenPath, 'lineHeight');
+      const letterSpacingRef = refToBaseTypography(orig.letterSpacing, tokenPath, 'letterSpacing');
 
       output += `    public static let ${name} = MDSFont(\n`;
       output += `        font: UIFont(name: "${fontName}", size: ${fontSizeRef}) ?? .systemFont(ofSize: ${fontSizeRef}, weight: ${swiftWeight}),\n`;
