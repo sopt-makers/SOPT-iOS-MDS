@@ -113,16 +113,10 @@ StyleDictionary.registerFormat({
   }
 });
 
-const fontNameMap = {
-  '700': 'SUIT-Bold',
-  '600': 'SUIT-SemiBold',
-  '400': 'SUIT-Regular',
-};
-
-const swiftWeightMap = {
-  '700': '.bold',
-  '600': '.semibold',
-  '400': '.regular',
+const weightMap = {
+  'bold':     { fontName: 'SUIT-Bold',     swiftWeight: '.bold'     },
+  'semibold': { fontName: 'SUIT-SemiBold', swiftWeight: '.semibold' },
+  'regular':  { fontName: 'SUIT-Regular',  swiftWeight: '.regular'  },
 };
 
 const TYPOGRAPHY_REF_PATTERN = /^\{typography\.base\.([^.]+)\.([^.}]+)\}$/;
@@ -151,12 +145,10 @@ StyleDictionary.registerFormat({
       const cat = token.path[1];
       const num = token.path[2];
       const name = `${cat}${num}`;
-      const val = token.$value ?? token.value;
       const orig = token.original.$value ?? token.original.value;
 
-      const weightKey = String(toNumber(val.fontWeight));
-      const fontName = fontNameMap[weightKey] ?? 'SUIT-Regular';
-      const swiftWeight = swiftWeightMap[weightKey] ?? '.regular';
+      const weightRef = orig.fontWeight?.match(TYPOGRAPHY_REF_PATTERN)?.[2];
+      const { fontName, swiftWeight } = weightMap[weightRef] ?? weightMap['regular'];
 
       const tokenPath = token.path.join('.');
       const fontSizeRef = refToBaseTypography(orig.fontSize, tokenPath, 'fontSize');
