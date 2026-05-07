@@ -14,7 +14,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "MDS"
+            name: "MDS",
+            resources: [
+                .process("Foundation/Resources")
+            ]
         )
     ],
     swiftLanguageModes: [.v6]
