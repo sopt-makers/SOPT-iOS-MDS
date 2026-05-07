@@ -11,73 +11,73 @@ import UIKit
 
 public enum Typography {
     public static let heading1 = MDSFont(
-        font: UIFont(name: "Pretendard-Bold", size: 32) ?? .systemFont(ofSize: 32, weight: .bold),
-        lineHeight: 48,
-        letterSpacing: -0.64
+        font: UIFont(name: "SUIT-Bold", size: BaseTypography.Size.t32) ?? .systemFont(ofSize: BaseTypography.Size.t32, weight: .bold),
+        lineHeight: BaseTypography.LineHeight.t48,
+        letterSpacing: BaseTypography.Size.t32 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let heading2 = MDSFont(
-        font: UIFont(name: "Pretendard-Bold", size: 24) ?? .systemFont(ofSize: 24, weight: .bold),
-        lineHeight: 36,
-        letterSpacing: -0.48
+        font: UIFont(name: "SUIT-Bold", size: BaseTypography.Size.t24) ?? .systemFont(ofSize: BaseTypography.Size.t24, weight: .bold),
+        lineHeight: BaseTypography.LineHeight.t36,
+        letterSpacing: BaseTypography.Size.t24 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let heading3 = MDSFont(
-        font: UIFont(name: "Pretendard-Bold", size: 20) ?? .systemFont(ofSize: 20, weight: .bold),
-        lineHeight: 30,
-        letterSpacing: -0.4
+        font: UIFont(name: "SUIT-Bold", size: BaseTypography.Size.t20) ?? .systemFont(ofSize: BaseTypography.Size.t20, weight: .bold),
+        lineHeight: BaseTypography.LineHeight.t30,
+        letterSpacing: BaseTypography.Size.t20 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let heading4 = MDSFont(
-        font: UIFont(name: "Pretendard-Bold", size: 16) ?? .systemFont(ofSize: 16, weight: .bold),
-        lineHeight: 24,
-        letterSpacing: -0.24
+        font: UIFont(name: "SUIT-Bold", size: BaseTypography.Size.t16) ?? .systemFont(ofSize: BaseTypography.Size.t16, weight: .bold),
+        lineHeight: BaseTypography.LineHeight.t24,
+        letterSpacing: BaseTypography.Size.t16 * (BaseTypography.LetterSpacing.wide / 100)
     )
     public static let title1 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 28) ?? .systemFont(ofSize: 28, weight: .semibold),
-        lineHeight: 42,
-        letterSpacing: -0.56
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t28) ?? .systemFont(ofSize: BaseTypography.Size.t28, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t42,
+        letterSpacing: BaseTypography.Size.t28 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let title2 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 24) ?? .systemFont(ofSize: 24, weight: .semibold),
-        lineHeight: 36,
-        letterSpacing: -0.48
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t24) ?? .systemFont(ofSize: BaseTypography.Size.t24, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t36,
+        letterSpacing: BaseTypography.Size.t24 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let title3 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 20) ?? .systemFont(ofSize: 20, weight: .semibold),
-        lineHeight: 30,
-        letterSpacing: -0.4
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t20) ?? .systemFont(ofSize: BaseTypography.Size.t20, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t30,
+        letterSpacing: BaseTypography.Size.t20 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let title4 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 16) ?? .systemFont(ofSize: 16, weight: .semibold),
-        lineHeight: 24,
-        letterSpacing: -0.24
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t16) ?? .systemFont(ofSize: BaseTypography.Size.t16, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t24,
+        letterSpacing: BaseTypography.Size.t16 * (BaseTypography.LetterSpacing.wide / 100)
     )
     public static let body1 = MDSFont(
-        font: UIFont(name: "Pretendard-Regular", size: 16) ?? .systemFont(ofSize: 16, weight: .regular),
-        lineHeight: 26,
-        letterSpacing: -0.24
+        font: UIFont(name: "SUIT-Regular", size: BaseTypography.Size.t16) ?? .systemFont(ofSize: BaseTypography.Size.t16, weight: .regular),
+        lineHeight: BaseTypography.LineHeight.t26,
+        letterSpacing: BaseTypography.Size.t16 * (BaseTypography.LetterSpacing.wide / 100)
     )
     public static let body2 = MDSFont(
-        font: UIFont(name: "Pretendard-Regular", size: 14) ?? .systemFont(ofSize: 14, weight: .regular),
-        lineHeight: 22,
-        letterSpacing: -0.21
+        font: UIFont(name: "SUIT-Regular", size: BaseTypography.Size.t14) ?? .systemFont(ofSize: BaseTypography.Size.t14, weight: .regular),
+        lineHeight: BaseTypography.LineHeight.t22,
+        letterSpacing: BaseTypography.Size.t14 * (BaseTypography.LetterSpacing.wide / 100)
     )
     public static let label1 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 18) ?? .systemFont(ofSize: 18, weight: .semibold),
-        lineHeight: 24,
-        letterSpacing: -0.36
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t18) ?? .systemFont(ofSize: BaseTypography.Size.t18, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t24,
+        letterSpacing: BaseTypography.Size.t18 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let label2 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 16) ?? .systemFont(ofSize: 16, weight: .semibold),
-        lineHeight: 22,
-        letterSpacing: -0.32
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t16) ?? .systemFont(ofSize: BaseTypography.Size.t16, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t22,
+        letterSpacing: BaseTypography.Size.t16 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let label3 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold),
-        lineHeight: 18,
-        letterSpacing: -0.28
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t14) ?? .systemFont(ofSize: BaseTypography.Size.t14, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t18,
+        letterSpacing: BaseTypography.Size.t14 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let label4 = MDSFont(
-        font: UIFont(name: "Pretendard-SemiBold", size: 12) ?? .systemFont(ofSize: 12, weight: .semibold),
-        lineHeight: 16,
-        letterSpacing: -0.24
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t12) ?? .systemFont(ofSize: BaseTypography.Size.t12, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t16,
+        letterSpacing: BaseTypography.Size.t12 * (BaseTypography.LetterSpacing.`default` / 100)
     )
 }
