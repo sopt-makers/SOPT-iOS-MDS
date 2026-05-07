@@ -1,0 +1,64 @@
+{
+  "color": {
+    "stroke": {
+      "neutral": {
+        "default": {
+          "$value": "{color.base.gray.600}",
+          "$type": "color"
+        },
+        "default-focused": {
+          "$value": "{color.base.gray.200}",
+          "$type": "color"
+        },
+        "default-disabled": {
+          "$value": "{color.base.gray.700}",
+          "$type": "color"
+        },
+        "inverse": {
+          "$value": "{color.base.gray.10}",
+          "$type": "color"
+        },
+        "subtle": {
+          "$value": "{color.base.gray.700}",
+          "$type": "color"
+        },
+        "ghost": {
+          "$value": "{color.base.gray.800}",
+          "$type": "color"
+        }
+      },
+      "brand": {
+        "default": {
+          "$value": "{color.base.orange.400}",
+          "$type": "color"
+        },
+        "subtle": {
+          "$value": "{color.base.orange.600}",
+          "$type": "color"
+        }
+      },
+      "secondary": {
+        "default": {
+          "$value": "{color.base.blue.400}",
+          "$type": "color"
+        },
+        "subtle": {
+          "$value": "{color.base.blue.600}",
+          "$type": "color"
+        }
+      },
+      "information": {
+        "subtle": {
+          "$value": "{color.base.blue.600}",
+          "$type": "color"
+        }
+      },
+      "danger": {
+        "default": {
+          "$value": "{color.base.red.400}",
+          "$type": "color"
+        }
+      }
+    }
+  }
+}
