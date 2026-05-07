@@ -33,31 +33,18 @@ StyleDictionary.registerFormat({
     output += '// MARK: - Base Color (Internal Only)\n\n';
     output += 'internal enum BaseColor {\n';
 
-    const groups = {};
-    for (const token of dictionary.allTokens) {
-      const colorName = token.path[2]; // gray, blue ...
-      if (!groups[colorName]) groups[colorName] = [];
-      groups[colorName].push(token);
+      for (const token of dictionary.allTokens) {
+            const colorName = token.path[2];
+            const shade = token.path[token.path.length - 1];
+            const hex = token.$value ?? token.value;
+            const { r, g, b } = hexToRGB(hex);
+
+            output += `    static let ${colorName}${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
+          }
+
+          output += '}\n';
+          return output;
     }
-
-    for (const [colorName, tokens] of Object.entries(groups)) {
-      output += `\n    // MARK: ${capitalize(colorName)}\n`;
-      output += `    enum ${capitalize(colorName)} {\n`;
-
-      for (const token of tokens) {
-        const shade = token.path[token.path.length - 1];
-        const hex = token.$value ?? token.value;
-        const { r, g, b } = hexToRGB(hex);
-
-        output += `        static let c${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
-      }
-
-      output += `    }\n`;
-    }
-
-    output += '}\n';
-    return output;
-  }
 });
 
 StyleDictionary.registerFormat({
@@ -182,10 +169,9 @@ const resolveBaseColorReference = (value) => {
 
     const match = value.match(/^\{color\.base\.([^.]+)\.([^.}]+)\}$/);
     if (!match) return null;
-    const color = capitalize(match[1]);
+    const colorName = match[1];
     const shade = match[2];
-    const memberName = /^\d+$/.test(shade) ? `c${shade}` : toSwiftName(shade);
-    return `BaseColor.${color}.${memberName}`;
+    return `BaseColor.${colorName}${shade}`;
 };
 
 StyleDictionary.registerFormat({
@@ -219,7 +205,7 @@ StyleDictionary.registerFormat({
           const variant = token.path[3];
           const name = toSwiftName(variant);
 
-          const rawValue = token.$value ?? token.value;
+          const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
           const baseRef = resolveBaseColorReference(rawValue);
 
             if (!baseRef) {
