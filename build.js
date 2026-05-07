@@ -174,6 +174,21 @@ const resolveBaseColorReference = (value) => {
     return `BaseColor.${colorName}${shade}`;
 };
 
+const STATE_SUFFIXES = ['hover', 'pressed', 'disabled', 'focused'];
+const isStateSuffix = (str) => STATE_SUFFIXES.includes(str);
+
+const parseTokenName = (name) => {
+  const parts = name.split('-');
+  const last = parts[parts.length - 1];
+  if (isStateSuffix(last)) {
+    return {
+      base: parts.slice(0, -1).join('-'),
+      state: last,
+    };
+  }
+  return { base: name, state: null };
+};
+
 StyleDictionary.registerFormat({
   name: 'ios/swift-color-semantic',
   format: ({ dictionary }) => {
@@ -183,7 +198,7 @@ StyleDictionary.registerFormat({
 
     const level1Groups = {};
     for (const token of dictionary.allTokens) {
-      const level1 = token.path[1]; // fg
+      const level1 = token.path[1];
       if (!level1Groups[level1]) level1Groups[level1] = [];
       level1Groups[level1].push(token);
     }
@@ -193,7 +208,7 @@ StyleDictionary.registerFormat({
 
       const level2Groups = {};
       for (const token of tokens) {
-        const level2 = token.path[2]; // neutral, brand...
+        const level2 = token.path[2];
         if (!level2Groups[level2]) level2Groups[level2] = [];
         level2Groups[level2].push(token);
       }
@@ -201,17 +216,43 @@ StyleDictionary.registerFormat({
       for (const [level2, innerTokens] of Object.entries(level2Groups)) {
         output += `\n        public enum ${capitalize(level2)} {\n`;
 
+        // base 토큰이랑 state 토큰 분리
+        const baseTokens = [];
+        const stateGroups = {}; // { "default": { hover: token, pressed: token, ... } }
+
         for (const token of innerTokens) {
           const variant = token.path[3];
-          const name = toSwiftName(variant);
+          const { base, state } = parseTokenName(variant);
 
+          if (state) {
+            if (!stateGroups[base]) stateGroups[base] = {};
+            stateGroups[base][state] = token;
+          } else {
+            baseTokens.push(token);
+          }
+        }
+
+        // base static let 먼저
+        for (const token of baseTokens) {
+          const variant = token.path[3];
+          const name = toSwiftName(variant);
           const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
           const baseRef = resolveBaseColorReference(rawValue);
+          if (!baseRef) throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
+          output += `            public static let ${name} = ${baseRef}\n`;
+        }
 
-            if (!baseRef) {
-                throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
-            }
-            output += `            public static let ${name} = ${baseRef}\n`;
+        // state enum
+        for (const [base, states] of Object.entries(stateGroups)) {
+          const enumName = capitalize(toSwiftName(base));
+          output += `\n            public enum ${enumName} {\n`;
+          for (const [state, token] of Object.entries(states)) {
+            const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
+            const baseRef = resolveBaseColorReference(rawValue);
+            if (!baseRef) throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
+            output += `                public static let ${state} = ${baseRef}\n`;
+          }
+          output += `            }\n`;
         }
 
         output += `        }\n`;
