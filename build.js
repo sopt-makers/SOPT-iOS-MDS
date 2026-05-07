@@ -114,9 +114,9 @@ StyleDictionary.registerFormat({
 });
 
 const fontNameMap = {
-  '700': 'Pretendard-Bold',
-  '600': 'Pretendard-SemiBold',
-  '400': 'Pretendard-Regular',
+  '700': 'SUIT-Bold',
+  '600': 'SUIT-SemiBold',
+  '400': 'SUIT-Regular',
 };
 
 const swiftWeightMap = {
@@ -155,7 +155,7 @@ StyleDictionary.registerFormat({
       const orig = token.original.$value ?? token.original.value;
 
       const weightKey = String(toNumber(val.fontWeight));
-      const fontName = fontNameMap[weightKey] ?? 'Pretendard-Regular';
+      const fontName = fontNameMap[weightKey] ?? 'SUIT-Regular';
       const swiftWeight = swiftWeightMap[weightKey] ?? '.regular';
 
       const tokenPath = token.path.join('.');

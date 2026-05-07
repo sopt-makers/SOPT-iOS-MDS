@@ -16,15 +16,15 @@ internal enum FontLoader {
         isRegistered = true
 
         let fontNames = [
-            "Pretendard-Thin",
-            "Pretendard-ExtraLight",
-            "Pretendard-Light",
-            "Pretendard-Regular",
-            "Pretendard-Medium",
-            "Pretendard-SemiBold",
-            "Pretendard-Bold",
-            "Pretendard-ExtraBold",
-            "Pretendard-Black",
+            "SUIT-Thin",
+            "SUIT-ExtraLight",
+            "SUIT-Light",
+            "SUIT-Regular",
+            "SUIT-Medium",
+            "SUIT-SemiBold",
+            "SUIT-Bold",
+            "SUIT-ExtraBold",
+            "SUIT-Heavy",
         ]
 
         fontNames.forEach { name in
