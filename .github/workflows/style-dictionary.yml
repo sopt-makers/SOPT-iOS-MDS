@@ -60,14 +60,27 @@ jobs:
           const beforeSha = process.env.BEFORE_SHA;
           const afterSha = process.env.AFTER_SHA;
 
-          const changedFiles = execSync(
-            `git diff --name-only ${beforeSha} ${afterSha} -- tokens/`
-          ).toString().trim().split('\n').filter(f => f.endsWith('.json'));
+          function isValidSha(sha) {
+            try { execSync(`git cat-file -e ${sha}`); return true; } catch { return false; }
+          }
+
+          function resolveBase(afterSha) {
+            if (beforeSha && isValidSha(beforeSha)) return beforeSha;
+            try {
+              return execSync(`git merge-base ${afterSha} origin/default`).toString().trim();
+            } catch { return null; }
+          }
+
+          const baseSha = resolveBase(afterSha);
+          const changedFiles = baseSha
+            ? execSync(`git diff --name-only ${baseSha} ${afterSha} -- tokens/`)
+                .toString().trim().split('\n').filter(f => f.endsWith('.json'))
+            : [];
 
           const rows = [];
           for (const file of changedFiles) {
             let before = {}, after = {};
-            try { before = parseTokenFile(execSync(`git show ${beforeSha}:${file}`).toString()); } catch {}
+            try { before = parseTokenFile(execSync(`git show ${baseSha}:${file}`).toString()); } catch {}
             try { after = parseTokenFile(fs.readFileSync(file, 'utf-8')); } catch {}
 
             const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
