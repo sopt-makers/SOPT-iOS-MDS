@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       contents: write
       pull-requests: write
@@ -99,6 +99,14 @@ jobs:
 
           fs.writeFileSync('/tmp/token_diff.md', table);
           EOF
+
+      - name: Validate Swift build
+        run: |
+          cd MDS && xcodebuild build \
+            -scheme MDS \
+            -destination 'generic/platform=iOS Simulator' \
+            -skipPackagePluginValidation \
+            | xcpretty || exit 1
 
       - name: Commit generated Swift files
         uses: stefanzweifel/git-auto-commit-action@v5
