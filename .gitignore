@@ -70,6 +70,8 @@ node_modules/
 # Swift Package Manager
 /.build
 /Packages
-.swiftpm/configuration/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.swiftpm/
 .netrc
+
+# Xcode generated workspace
+project.xcworkspace/
