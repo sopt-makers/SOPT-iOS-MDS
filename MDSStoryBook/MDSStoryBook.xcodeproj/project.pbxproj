@@ -362,9 +362,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		CB1940912F97953900451472 /* XCLocalSwiftPackageReference "../../../MDS" */ = {
+		CB1940912F97953900451472 /* XCLocalSwiftPackageReference "../.." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../MDS;
+			relativePath = ../..;
 		};
 /* End XCLocalSwiftPackageReference section */
 
