@@ -62,6 +62,8 @@ extension TokenCategoryViewController: UITableViewDataSource, UITableViewDelegat
             navigationController?.pushViewController(ColorTokenViewController(), animated: true)
         case "Typography":
             navigationController?.pushViewController(TypographyTokenViewController(), animated: true)
+        case "Spacing":
+            navigationController?.pushViewController(SpacingTokenViewController(), animated: true)
         default:
             break
         }
