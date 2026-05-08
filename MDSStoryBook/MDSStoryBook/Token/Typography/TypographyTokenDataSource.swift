@@ -1,0 +1,35 @@
+//
+//  TypographyTokenDataSource.swift
+//  MDSStoryBook
+//
+//  Created by 강윤서 on 5/8/26.
+//
+
+import MDS
+
+enum TypographyTokenDataSource {
+    static let sections: [TypographyTokenSection] = [
+        .init(title: "Heading", items: [
+            .init(name: "heading1", mdsFont: Typography.heading1),
+            .init(name: "heading2", mdsFont: Typography.heading2),
+            .init(name: "heading3", mdsFont: Typography.heading3),
+            .init(name: "heading4", mdsFont: Typography.heading4),
+        ]),
+        .init(title: "Title", items: [
+            .init(name: "title1", mdsFont: Typography.title1),
+            .init(name: "title2", mdsFont: Typography.title2),
+            .init(name: "title3", mdsFont: Typography.title3),
+            .init(name: "title4", mdsFont: Typography.title4),
+        ]),
+        .init(title: "Body", items: [
+            .init(name: "body1", mdsFont: Typography.body1),
+            .init(name: "body2", mdsFont: Typography.body2),
+        ]),
+        .init(title: "Label", items: [
+            .init(name: "label1", mdsFont: Typography.label1),
+            .init(name: "label2", mdsFont: Typography.label2),
+            .init(name: "label3", mdsFont: Typography.label3),
+            .init(name: "label4", mdsFont: Typography.label4),
+        ]),
+    ]
+}
