@@ -8,6 +8,7 @@
 import CoreText
 import Foundation
 
+@MainActor
 internal enum FontLoader {
     private static var isRegistered = false
 
