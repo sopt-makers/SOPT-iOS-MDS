@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B07A7722FAE0ED800634319 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B07A7712FAE0ED800634319 /* MDS */; };
-		CB1940932F97953900451472 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = CB1940922F97953900451472 /* MDS */; };
+		3B2CC1E02FAE22C100AFC4B7 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2CC1DF2FAE22C100AFC4B7 /* MDS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB1940932F97953900451472 /* MDS in Frameworks */,
-				3B07A7722FAE0ED800634319 /* MDS in Frameworks */,
+				3B2CC1E02FAE22C100AFC4B7 /* MDS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +83,7 @@
 			);
 			name = MDSStoryBook;
 			packageProductDependencies = (
-				CB1940922F97953900451472 /* MDS */,
-				3B07A7712FAE0ED800634319 /* MDS */,
+				3B2CC1DF2FAE22C100AFC4B7 /* MDS */,
 			);
 			productName = MDSStoryBook;
 			productReference = CB1940692F9794C300451472 /* MDSStoryBook.app */;
@@ -117,7 +114,7 @@
 			mainGroup = CB1940602F9794C300451472;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3B07A7702FAE0ED800634319 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */,
+				3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB19406A2F9794C300451472 /* Products */;
@@ -365,24 +362,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3B07A7702FAE0ED800634319 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */ = {
+		3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sopt-makers/SOPT-iOS-MDS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.2;
+				minimumVersion = 0.1.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3B07A7712FAE0ED800634319 /* MDS */ = {
+		3B2CC1DF2FAE22C100AFC4B7 /* MDS */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3B07A7702FAE0ED800634319 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */;
-			productName = MDS;
-		};
-		CB1940922F97953900451472 /* MDS */ = {
-			isa = XCSwiftPackageProductDependency;
+			package = 3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */;
 			productName = MDS;
 		};
 /* End XCSwiftPackageProductDependency section */
