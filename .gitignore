@@ -66,3 +66,10 @@ fastlane/test_output
 
 # Node.js
 node_modules/
+
+# Swift Package Manager
+/.build
+/Packages
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc

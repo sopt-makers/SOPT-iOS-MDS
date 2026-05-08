@@ -18,6 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "MDS",
+            path: "MDS/Sources",
             resources: [
                 .process("Foundation/Resources")
             ]

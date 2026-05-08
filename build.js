@@ -281,7 +281,7 @@ const sd = new StyleDictionary({
   platforms: {
     swift: {
       transforms: [],
-      buildPath: 'MDS/Sources/MDS/Foundation/Base/',
+      buildPath: 'MDS/Sources/Foundation/Base/',
       files: [
         {
           destination: 'BaseTypography.swift',
@@ -302,7 +302,7 @@ const sd = new StyleDictionary({
     },
     swiftSemantic: {
       transforms: [],
-      buildPath: 'MDS/Sources/MDS/Tokens/',
+      buildPath: 'MDS/Sources/Tokens/',
       files: [
         {
           destination: 'Typography.swift',
