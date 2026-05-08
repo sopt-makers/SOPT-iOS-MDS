@@ -96,19 +96,47 @@ iOS 앱 디자인 시스템을 웹 브라우저에서 확인하는 것은 실제
 
 ## 워크플로우
 
+### 자동화가 필요했던 이유
+
+1. 토큰을 수정할 때마다 Style Dictionary를 수동으로 실행해 각 플랫폼 코드로 변환해야 해 번거로움
+2. Token Studio 무료 플랜은 기간 제한이 있어 장기 운영이 불가 → Figma 플러그인에서 JSON 추출까지 자동화 필요
+
+### 목표 구조
+
 ```
-Figma 변경
-    ↓
+Figma 플러그인
+    ├── 토큰 등록 (Base / Semantic 분류, 토큰 간 참조)
+    └── JSON으로 변환 → 서버로 전송
+          ↓
+    서버에서 JSON 수신
+    → GitHub API로 브랜치 생성 + PR 자동 오픈
+          ↓
+    개발자 PR 리뷰 & 머지
+          ↓
+    GitHub Actions 실행
+    ├── Style Dictionary: JSON → 각 플랫폼 코드 자동 변환
+    └── 패키지 재배포
+          ↓
+    Slack 알림
+```
+
+### 현재 구조 (서버 연동 전)
+
+```
 tokens/ JSON 수정 후 token-sync 브랜치에 push
     ↓
 GitHub Actions 실행
     ├── Style Dictionary: JSON → Swift 파일 자동 생성
-    ├── xcodebuild: iOS Simulator 빌드 검증 (pipefail 적용)
+    ├── xcodebuild: iOS Simulator 빌드 검증
     └── 변경된 Swift 파일 커밋 + default로 PR 생성
     ↓
 PR 리뷰 & 머지 → 태그 → SPM 배포
 ```
 
-> 향후 Figma 서버 연동 시 `repository_dispatch` 이벤트로 전환 예정.
+> **향후 계획:** Figma 서버 연동 시 `repository_dispatch` 이벤트로 전환 예정.
 > 토큰 변경이 감지될 때만 `token-sync/날짜` 에페머럴 브랜치를 생성해
 > 장기 브랜치의 rebase 비용을 제거합니다.
+
+## 토큰 상세 문서
+
+토큰 구조, 네이밍 컨벤션, Base/Semantic 설계 이유에 대한 자세한 내용은 [토큰 가이드](docs/tokens.md)를 참고하세요.
