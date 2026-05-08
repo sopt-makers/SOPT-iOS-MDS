@@ -5,7 +5,7 @@
 
 import UIKit
 
-public struct MDSFont {
+public struct MDSFont: @unchecked Sendable {
     public let font: UIFont
     public let lineHeight: CGFloat
     public let letterSpacing: CGFloat
