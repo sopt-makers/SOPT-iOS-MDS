@@ -29,7 +29,7 @@ public enum SemanticColor {
                 public static let disabled = BaseColor.gray700
             }
 
-            public enum `default` {
+            public enum Default {
                 public static let hover = BaseColor.gray500
                 public static let pressed = BaseColor.gray500
                 public static let disabled = BaseColor.gray800
@@ -57,7 +57,7 @@ public enum SemanticColor {
             public static let subtle = BaseColor.blue900
             public static let ghost = BaseColor.blue950
 
-            public enum `default` {
+            public enum Default {
                 public static let hover = BaseColor.blue500
                 public static let pressed = BaseColor.blue600
             }
@@ -75,7 +75,7 @@ public enum SemanticColor {
             public static let `default` = BaseColor.red400
             public static let ghost = BaseColor.red950
 
-            public enum `default` {
+            public enum Default {
                 public static let hover = BaseColor.red500
                 public static let pressed = BaseColor.red600
             }
@@ -95,7 +95,7 @@ public enum SemanticColor {
             public static let ghost = BaseColor.gray500
             public static let inverse = BaseColor.gray950
 
-            public enum `default` {
+            public enum Default {
                 public static let disabled = BaseColor.gray500
             }
         }
@@ -140,7 +140,7 @@ public enum SemanticColor {
             public static let subtle = BaseColor.gray700
             public static let ghost = BaseColor.gray800
 
-            public enum `default` {
+            public enum Default {
                 public static let focused = BaseColor.gray200
                 public static let disabled = BaseColor.gray700
             }
