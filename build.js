@@ -88,8 +88,8 @@ StyleDictionary.registerFormat({
   name: 'ios/swift-spacing',
   format: ({ dictionary }) => {
     let output = fileHeader('BaseSpacing.swift');
-    output += '// MARK: - Base Spacing (Internal Only)\n\n';
-    output += 'internal enum BaseSpacing {\n';
+    output += '// MARK: - Base Spacing\n\n';
+    output += 'public enum BaseSpacing {\n';
 
     const groups = {};
     for (const token of dictionary.allTokens) {
@@ -100,10 +100,10 @@ StyleDictionary.registerFormat({
 
     for (const [cat, tokens] of Object.entries(groups)) {
       output += `\n    // MARK: ${capitalize(cat)}\n`;
-      output += `    enum ${capitalize(cat)} {\n`;
+      output += `    public enum ${capitalize(cat)} {\n`;
       for (const token of tokens) {
         const last = token.path[token.path.length - 1];
-        output += `        static let ${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
+        output += `        public static let ${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
     }
