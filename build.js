@@ -252,7 +252,7 @@ StyleDictionary.registerFormat({
 
         // state enum
         for (const [base, states] of Object.entries(stateGroups)) {
-          const enumName = capitalize(toSwiftName(base));
+          const enumName = toSwiftName(capitalize(base));
           output += `\n            public enum ${enumName} {\n`;
           for (const [state, token] of Object.entries(states)) {
             const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
