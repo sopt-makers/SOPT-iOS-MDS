@@ -60,6 +60,8 @@ extension TokenCategoryViewController: UITableViewDataSource, UITableViewDelegat
         switch categories[indexPath.row] {
         case "Color":
             navigationController?.pushViewController(ColorTokenViewController(), animated: true)
+        case "Typography":
+            navigationController?.pushViewController(TypographyTokenViewController(), animated: true)
         default:
             break
         }
