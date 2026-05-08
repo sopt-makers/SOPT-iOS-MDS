@@ -7,32 +7,32 @@
 
 import UIKit
 
-// MARK: - Base Spacing (Internal Only)
+// MARK: - Base Spacing
 
-internal enum BaseSpacing {
+public enum BaseSpacing {
 
     // MARK: Base
-    enum Base {
-        static let s0: CGFloat = 0
-        static let s2: CGFloat = 2
-        static let s4: CGFloat = 4
-        static let s6: CGFloat = 6
-        static let s8: CGFloat = 8
-        static let s10: CGFloat = 10
-        static let s12: CGFloat = 12
-        static let s14: CGFloat = 14
-        static let s16: CGFloat = 16
-        static let s20: CGFloat = 20
-        static let s24: CGFloat = 24
-        static let s28: CGFloat = 28
-        static let s32: CGFloat = 32
-        static let s36: CGFloat = 36
-        static let s40: CGFloat = 40
-        static let s48: CGFloat = 48
-        static let s64: CGFloat = 64
-        static let s72: CGFloat = 72
-        static let s80: CGFloat = 80
-        static let s120: CGFloat = 120
-        static let s160: CGFloat = 160
+    public enum Base {
+        public static let s0: CGFloat = 0
+        public static let s2: CGFloat = 2
+        public static let s4: CGFloat = 4
+        public static let s6: CGFloat = 6
+        public static let s8: CGFloat = 8
+        public static let s10: CGFloat = 10
+        public static let s12: CGFloat = 12
+        public static let s14: CGFloat = 14
+        public static let s16: CGFloat = 16
+        public static let s20: CGFloat = 20
+        public static let s24: CGFloat = 24
+        public static let s28: CGFloat = 28
+        public static let s32: CGFloat = 32
+        public static let s36: CGFloat = 36
+        public static let s40: CGFloat = 40
+        public static let s48: CGFloat = 48
+        public static let s64: CGFloat = 64
+        public static let s72: CGFloat = 72
+        public static let s80: CGFloat = 80
+        public static let s120: CGFloat = 120
+        public static let s160: CGFloat = 160
     }
 }
