@@ -101,7 +101,9 @@ jobs:
           EOF
 
       - name: Validate Swift build
+        shell: bash
         run: |
+          set -o pipefail
           cd MDS && xcodebuild build \
             -scheme MDS \
             -destination 'generic/platform=iOS Simulator' \
