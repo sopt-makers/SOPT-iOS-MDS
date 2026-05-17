@@ -1,0 +1,15 @@
+{
+  "originHash" : "aee4cedb74545e2396e3b8137d1eda7787dd5c92f8274b7170dde014f2101951",
+  "pins" : [
+    {
+      "identity" : "sopt-ios-mds",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sopt-makers/SOPT-iOS-MDS",
+      "state" : {
+        "revision" : "46ffe8cc4448819fe6b09b62af378a9d7bb9683a",
+        "version" : "0.1.4"
+      }
+    }
+  ],
+  "version" : 3
+}
