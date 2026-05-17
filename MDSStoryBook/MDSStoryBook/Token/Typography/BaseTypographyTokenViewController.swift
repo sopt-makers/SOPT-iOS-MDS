@@ -36,14 +36,57 @@ final class BaseTypographyTokenViewController: UIViewController {
 
     private func setupTableView() {
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 80
         tableView.register(TypographyTokenCell.self, forCellReuseIdentifier: TypographyTokenCell.reuseIdentifier)
     }
 
-    private func formattedValue(_ value: CGFloat, category: String) -> String {
+    private func subtitle(_ value: CGFloat, category: String) -> String {
         switch category {
         case "weight":        return "\(Int(value))"
         case "letterSpacing": return "\(value)%"
         default:              return "\(Int(value))px"
+        }
+    }
+
+    private func makePreview(entry: BaseTypographyCatalogEntry, category: String) -> NSAttributedString {
+        let sample = "다람쥐 헌 쳇바퀴에 타고파"
+
+        switch category {
+        case "weight":
+            let weight: UIFont.Weight
+            switch Int(entry.value) {
+            case 700: weight = .bold
+            case 600: weight = .semibold
+            default:  weight = .regular
+            }
+            return NSAttributedString(string: sample, attributes: [
+                .font: UIFont.systemFont(ofSize: 17, weight: weight)
+            ])
+
+        case "size":
+            return NSAttributedString(string: sample, attributes: [
+                .font: UIFont.systemFont(ofSize: entry.value)
+            ])
+
+        case "lineHeight":
+            let style = NSMutableParagraphStyle()
+            style.minimumLineHeight = entry.value
+            style.maximumLineHeight = entry.value
+            return NSAttributedString(string: "다람쥐 헌 쳇바퀴에\n타고파", attributes: [
+                .paragraphStyle: style,
+                .font: UIFont.systemFont(ofSize: 14)
+            ])
+
+        case "letterSpacing":
+            let fontSize: CGFloat = 17
+            return NSAttributedString(string: sample, attributes: [
+                .font: UIFont.systemFont(ofSize: fontSize),
+                .kern: fontSize * (entry.value / 100)
+            ])
+
+        default:
+            return NSAttributedString(string: sample)
         }
     }
 }
@@ -65,7 +108,11 @@ extension BaseTypographyTokenViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: TypographyTokenCell.reuseIdentifier, for: indexPath) as! TypographyTokenCell
         let group = BaseTypographyCatalogData.groups[indexPath.section]
         let entry = group.entries[indexPath.row]
-        cell.configure(name: entry.name, value: formattedValue(entry.value, category: group.categoryName))
+        cell.configure(
+            name: entry.name,
+            subtitle: subtitle(entry.value, category: group.categoryName),
+            preview: makePreview(entry: entry, category: group.categoryName)
+        )
         return cell
     }
 }

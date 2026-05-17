@@ -22,6 +22,7 @@ final class TypographyTokenCell: UITableViewCell {
     private let previewLabel: UILabel = {
         let label = UILabel()
         label.text = "다람쥐 헌 쳇바퀴에 타고파"
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -65,7 +66,16 @@ final class TypographyTokenCell: UITableViewCell {
         nameLabel.text = name
         previewLabel.font = .monospacedSystemFont(ofSize: 20, weight: .regular)
         previewLabel.text = value
+        previewLabel.attributedText = nil
         propsLabel.text = nil
+    }
+
+    func configure(name: String, subtitle: String, preview: NSAttributedString) {
+        nameLabel.text = name
+        previewLabel.text = nil
+        previewLabel.font = nil
+        previewLabel.attributedText = preview
+        propsLabel.text = subtitle
     }
 
     func configure(with item: TypographyTokenItem) {
