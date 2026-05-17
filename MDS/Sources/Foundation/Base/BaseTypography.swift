@@ -7,45 +7,45 @@
 
 import UIKit
 
-// MARK: - Base Typography (Internal Only)
+// MARK: - Base Typography
 
-internal enum BaseTypography {
+@_spi(MDSCatalog) public enum BaseTypography {
 
     // MARK: Weight
-    enum Weight {
-        static let bold: CGFloat = 700
-        static let semibold: CGFloat = 600
-        static let regular: CGFloat = 400
+    public enum Weight {
+        public static let bold: CGFloat = 700
+        public static let semibold: CGFloat = 600
+        public static let regular: CGFloat = 400
     }
 
     // MARK: Size
-    enum Size {
-        static let t12: CGFloat = 12
-        static let t14: CGFloat = 14
-        static let t16: CGFloat = 16
-        static let t18: CGFloat = 18
-        static let t20: CGFloat = 20
-        static let t24: CGFloat = 24
-        static let t28: CGFloat = 28
-        static let t32: CGFloat = 32
+    public enum Size {
+        public static let t12: CGFloat = 12
+        public static let t14: CGFloat = 14
+        public static let t16: CGFloat = 16
+        public static let t18: CGFloat = 18
+        public static let t20: CGFloat = 20
+        public static let t24: CGFloat = 24
+        public static let t28: CGFloat = 28
+        public static let t32: CGFloat = 32
     }
 
     // MARK: LineHeight
-    enum LineHeight {
-        static let t16: CGFloat = 16
-        static let t18: CGFloat = 18
-        static let t22: CGFloat = 22
-        static let t24: CGFloat = 24
-        static let t26: CGFloat = 26
-        static let t30: CGFloat = 30
-        static let t36: CGFloat = 36
-        static let t42: CGFloat = 42
-        static let t48: CGFloat = 48
+    public enum LineHeight {
+        public static let t16: CGFloat = 16
+        public static let t18: CGFloat = 18
+        public static let t22: CGFloat = 22
+        public static let t24: CGFloat = 24
+        public static let t26: CGFloat = 26
+        public static let t30: CGFloat = 30
+        public static let t36: CGFloat = 36
+        public static let t42: CGFloat = 42
+        public static let t48: CGFloat = 48
     }
 
     // MARK: LetterSpacing
-    enum LetterSpacing {
-        static let wide: CGFloat = -1.5
-        static let `default`: CGFloat = -2
+    public enum LetterSpacing {
+        public static let wide: CGFloat = -1.5
+        public static let `default`: CGFloat = -2
     }
 }
