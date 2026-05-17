@@ -30,8 +30,8 @@ StyleDictionary.registerFormat({
   name: 'ios/swift-color-base',
   format: ({ dictionary }) => {
     let output = fileHeader('BaseColor.swift');
-    output += '// MARK: - Base Color (Internal Only)\n\n';
-    output += 'internal enum BaseColor {\n';
+    output += '// MARK: - Base Color\n\n';
+    output += '@_spi(MDSCatalog) public enum BaseColor {\n';
 
       for (const token of dictionary.allTokens) {
             const colorName = token.path[2];
@@ -39,7 +39,7 @@ StyleDictionary.registerFormat({
             const hex = token.$value ?? token.value;
             const { r, g, b } = hexToRGB(hex);
 
-            output += `    static let ${colorName}${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
+            output += `    public static let ${colorName}${shade} = UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1)\n`;
           }
 
           output += '}\n';
@@ -51,8 +51,8 @@ StyleDictionary.registerFormat({
   name: 'ios/swift-typography',
   format: ({ dictionary }) => {
     let output = fileHeader('BaseTypography.swift');
-    output += '// MARK: - Base Typography (Internal Only)\n\n';
-    output += 'internal enum BaseTypography {\n';
+    output += '// MARK: - Base Typography\n\n';
+    output += '@_spi(MDSCatalog) public enum BaseTypography {\n';
 
     const groups = {};
     for (const token of dictionary.allTokens) {
@@ -63,7 +63,7 @@ StyleDictionary.registerFormat({
 
     for (const [cat, tokens] of Object.entries(groups)) {
       output += `\n    // MARK: ${capitalize(cat)}\n`;
-      output += `    enum ${capitalize(cat)} {\n`;
+      output += `    public enum ${capitalize(cat)} {\n`;
       for (const token of tokens) {
         const last = token.path[token.path.length - 1];
         let name;
@@ -74,7 +74,7 @@ StyleDictionary.registerFormat({
         } else {
           name = last;
         }
-        output += `        static let ${name}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
+        output += `        public static let ${name}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
       }
       output += `    }\n`;
     }
@@ -172,6 +172,13 @@ const toSwiftName = (str) => {
   return camel === 'default' ? '`default`' : camel;
 };
 
+const resolveBaseTokenPath = (value) => {
+  if (typeof value !== 'string') return '';
+  const match = value.match(/^\{color\.base\.([^.]+)\.([^.}]+)\}$/);
+  if (!match) return '';
+  return `color.base.${match[1]}.${match[2]}`;
+};
+
 const resolveBaseColorReference = (value) => {
   if (typeof value !== 'string') return null;
 
@@ -196,6 +203,161 @@ const parseTokenName = (name) => {
   }
   return { base: name, state: null };
 };
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-color-base-catalog',
+  format: ({ dictionary }) => {
+    let output = fileHeader('BaseColorCatalogData.swift');
+    output += '// MARK: - Base Color Catalog Data\n\n';
+    output += '@_spi(MDSCatalog) public struct BaseColorCatalogEntry {\n';
+    output += '    public let name: String\n';
+    output += '    public let color: UIColor\n';
+    output += '}\n\n';
+    output += '@_spi(MDSCatalog) public enum BaseColorCatalogData {\n';
+
+    const groups = new Map();
+    for (const token of dictionary.allTokens) {
+      const colorName = token.path[2];
+      const shade = token.path[token.path.length - 1];
+      if (!groups.has(colorName)) groups.set(colorName, []);
+      groups.get(colorName).push(shade);
+    }
+
+    for (const [colorName, shades] of groups.entries()) {
+      output += `    public static let ${colorName}: [BaseColorCatalogEntry] = [\n`;
+      for (const shade of shades) {
+        output += `        .init(name: "${colorName}.${shade}", color: BaseColor.${colorName}${shade}),\n`;
+      }
+      output += `    ]\n`;
+    }
+
+    output += '\n    public static let groups: [(paletteName: String, entries: [BaseColorCatalogEntry])] = [\n';
+    for (const [colorName] of groups.entries()) {
+      output += `        ("${capitalize(colorName)}", ${colorName}),\n`;
+    }
+    output += '    ]\n';
+    output += '}\n';
+    return output;
+  }
+});
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-typography-catalog',
+  format: ({ dictionary }) => {
+    let output = fileHeader('BaseTypographyCatalogData.swift');
+    output += '// MARK: - Base Typography Catalog Data\n\n';
+    output += '@_spi(MDSCatalog) public struct BaseTypographyCatalogEntry {\n';
+    output += '    public let name: String\n';
+    output += '    public let value: CGFloat\n';
+    output += '}\n\n';
+    output += '@_spi(MDSCatalog) public enum BaseTypographyCatalogData {\n';
+
+    const groups = new Map();
+    for (const token of dictionary.allTokens) {
+      const cat = token.path[2];
+      if (!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat).push(token);
+    }
+
+    for (const [cat, tokens] of groups.entries()) {
+      output += `    public static let ${cat}: [BaseTypographyCatalogEntry] = [\n`;
+      for (const token of tokens) {
+        const last = token.path[token.path.length - 1];
+        const swiftKey = last === 'default' ? '`default`' : last;
+        output += `        .init(name: "${last}", value: BaseTypography.${capitalize(cat)}.${swiftKey}),\n`;
+      }
+      output += `    ]\n`;
+    }
+
+    output += '\n    public static let groups: [(categoryName: String, entries: [BaseTypographyCatalogEntry])] = [\n';
+    for (const [cat] of groups.entries()) {
+      output += `        ("${cat}", ${cat}),\n`;
+    }
+    output += '    ]\n';
+    output += '}\n';
+    return output;
+  }
+});
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-color-semantic-datasource',
+  format: ({ dictionary }) => {
+    let output = '//\n//  ColorTokenDataSource.swift\n//  MDSStoryBook\n//\n';
+    output += '//  Auto-generated by Style Dictionary. Do not edit manually.\n//\n\n';
+    output += 'import MDS\n\n';
+    output += 'enum ColorTokenDataSource {\n';
+    output += '    static let sections: [ColorTokenSection] = [\n';
+
+    const level1Map = new Map();
+    for (const token of dictionary.allTokens) {
+      const level1 = token.path[1];
+      const level2 = token.path[2];
+      const variant = token.path[3];
+      if (!level1Map.has(level1)) level1Map.set(level1, new Map());
+      const level2Map = level1Map.get(level1);
+      if (!level2Map.has(level2)) level2Map.set(level2, { base: [], state: [] });
+
+      const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
+      const baseTokenPath = resolveBaseTokenPath(rawValue);
+      const { base, state } = parseTokenName(variant);
+      const level1Cap = capitalize(level1);
+      const level2Cap = capitalize(level2);
+
+      if (state) {
+        const swiftRef = `SemanticColor.${level1Cap}.${level2Cap}.${toSwiftName(capitalize(base))}.${state}`;
+        level2Map.get(level2).state.push({ displayName: `${base} · ${state}`, swiftRef, baseTokenPath });
+      } else {
+        const swiftRef = `SemanticColor.${level1Cap}.${level2Cap}.${toSwiftName(base)}`;
+        level2Map.get(level2).base.push({ displayName: base, swiftRef, baseTokenPath });
+      }
+    }
+
+    for (const [level1, level2Map] of level1Map.entries()) {
+      const level1Cap = capitalize(level1);
+      for (const [level2, { base, state }] of level2Map.entries()) {
+        const level2Cap = capitalize(level2);
+        output += `        ColorTokenSection(title: "${level1Cap} / ${level2Cap}", items: [\n`;
+        for (const item of [...base, ...state]) {
+          output += `            ColorTokenItem(name: "${item.displayName}", color: ${item.swiftRef}, baseTokenPath: "${item.baseTokenPath}"),\n`;
+        }
+        output += `        ]),\n`;
+      }
+    }
+
+    output += '    ]\n}\n';
+    return output;
+  }
+});
+
+StyleDictionary.registerFormat({
+  name: 'ios/swift-typography-semantic-datasource',
+  format: ({ dictionary }) => {
+    let output = '//\n//  TypographyTokenDataSource.swift\n//  MDSStoryBook\n//\n';
+    output += '//  Auto-generated by Style Dictionary. Do not edit manually.\n//\n\n';
+    output += 'import MDS\n\n';
+    output += 'enum TypographyTokenDataSource {\n';
+    output += '    static let sections: [TypographyTokenSection] = [\n';
+
+    const groups = new Map();
+    for (const token of dictionary.allTokens) {
+      const cat = token.path[1];
+      const num = token.path[2];
+      if (!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat).push(num);
+    }
+
+    for (const [cat, nums] of groups.entries()) {
+      output += `        .init(title: "${capitalize(cat)}", items: [\n`;
+      for (const num of nums) {
+        output += `            .init(name: "${cat}${num}", mdsFont: Typography.${cat}${num}),\n`;
+      }
+      output += `        ]),\n`;
+    }
+
+    output += '    ]\n}\n';
+    return output;
+  }
+});
 
 StyleDictionary.registerFormat({
   name: 'ios/swift-color-semantic',
@@ -300,6 +462,44 @@ const sd = new StyleDictionary({
         }
       ]
     },
+    swiftCatalog: {
+      transforms: [],
+      buildPath: 'MDS/Sources/Catalog/',
+      files: [
+        {
+          destination: 'BaseColorCatalogData.swift',
+          format: 'ios/swift-color-base-catalog',
+          filter: (token) => token.path[0] === 'color' && token.path[1] === 'base'
+        },
+        {
+          destination: 'BaseTypographyCatalogData.swift',
+          format: 'ios/swift-typography-catalog',
+          filter: (token) => token.path[0] === 'typography' && typeof (token.$value ?? token.value) !== 'object'
+        }
+      ]
+    },
+    swiftStoryBook: {
+      transforms: [],
+      buildPath: 'MDSStoryBook/MDSStoryBook/Token/Color/',
+      files: [
+        {
+          destination: 'ColorTokenDataSource.swift',
+          format: 'ios/swift-color-semantic-datasource',
+          filter: (token) => token.path[0] === 'color' && token.path[1] !== 'base'
+        }
+      ]
+    },
+    swiftStoryBookTypography: {
+      transforms: [],
+      buildPath: 'MDSStoryBook/MDSStoryBook/Token/Typography/',
+      files: [
+        {
+          destination: 'TypographyTokenDataSource.swift',
+          format: 'ios/swift-typography-semantic-datasource',
+          filter: (token) => token.path[0] === 'typography' && typeof (token.$value ?? token.value) === 'object'
+        }
+      ]
+    },
     swiftSemantic: {
       transforms: [],
       buildPath: 'MDS/Sources/Tokens/',
@@ -315,7 +515,7 @@ const sd = new StyleDictionary({
           filter: (token) => token.path[0] === 'color' && token.path[1] !== 'base'
         }
       ]
-    }
+    },
   }
 });
 
