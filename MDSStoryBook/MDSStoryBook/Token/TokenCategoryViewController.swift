@@ -8,7 +8,7 @@
 import UIKit
 
 final class TokenCategoryViewController: UIViewController {
-    private let categories = ["Color", "Typography", "Spacing"]
+    private let categories = ["Color", "Typography", "Spacing", "Base Color", "Base Typography"]
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -64,6 +64,10 @@ extension TokenCategoryViewController: UITableViewDataSource, UITableViewDelegat
             navigationController?.pushViewController(TypographyTokenViewController(), animated: true)
         case "Spacing":
             navigationController?.pushViewController(SpacingTokenViewController(), animated: true)
+        case "Base Color":
+            navigationController?.pushViewController(BaseColorTokenViewController(), animated: true)
+        case "Base Typography":
+            navigationController?.pushViewController(BaseTypographyTokenViewController(), animated: true)
         default:
             break
         }
