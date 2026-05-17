@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - Base Typography Catalog Data
 
-@_spi(MDSCatalog) public struct BaseTypographyCatalogEntry {
+@_spi(MDSCatalog) public struct BaseTypographyCatalogEntry: Sendable {
     public let name: String
     public let value: CGFloat
 }

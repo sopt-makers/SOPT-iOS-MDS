@@ -209,7 +209,7 @@ StyleDictionary.registerFormat({
   format: ({ dictionary }) => {
     let output = fileHeader('BaseColorCatalogData.swift');
     output += '// MARK: - Base Color Catalog Data\n\n';
-    output += '@_spi(MDSCatalog) public struct BaseColorCatalogEntry {\n';
+    output += '@_spi(MDSCatalog) public struct BaseColorCatalogEntry: @unchecked Sendable {\n';
     output += '    public let name: String\n';
     output += '    public let color: UIColor\n';
     output += '}\n\n';
@@ -246,7 +246,7 @@ StyleDictionary.registerFormat({
   format: ({ dictionary }) => {
     let output = fileHeader('BaseTypographyCatalogData.swift');
     output += '// MARK: - Base Typography Catalog Data\n\n';
-    output += '@_spi(MDSCatalog) public struct BaseTypographyCatalogEntry {\n';
+    output += '@_spi(MDSCatalog) public struct BaseTypographyCatalogEntry: Sendable {\n';
     output += '    public let name: String\n';
     output += '    public let value: CGFloat\n';
     output += '}\n\n';

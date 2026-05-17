@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - Base Color Catalog Data
 
-@_spi(MDSCatalog) public struct BaseColorCatalogEntry {
+@_spi(MDSCatalog) public struct BaseColorCatalogEntry: @unchecked Sendable {
     public let name: String
     public let color: UIColor
 }
