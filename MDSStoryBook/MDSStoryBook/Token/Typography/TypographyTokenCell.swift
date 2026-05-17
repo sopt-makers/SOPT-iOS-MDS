@@ -61,6 +61,13 @@ final class TypographyTokenCell: UITableViewCell {
         ])
     }
 
+    func configure(name: String, value: String) {
+        nameLabel.text = name
+        previewLabel.font = .monospacedSystemFont(ofSize: 20, weight: .regular)
+        previewLabel.text = value
+        propsLabel.text = nil
+    }
+
     func configure(with item: TypographyTokenItem) {
         nameLabel.text = item.name
 
@@ -71,10 +78,14 @@ final class TypographyTokenCell: UITableViewCell {
         let letterSpacingPercent = mdsFont.font.pointSize > 0
             ? mdsFont.letterSpacing / mdsFont.font.pointSize * 100
             : 0
+        let weightName = (mdsFont.font.fontDescriptor.object(forKey: .face) as? String)
+            ?? mdsFont.font.fontName.components(separatedBy: "-").last
+            ?? ""
 
         propsLabel.text = String(
-            format: "size: %.0fpx   lineHeight: %.0fpx\nletterSpacing: %.0f%%",
+            format: "size: %.0fpx   weight: %@   lineHeight: %.0fpx\nletterSpacing: %.0f%%",
             mdsFont.font.pointSize,
+            weightName,
             mdsFont.lineHeight,
             letterSpacingPercent
         )

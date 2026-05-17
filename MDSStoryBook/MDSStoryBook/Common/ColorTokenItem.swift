@@ -10,6 +10,7 @@ import UIKit
 struct ColorTokenItem {
     let name: String
     let color: UIColor
+    let baseTokenPath: String
 }
 
 struct ColorTokenSection {

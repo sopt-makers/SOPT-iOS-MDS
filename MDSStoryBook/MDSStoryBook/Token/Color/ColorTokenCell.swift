@@ -26,9 +26,9 @@ final class ColorTokenCell: UITableViewCell {
         return label
     }()
 
-    private let hexLabel: UILabel = {
+    private let tokenPathLabel: UILabel = {
         let label = UILabel()
-        label.font = .monospacedSystemFont(ofSize: 13, weight: .regular)
+        label.font = .monospacedSystemFont(ofSize: 11, weight: .regular)
         label.textColor = .secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -42,7 +42,7 @@ final class ColorTokenCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 
     private func setupLayout() {
-        [swatchView, nameLabel, hexLabel].forEach { contentView.addSubview($0) }
+        [swatchView, nameLabel, tokenPathLabel].forEach { contentView.addSubview($0) }
 
         NSLayoutConstraint.activate([
             swatchView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -52,16 +52,16 @@ final class ColorTokenCell: UITableViewCell {
 
             nameLabel.leadingAnchor.constraint(equalTo: swatchView.trailingAnchor, constant: 12),
             nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: hexLabel.leadingAnchor, constant: -8),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: tokenPathLabel.leadingAnchor, constant: -8),
 
-            hexLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            hexLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            tokenPathLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            tokenPathLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
     func configure(with item: ColorTokenItem) {
         swatchView.backgroundColor = item.color
         nameLabel.text = item.name
-        hexLabel.text = item.color.hexString
+        tokenPathLabel.text = item.baseTokenPath
     }
 }
