@@ -1,15 +1,14 @@
 //
-//  SpacingTokenViewController.swift
+//  BaseColorTokenViewController.swift
 //  MDSStoryBook
 //
-//  Created by 강윤서 on 5/8/26.
+//  Created by 강윤서 on 5/17/26.
 //
 
 import UIKit
-import MDS
+@_spi(MDSCatalog) import MDS
 
-final class SpacingTokenViewController: UIViewController {
-    private let items = SpacingTokenDataSource.items
+final class BaseColorTokenViewController: UIViewController {
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -20,7 +19,7 @@ final class SpacingTokenViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Spacing"
+        title = "Base Color"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
@@ -38,19 +37,27 @@ final class SpacingTokenViewController: UIViewController {
 
     private func setupTableView() {
         tableView.dataSource = self
-        tableView.register(SpacingTokenCell.self, forCellReuseIdentifier: SpacingTokenCell.reuseIdentifier)
+        tableView.register(ColorTokenCell.self, forCellReuseIdentifier: ColorTokenCell.reuseIdentifier)
     }
 }
 
-extension SpacingTokenViewController: UITableViewDataSource {
+extension BaseColorTokenViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        BaseColorCatalogData.groups.count
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        BaseColorCatalogData.groups[section].paletteName
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
+        BaseColorCatalogData.groups[section].entries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SpacingTokenCell.reuseIdentifier, for: indexPath) as! SpacingTokenCell
-        let item = items[indexPath.row]
-        cell.configure(name: item.name, value: item.value, maxValue: SpacingTokenDataSource.items.last?.value ?? 0)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ColorTokenCell.reuseIdentifier, for: indexPath) as! ColorTokenCell
+        let entry = BaseColorCatalogData.groups[indexPath.section].entries[indexPath.row]
+        cell.configure(with: ColorTokenItem(name: entry.name, color: entry.color, baseTokenPath: ""))
         return cell
     }
 }

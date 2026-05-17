@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B2CC1E02FAE22C100AFC4B7 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B2CC1DF2FAE22C100AFC4B7 /* MDS */; };
+		3B4B68342FB9B9670042AAA5 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B4B68332FB9B9670042AAA5 /* MDS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B2CC1E02FAE22C100AFC4B7 /* MDS in Frameworks */,
+				3B4B68342FB9B9670042AAA5 /* MDS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = MDSStoryBook;
 			packageProductDependencies = (
-				3B2CC1DF2FAE22C100AFC4B7 /* MDS */,
+				3B4B68332FB9B9670042AAA5 /* MDS */,
 			);
 			productName = MDSStoryBook;
 			productReference = CB1940692F9794C300451472 /* MDSStoryBook.app */;
@@ -114,7 +114,7 @@
 			mainGroup = CB1940602F9794C300451472;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */,
+				3B4B68322FB9B9670042AAA5 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB19406A2F9794C300451472 /* Products */;
@@ -154,7 +154,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95YWTT5L8K;
+				DEVELOPMENT_TEAM = CQJ9UKUU35;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MDSStoryBook/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -190,7 +190,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95YWTT5L8K;
+				DEVELOPMENT_TEAM = CQJ9UKUU35;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MDSStoryBook/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -362,20 +362,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */ = {
+		3B4B68322FB9B9670042AAA5 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sopt-makers/SOPT-iOS-MDS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
+				minimumVersion = 0.1.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3B2CC1DF2FAE22C100AFC4B7 /* MDS */ = {
+		3B4B68332FB9B9670042AAA5 /* MDS */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3B2CC1DE2FAE22C100AFC4B7 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */;
+			package = 3B4B68322FB9B9670042AAA5 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */;
 			productName = MDS;
 		};
 /* End XCSwiftPackageProductDependency section */
