@@ -138,6 +138,24 @@
             "opacity": 0.8
           }
         }
+      },
+      "layer": {
+        "basement": {
+          "$value": "{color.base.gray.950}",
+          "$type": "color"
+        },
+        "basement-hover": {
+          "$value": "{color.base.gray.800}",
+          "$type": "color"
+        },
+        "default": {
+          "$value": "{color.base.gray.900}",
+          "$type": "color"
+        },
+        "default-hover": {
+          "$value": "{color.base.gray.800}",
+          "$type": "color"
+        }
       }
     }
   }
