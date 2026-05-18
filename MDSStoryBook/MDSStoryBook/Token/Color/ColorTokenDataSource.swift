@@ -53,6 +53,12 @@ enum ColorTokenDataSource {
         ColorTokenSection(title: "Bg / Dim", items: [
             ColorTokenItem(name: "default", color: SemanticColor.Bg.Dim.`default`, baseTokenPath: "color.base.gray.950"),
         ]),
+        ColorTokenSection(title: "Bg / Layer", items: [
+            ColorTokenItem(name: "basement", color: SemanticColor.Bg.Layer.basement, baseTokenPath: "color.base.gray.950"),
+            ColorTokenItem(name: "default", color: SemanticColor.Bg.Layer.`default`, baseTokenPath: "color.base.gray.900"),
+            ColorTokenItem(name: "basement · hover", color: SemanticColor.Bg.Layer.Basement.hover, baseTokenPath: "color.base.gray.800"),
+            ColorTokenItem(name: "default · hover", color: SemanticColor.Bg.Layer.Default.hover, baseTokenPath: "color.base.gray.800"),
+        ]),
         ColorTokenSection(title: "Fg / Neutral", items: [
             ColorTokenItem(name: "bold", color: SemanticColor.Fg.Neutral.bold, baseTokenPath: "color.base.gray.10"),
             ColorTokenItem(name: "default", color: SemanticColor.Fg.Neutral.`default`, baseTokenPath: "color.base.gray.100"),
