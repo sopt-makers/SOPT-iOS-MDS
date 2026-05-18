@@ -1,14 +1,12 @@
 //
-//  HomeViewController.swift
+//  ComponentCategoryViewController.swift
 //  MDSStoryBook
-//
-//  Created by 강윤서 on 5/8/26.
 //
 
 import UIKit
 
-final class HomeViewController: UIViewController {
-    private let items = ["Token", "Component"]
+final class ComponentCategoryViewController: UIViewController {
+    private let categories = ["Chip", "Tag"]
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -19,7 +17,7 @@ final class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "MDS Catalog"
+        title = "Component"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
@@ -38,30 +36,28 @@ final class HomeViewController: UIViewController {
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HomeCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CategoryCell")
     }
 }
 
-extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
+extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
+        categories.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "HomeCell", for: indexPath)
-        cell = UITableViewCell(style: .default, reuseIdentifier: "HomeCell")
-        cell.textLabel?.text = items[indexPath.row]
+        var cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        cell = UITableViewCell(style: .default, reuseIdentifier: "CategoryCell")
+        cell.textLabel?.text = categories[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch items[indexPath.row] {
-        case "Token":
-            navigationController?.pushViewController(TokenCategoryViewController(), animated: true)
-        case "Component":
-            navigationController?.pushViewController(ComponentCategoryViewController(), animated: true)
+        switch categories[indexPath.row] {
+        case "Chip":
+            navigationController?.pushViewController(ChipViewController(), animated: true)
         default:
             break
         }
