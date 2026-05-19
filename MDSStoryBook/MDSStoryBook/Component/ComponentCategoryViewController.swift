@@ -6,7 +6,7 @@
 import UIKit
 
 final class ComponentCategoryViewController: UIViewController {
-    private let categories = ["Tag"]
+    private let categories = ["Chip", "Tag"]
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -56,6 +56,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
+        case "Chip":
+            navigationController?.pushViewController(ChipViewController(), animated: true)
         case "Tag":
             navigationController?.pushViewController(TagViewController(), animated: true)
         default:
