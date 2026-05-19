@@ -84,6 +84,19 @@ public enum SemanticColor {
         public enum Dim {
             public static let `default` = BaseColor.gray950
         }
+
+        public enum Layer {
+            public static let basement = BaseColor.gray950
+            public static let `default` = BaseColor.gray900
+
+            public enum Basement {
+                public static let hover = BaseColor.gray800
+            }
+
+            public enum Default {
+                public static let hover = BaseColor.gray800
+            }
+        }
     }
 
     public enum Fg {

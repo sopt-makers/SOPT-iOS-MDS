@@ -114,7 +114,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '[Style Dictionary] Update generated Swift token files'
-          file_pattern: 'MDS/Sources/Foundation/Base/Base*.swift MDS/Sources/Tokens/Typography.swift MDS/Sources/Tokens/SemanticColor.swift'
+          file_pattern: 'MDS/Sources/Foundation/Base/Base*.swift MDS/Sources/Tokens/Typography.swift MDS/Sources/Tokens/SemanticColor.swift MDSStoryBook/MDSStoryBook/Token/Color/ColorTokenDataSource.swift MDSStoryBook/MDSStoryBook/Token/Typography/TypographyTokenDataSource.swift'
 
       - name: Create Pull Request if not exists
         env:

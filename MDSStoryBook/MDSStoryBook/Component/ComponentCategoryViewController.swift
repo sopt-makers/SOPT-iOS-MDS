@@ -58,6 +58,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
         switch categories[indexPath.row] {
         case "Chip":
             navigationController?.pushViewController(ChipViewController(), animated: true)
+        case "Tag":
+            navigationController?.pushViewController(TagViewController(), animated: true)
         default:
             break
         }
