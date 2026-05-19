@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B50BC0D2FBB197000972B89 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B50BC0C2FBB197000972B89 /* MDS */; };
+		3B5857642FBC3BFB00AE72A8 /* MDS in Frameworks */ = {isa = PBXBuildFile; productRef = 3B5857632FBC3BFB00AE72A8 /* MDS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B50BC0D2FBB197000972B89 /* MDS in Frameworks */,
+				3B5857642FBC3BFB00AE72A8 /* MDS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = MDSStoryBook;
 			packageProductDependencies = (
-				3B50BC0C2FBB197000972B89 /* MDS */,
+				3B5857632FBC3BFB00AE72A8 /* MDS */,
 			);
 			productName = MDSStoryBook;
 			productReference = CB1940692F9794C300451472 /* MDSStoryBook.app */;
@@ -114,7 +114,7 @@
 			mainGroup = CB1940602F9794C300451472;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3B50BC0B2FBB197000972B89 /* XCLocalSwiftPackageReference "../../SOPT-iOS-MDS" */,
+				3B5857622FBC3BFB00AE72A8 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB19406A2F9794C300451472 /* Products */;
@@ -361,16 +361,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		3B50BC0B2FBB197000972B89 /* XCLocalSwiftPackageReference "../../SOPT-iOS-MDS" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../SOPT-iOS-MDS";
+/* Begin XCRemoteSwiftPackageReference section */
+		3B5857622FBC3BFB00AE72A8 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sopt-makers/SOPT-iOS-MDS";
+			requirement = {
+				branch = default;
+				kind = branch;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3B50BC0C2FBB197000972B89 /* MDS */ = {
+		3B5857632FBC3BFB00AE72A8 /* MDS */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 3B5857622FBC3BFB00AE72A8 /* XCRemoteSwiftPackageReference "SOPT-iOS-MDS" */;
 			productName = MDS;
 		};
 /* End XCSwiftPackageProductDependency section */

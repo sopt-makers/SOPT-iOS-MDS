@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sopt-makers/SOPT-iOS-MDS",
       "state" : {
-        "revision" : "46ffe8cc4448819fe6b09b62af378a9d7bb9683a",
-        "version" : "0.1.4"
+        "branch" : "default",
+        "revision" : "f076e94f59bbd799d5483d84715355ab8a705caa"
       }
     }
   ],
