@@ -111,6 +111,7 @@ extension MDSCallout {
         
         if let icon {
             iconImageView.isHidden = false
+            iconImageView.tintColor = colorToken.foreground
             iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
         } else {
             iconImageView.isHidden = true
@@ -129,9 +130,13 @@ extension MDSCallout {
                     ]
                 )
             )
-            config.image = MDSIcon.chevronRightOutlined.image.withRenderingMode(.alwaysTemplate)
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular)
+            config.image = MDSIcon.chevronRightOutlined.image
+                .applyingSymbolConfiguration(symbolConfig)?
+                .withRenderingMode(.alwaysTemplate)
             config.imagePlacement = .trailing
             config.imagePadding = 2
+            config.baseForegroundColor = SemanticColor.Fg.Neutral.bold
             textButton.configuration = config
             textButton.isHidden = false
         } else {
@@ -145,15 +150,18 @@ extension MDSCallout {
     struct ColorToken {
         let background: UIColor
         let stroke: UIColor
+        let foreground: UIColor
         
         init(style: Style) {
             switch style {
             case .danger:
                 background = SemanticColor.Bg.Danger.ghost
                 stroke = SemanticColor.Stroke.Danger.default
+                foreground = SemanticColor.Fg.Danger.default
             case .information:
                 background = SemanticColor.Bg.Information.ghost
                 stroke = SemanticColor.Stroke.Information.subtle
+                foreground = SemanticColor.Fg.Information.default
             }
         }
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 extension MDSCallout {
-    public enum Style: CaseIterable {
+    public enum Style: String, CaseIterable {
         case danger
         case information
     }
