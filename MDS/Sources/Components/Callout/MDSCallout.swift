@@ -130,12 +130,11 @@ extension MDSCallout {
                     ]
                 )
             )
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular)
             config.image = MDSIcon.chevronRightOutlined.image
-                .applyingSymbolConfiguration(symbolConfig)?
+                .resize(to: CGSize(width: 16, height: 16))
                 .withRenderingMode(.alwaysTemplate)
             config.imagePlacement = .trailing
-            config.imagePadding = 2
+            config.imagePadding = 0
             config.baseForegroundColor = SemanticColor.Fg.Neutral.bold
             textButton.configuration = config
             textButton.isHidden = false
@@ -163,6 +162,14 @@ extension MDSCallout {
                 stroke = SemanticColor.Stroke.Information.subtle
                 foreground = SemanticColor.Fg.Information.default
             }
+        }
+    }
+}
+
+extension UIImage {
+    func resize(to size: CGSize) -> UIImage {
+        UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
         }
     }
 }
