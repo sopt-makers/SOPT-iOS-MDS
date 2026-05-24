@@ -35,14 +35,16 @@ final class CalloutViewController: UIViewController {
     }
 
     private func setupLayout() {
+        let safeArea = view.safeAreaLayoutGuide
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
 
             contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
