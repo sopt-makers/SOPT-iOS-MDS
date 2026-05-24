@@ -6,7 +6,7 @@
 import UIKit
 
 final class ComponentCategoryViewController: UIViewController {
-    private let categories = ["Chip", "Tag"]
+    private let categories = ["Chip", "Tag", "Callout"]
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -60,6 +60,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
             navigationController?.pushViewController(ChipViewController(), animated: true)
         case "Tag":
             navigationController?.pushViewController(TagViewController(), animated: true)
+        case "Callout":
+            navigationController?.pushViewController(CalloutViewController(), animated: true)
         default:
             break
         }
