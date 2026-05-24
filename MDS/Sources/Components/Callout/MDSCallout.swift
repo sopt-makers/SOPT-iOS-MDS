@@ -92,8 +92,6 @@ extension MDSCallout {
 
             iconImageView.widthAnchor.constraint(equalToConstant: 20),
             iconImageView.heightAnchor.constraint(equalToConstant: 20),
-
-            contentStackView.trailingAnchor.constraint(equalTo: containerStackView.layoutMarginsGuide.trailingAnchor)
         ])
     }
     
