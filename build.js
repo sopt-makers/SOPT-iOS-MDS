@@ -113,6 +113,32 @@ StyleDictionary.registerFormat({
   }
 });
 
+StyleDictionary.registerFormat({
+  name: 'ios/swift-radius',
+  format: ({ dictionary }) => {
+    let output = fileHeader('BaseRadius.swift');
+    output += '// MARK: - Base Radius\n\n';
+    output += 'public enum BaseRadius {\n';
+    const groups = {};
+    for (const token of dictionary.allTokens) {
+      const cat = token.path[1]; // "base"
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(token);
+    }
+    for (const [cat, tokens] of Object.entries(groups)) {
+      output += `\n    // MARK: ${capitalize(cat)}\n`;
+      output += `    public enum ${capitalize(cat)} {\n`;
+      for (const token of tokens) {
+        const last = token.path[token.path.length - 1];
+        output += `        public static let ${last}: CGFloat = ${toNumber(token.$value ?? token.value)}\n`;
+      }
+      output += `    }\n`;
+    }
+    output += '}\n';
+    return output;
+  }
+});
+
 const weightMap = {
   'bold':     { fontName: 'SUIT-Bold',     swiftWeight: '.bold'     },
   'semibold': { fontName: 'SUIT-SemiBold', swiftWeight: '.semibold' },
@@ -459,6 +485,11 @@ const sd = new StyleDictionary({
           destination: 'BaseColor.swift',
           format: 'ios/swift-color-base',
           filter: (token) => token.path[0] === 'color' && token.path[1] === 'base'
+        },
+	{
+          destination: 'BaseRadius.swift',
+          format: 'ios/swift-radius',
+          filter: (token) => token.path[0] === 'radius'
         }
       ]
     },
