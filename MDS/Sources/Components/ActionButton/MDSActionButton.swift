@@ -215,12 +215,12 @@ private extension MDSActionButton {
             switch variant {
             case .primary:
                 background = isHighlighted
-                    ? SemanticColor.Bg.Neutral.Inverse.hover
+                    ? SemanticColor.Bg.Neutral.Inverse.pressed
                     : SemanticColor.Bg.Neutral.inverse
                 foreground = SemanticColor.Fg.Neutral.inverse
             case .secondary:
                 background = isHighlighted
-                    ? SemanticColor.Bg.Neutral.Subtle.hover
+                    ? SemanticColor.Bg.Neutral.Subtle.pressed
                     : SemanticColor.Bg.Neutral.subtle
                 foreground = SemanticColor.Fg.Neutral.bold
             case .danger:

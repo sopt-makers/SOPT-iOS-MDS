@@ -6,7 +6,6 @@
 import UIKit
 
 final class ComponentCategoryViewController: UIViewController {
-
     private enum Category: String, CaseIterable {
         case chip = "Chip"
         case tag = "Tag"
