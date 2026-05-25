@@ -76,7 +76,12 @@ public final class MDSActionButton: UIControl {
 
     public init(variant: Variant = .primary, size: Size = .large) {
         self.variant = variant
-        self.size = size
+        if variant == .danger && size == .xsmall {
+            assertionFailure("MDSActionButton: danger variant은 xsmall size를 지원하지 않습니다.")
+            self.size = .small
+        } else {
+            self.size = size
+        }
         super.init(frame: .zero)
         setup()
     }
