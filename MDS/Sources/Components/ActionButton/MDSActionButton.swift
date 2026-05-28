@@ -92,8 +92,13 @@ public final class MDSActionButton: UIControl {
     // MARK: - Setup
 
     private func setup() {
-        let sizeToken = SizeToken(size: size)
+        setupHierarchy()
+        setupLayout()
+        updateAppearance()
+    }
 
+    private func setupHierarchy() {
+        let sizeToken = SizeToken(size: size)
         layer.cornerRadius = sizeToken.cornerRadius
         layer.masksToBounds = true
 
@@ -102,7 +107,10 @@ public final class MDSActionButton: UIControl {
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(suffixImageView)
         addSubview(contentStackView)
+    }
 
+    private func setupLayout() {
+        let sizeToken = SizeToken(size: size)
         let insets = sizeToken.contentInsets
         let iconSize = sizeToken.iconSize
 
@@ -119,8 +127,6 @@ public final class MDSActionButton: UIControl {
             suffixImageView.widthAnchor.constraint(equalToConstant: iconSize),
             suffixImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
-
-        updateAppearance()
     }
 
     // MARK: - Appearance
