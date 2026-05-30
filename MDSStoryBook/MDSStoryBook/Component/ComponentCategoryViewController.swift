@@ -6,7 +6,15 @@
 import UIKit
 
 final class ComponentCategoryViewController: UIViewController {
-    private let categories = ["Chip", "Tag", "Callout", "Button"]
+
+    private enum Category: String, CaseIterable {
+        case chip = "Chip"
+        case tag = "Tag"
+        case callout = "Callout"
+        case button = "Button"
+    }
+
+    private let categories = Category.allCases
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -47,7 +55,7 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        cell.textLabel?.text = categories[indexPath.row]
+        cell.textLabel?.text = categories[indexPath.row].rawValue
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -55,16 +63,14 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
-        case "Chip":
+        case .chip:
             navigationController?.pushViewController(ChipViewController(), animated: true)
-        case "Tag":
+        case .tag:
             navigationController?.pushViewController(TagViewController(), animated: true)
-        case "Callout":
+        case .callout:
             navigationController?.pushViewController(CalloutViewController(), animated: true)
-        case "Button":
+        case .button:
             navigationController?.pushViewController(ButtonCategoryViewController(), animated: true)
-        default:
-            break
         }
     }
 }
