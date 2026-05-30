@@ -1,12 +1,15 @@
 //
-//  ComponentCategoryViewController.swift
+//  ButtonCategoryViewController.swift
 //  MDSStoryBook
+//
+//  Created by yungu0010 on 5/25/26.
 //
 
 import UIKit
 
-final class ComponentCategoryViewController: UIViewController {
-    private let categories = ["Chip", "Tag", "Callout", "Button"]
+final class ButtonCategoryViewController: UIViewController {
+
+    private let categories = ["Action Button", "Floating Button"]
 
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -17,7 +20,7 @@ final class ComponentCategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Component"
+        title = "Button"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
@@ -40,7 +43,8 @@ final class ComponentCategoryViewController: UIViewController {
     }
 }
 
-extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDelegate {
+extension ButtonCategoryViewController: UITableViewDataSource, UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         categories.count
     }
@@ -55,14 +59,10 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
-        case "Chip":
-            navigationController?.pushViewController(ChipViewController(), animated: true)
-        case "Tag":
-            navigationController?.pushViewController(TagViewController(), animated: true)
-        case "Callout":
-            navigationController?.pushViewController(CalloutViewController(), animated: true)
-        case "Button":
-            navigationController?.pushViewController(ButtonCategoryViewController(), animated: true)
+        case "Action Button":
+            navigationController?.pushViewController(ActionButtonViewController(), animated: true)
+        case "Floating Button":
+            navigationController?.pushViewController(FloatingButtonViewController(), animated: true)
         default:
             break
         }
