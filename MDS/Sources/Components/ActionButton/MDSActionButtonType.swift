@@ -7,13 +7,13 @@
 
 public extension MDSActionButton {
 
-    enum Variant {
+    public enum Variant {
         case primary
         case secondary
         case danger
     }
 
-    enum Size {
+    public enum Size {
         case xsmall
         case small
         case medium

@@ -1,0 +1,187 @@
+//
+//  MDSFloatingButton.swift
+//  MDS
+//
+//  Created by yungu0010 on 5/31/26.
+//
+
+import UIKit
+
+public final class MDSFloatingButton: UIControl {
+
+    // MARK: - Properties
+
+    public var icon: UIImage? {
+        didSet {
+            iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
+        }
+    }
+
+    public var label: String? {
+        didSet { updateAppearance() }
+    }
+
+    public override var isHighlighted: Bool {
+        didSet { updateAppearance() }
+    }
+
+    public override var isEnabled: Bool {
+        didSet { updateAppearance() }
+    }
+
+    private let size: Size
+
+    // MARK: - Subviews
+
+    private let contentStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        view.alignment = .center
+        view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let iconImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+
+    private let titleLabel: UILabel = {
+        let view = UILabel()
+        view.numberOfLines = 1
+        return view
+    }()
+
+    // MARK: - Init
+
+    public init(size: Size = .default, icon: UIImage? = nil, label: String? = nil) {
+        self.size = size
+        self.icon = icon
+        self.label = label
+        super.init(frame: .zero)
+        setup()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError() }
+
+    // MARK: - Setup
+
+    private func setup() {
+        setupHierarchy()
+        setupLayout()
+        updateAppearance()
+    }
+
+    private func setupHierarchy() {
+        let sizeToken = SizeToken(size: size)
+        layer.cornerRadius = sizeToken.cornerRadius
+        layer.masksToBounds = true
+
+        contentStackView.spacing = sizeToken.iconGap
+        contentStackView.addArrangedSubview(iconImageView)
+        contentStackView.addArrangedSubview(titleLabel)
+        addSubview(contentStackView)
+
+        iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
+    }
+
+    private func setupLayout() {
+        let sizeToken = SizeToken(size: size)
+        let insets = sizeToken.contentInsets
+        let iconSize = sizeToken.iconSize
+
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: 48),
+
+            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+
+            iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: iconSize),
+        ])
+
+        if size == .default {
+            NSLayoutConstraint.activate([
+                widthAnchor.constraint(equalToConstant: 48),
+            ])
+        }
+    }
+
+    // MARK: - Appearance
+
+    private func updateAppearance() {
+        let colorToken = ColorToken(isHighlighted: isHighlighted, isEnabled: isEnabled)
+        let sizeToken = SizeToken(size: size)
+
+        backgroundColor = colorToken.background
+        iconImageView.tintColor = colorToken.foreground
+
+        let hasLabel = !(label?.isEmpty ?? true)
+        titleLabel.isHidden = (size == .default) || !hasLabel
+
+        titleLabel.attributedText = NSAttributedString(
+            string: label ?? "",
+            attributes: [
+                .font: sizeToken.typography.font,
+                .kern: sizeToken.typography.letterSpacing,
+                .foregroundColor: colorToken.foreground,
+            ]
+        )
+    }
+}
+
+// MARK: - Size Token
+
+private extension MDSFloatingButton {
+
+    struct SizeToken {
+        let cornerRadius: CGFloat
+        let contentInsets: NSDirectionalEdgeInsets
+        let iconSize: CGFloat
+        let iconGap: CGFloat
+        let typography: MDSFont
+
+        init(size: MDSFloatingButton.Size) {
+            cornerRadius = BaseRadius.Base.r16
+            switch size {
+            case .default:
+                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                iconSize = 28
+                iconGap = 0
+                typography = Typography.label1
+            case .extended:
+                contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 14, bottom: 12, trailing: 14)
+                iconSize = 24
+                iconGap = 4
+                typography = Typography.label1
+            }
+        }
+    }
+}
+
+// MARK: - Color Token
+
+private extension MDSFloatingButton {
+
+    struct ColorToken {
+        let background: UIColor
+        let foreground: UIColor
+
+        init(isHighlighted: Bool, isEnabled: Bool) {
+            guard isEnabled else {
+                background = SemanticColor.Bg.Neutral.Default.disabled
+                foreground = SemanticColor.Fg.Neutral.Default.disabled
+                return
+            }
+            background = isHighlighted
+                ? SemanticColor.Bg.Neutral.Inverse.hover
+                : SemanticColor.Bg.Neutral.inverse
+            foreground = SemanticColor.Fg.Neutral.inverse
+        }
+    }
+}
