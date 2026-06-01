@@ -7,19 +7,19 @@
 
 public extension MDSTag {
 
-    enum Size {
+    public enum Size {
         case small, medium, large
     }
 
-    enum Shape {
+    public enum Shape {
         case rect, pill
     }
 
-    enum Variant {
+    public enum Variant {
         case `default`, primary, secondary
     }
 
-    enum Style {
+    public enum Style {
         case solid, subtle
     }
 }
