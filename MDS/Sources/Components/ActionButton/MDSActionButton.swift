@@ -16,17 +16,11 @@ public final class MDSActionButton: UIControl {
     }
 
     public var prefixIcon: UIImage? {
-        didSet {
-            prefixImageView.image = prefixIcon?.withRenderingMode(.alwaysTemplate)
-            prefixImageView.isHidden = prefixIcon == nil
-        }
+        didSet { updateAppearance() }
     }
 
     public var suffixIcon: UIImage? {
-        didSet {
-            suffixImageView.image = suffixIcon?.withRenderingMode(.alwaysTemplate)
-            suffixImageView.isHidden = suffixIcon == nil
-        }
+        didSet { updateAppearance() }
     }
 
     public override var isHighlighted: Bool {
@@ -74,7 +68,13 @@ public final class MDSActionButton: UIControl {
 
     // MARK: - Init
 
-    public init(variant: Variant = .primary, size: Size = .large) {
+    public init(
+        variant: Variant = .primary,
+        size: Size = .large,
+        title: String? = nil,
+        prefixIcon: UIImage? = nil,
+        suffixIcon: UIImage? = nil
+    ) {
         self.variant = variant
         if variant == .danger && size == .xsmall {
             assertionFailure("MDSActionButton: danger variant은 xsmall size를 지원하지 않습니다.")
@@ -82,6 +82,9 @@ public final class MDSActionButton: UIControl {
         } else {
             self.size = size
         }
+        self.title = title
+        self.prefixIcon = prefixIcon
+        self.suffixIcon = suffixIcon
         super.init(frame: .zero)
         setup()
     }
@@ -99,9 +102,6 @@ public final class MDSActionButton: UIControl {
 
     private func setupHierarchy() {
         let sizeToken = SizeToken(size: size)
-        layer.cornerRadius = sizeToken.cornerRadius
-        layer.masksToBounds = true
-
         contentStackView.spacing = sizeToken.iconGap
         contentStackView.addArrangedSubview(prefixImageView)
         contentStackView.addArrangedSubview(titleLabel)
@@ -113,6 +113,9 @@ public final class MDSActionButton: UIControl {
         let sizeToken = SizeToken(size: size)
         let insets = sizeToken.contentInsets
         let iconSize = sizeToken.iconSize
+
+        layer.cornerRadius = sizeToken.cornerRadius
+        layer.masksToBounds = true
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: sizeToken.height),
@@ -146,7 +149,12 @@ public final class MDSActionButton: UIControl {
             ]
         )
 
+        prefixImageView.image = prefixIcon?.withRenderingMode(.alwaysTemplate)
+        prefixImageView.isHidden = prefixIcon == nil
         prefixImageView.tintColor = colorToken.foreground
+
+        suffixImageView.image = suffixIcon?.withRenderingMode(.alwaysTemplate)
+        suffixImageView.isHidden = suffixIcon == nil
         suffixImageView.tintColor = colorToken.foreground
     }
 }

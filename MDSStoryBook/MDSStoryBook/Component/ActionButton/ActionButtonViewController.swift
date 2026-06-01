@@ -99,8 +99,7 @@ private extension ActionButtonViewController {
         isEnabled: Bool
     ) -> UIView {
         let buttons: [MDSActionButton] = sizes.map { size in
-            let button = MDSActionButton(variant: variant, size: size)
-            button.title = "Button"
+            let button = MDSActionButton(variant: variant, size: size, title: "Button")
             button.isEnabled = isEnabled
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
@@ -111,10 +110,13 @@ private extension ActionButtonViewController {
     // 지원되는 sizes별로 prefix + suffix 아이콘이 적용된 버튼을 한 행으로 구성
     func makeIconRow(label: String, variant: MDSActionButton.Variant, sizes: [MDSActionButton.Size]) -> UIView {
         let buttons: [MDSActionButton] = sizes.map { size in
-            let button = MDSActionButton(variant: variant, size: size)
-            button.title = "Button"
-            button.prefixIcon = MDSIcon.plusOutlined.image
-            button.suffixIcon = MDSIcon.chevronRightOutlined.image
+            let button = MDSActionButton(
+                variant: variant,
+                size: size,
+                title: "Button",
+                prefixIcon: MDSIcon.plusOutlined.image,
+                suffixIcon: MDSIcon.chevronRightOutlined.image
+            )
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
         }
