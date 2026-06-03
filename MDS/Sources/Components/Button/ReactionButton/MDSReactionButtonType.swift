@@ -6,11 +6,6 @@
 //
 
 public extension MDSReactionButton {
-    enum Variant {
-        case `default`
-        case disabled
-    }
-
     enum Size {
         case xsmall
         case small
