@@ -78,9 +78,6 @@ public final class MDSTextButton: UIControl {
     private func setup() {
         setupHierarchy()
         setupLayout()
-        if variant == .disabled {
-            isEnabled = false
-        }
         updateAppearance()
     }
     
@@ -166,7 +163,7 @@ private extension MDSTextButton {
         let foreground: UIColor
         
         init(variant: MDSTextButton.Variant, isEnabled: Bool) {
-            guard isEnabled, variant != .disabled else {
+            guard isEnabled else {
                 foreground = SemanticColor.Fg.Neutral.Default.disabled
                 return
             }
@@ -176,8 +173,6 @@ private extension MDSTextButton {
                 foreground = SemanticColor.Fg.Neutral.bold
             case .default:
                 foreground = SemanticColor.Fg.Neutral.default
-            case .disabled:
-                foreground = SemanticColor.Fg.Neutral.Default.disabled
             case .press:
                 foreground = SemanticColor.Fg.Neutral.default
             }
