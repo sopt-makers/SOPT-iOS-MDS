@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class MDSTextButton: UIButton {
+public final class MDSTextButton: UIControl {
 
     // MARK: - Properties
 
@@ -17,7 +17,7 @@ public final class MDSTextButton: UIButton {
 
     private let variant: Variant
     private let size: Size
-    public let title: String
+    private let title: String
 
     // MARK: - Subviews
 
@@ -55,9 +55,7 @@ public final class MDSTextButton: UIButton {
         self.variant = variant
         self.size = size
         self.title = title
-        
         super.init(frame: .zero)
-        
         setup()
     }
     
@@ -66,7 +64,6 @@ public final class MDSTextButton: UIButton {
     // MARK: - Setup
 
     private func setup() {
-        backgroundColor = .clear
         setupHierarchy()
         setupLayout()
         if variant == .disabled {
@@ -98,6 +95,8 @@ public final class MDSTextButton: UIButton {
     // MARK: - Appearance
 
     private func updateAppearance() {
+        backgroundColor = .clear
+        
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, isEnabled: isEnabled)
 
