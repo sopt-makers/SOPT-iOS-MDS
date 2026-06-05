@@ -9,7 +9,7 @@ public extension MDSTextButton {
     enum Variant {
         case emphasis
         case `default`
-        case disabled
+        case press
     }
 
     enum Size {
