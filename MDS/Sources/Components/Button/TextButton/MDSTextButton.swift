@@ -113,7 +113,11 @@ public final class MDSTextButton: UIControl {
         backgroundColor = .clear
         
         let sizeToken = SizeToken(size: size)
-        let colorToken = ColorToken(variant: variant, isEnabled: isEnabled)
+        let colorToken = ColorToken(
+            variant: variant,
+            isEnabled: isEnabled,
+            isHighlighted: isHighlighted
+        )
         
         textLabel.attributedText = NSAttributedString(
             string: title,
@@ -125,7 +129,7 @@ public final class MDSTextButton: UIControl {
         )
         chevronImageView.tintColor = colorToken.foreground
         
-        if variant == .press {
+        if isHighlighted {
             underlineView.isHidden = false
             underlineView.backgroundColor = colorToken.foreground
         } else {
@@ -162,9 +166,14 @@ private extension MDSTextButton {
     struct ColorToken {
         let foreground: UIColor
         
-        init(variant: MDSTextButton.Variant, isEnabled: Bool) {
+        init(variant: MDSTextButton.Variant, isEnabled: Bool, isHighlighted: Bool) {
             guard isEnabled else {
                 foreground = SemanticColor.Fg.Neutral.Default.disabled
+                return
+            }
+            
+            if isHighlighted {
+                foreground = SemanticColor.Fg.Neutral.default
                 return
             }
             
@@ -172,8 +181,6 @@ private extension MDSTextButton {
             case .emphasis:
                 foreground = SemanticColor.Fg.Neutral.bold
             case .default:
-                foreground = SemanticColor.Fg.Neutral.default
-            case .press:
                 foreground = SemanticColor.Fg.Neutral.default
             }
         }
