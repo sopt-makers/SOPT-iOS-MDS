@@ -11,7 +11,9 @@ final class ButtonCategoryViewController: UIViewController {
 
     private enum Category: String, CaseIterable {
         case actionButton = "Action Button"
+        case reactionButton = "Reaction Button"
         case floatingButton = "Floating Button"
+        case textButton = "Text Button"
     }
 
     private let categories = Category.allCases
@@ -66,8 +68,12 @@ extension ButtonCategoryViewController: UITableViewDataSource, UITableViewDelega
         switch categories[indexPath.row] {
         case .actionButton:
             navigationController?.pushViewController(ActionButtonViewController(), animated: true)
+        case .reactionButton:
+            navigationController?.pushViewController(ReactionButtonViewController(), animated: true)
         case .floatingButton:
             navigationController?.pushViewController(FloatingButtonViewController(), animated: true)
+        case .textButton:
+            navigationController?.pushViewController(TextButtonViewController(), animated: true)
         }
     }
 }
