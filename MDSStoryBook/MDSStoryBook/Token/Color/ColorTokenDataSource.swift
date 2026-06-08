@@ -66,12 +66,17 @@ enum ColorTokenDataSource {
             ColorTokenItem(name: "ghost", color: SemanticColor.Fg.Neutral.ghost, baseTokenPath: "color.base.gray.500"),
             ColorTokenItem(name: "inverse", color: SemanticColor.Fg.Neutral.inverse, baseTokenPath: "color.base.gray.950"),
             ColorTokenItem(name: "default · disabled", color: SemanticColor.Fg.Neutral.Default.disabled, baseTokenPath: "color.base.gray.500"),
+            ColorTokenItem(name: "ghost · disabled", color: SemanticColor.Fg.Neutral.Ghost.disabled, baseTokenPath: "color.base.gray.700"),
         ]),
         ColorTokenSection(title: "Fg / Brand", items: [
             ColorTokenItem(name: "default", color: SemanticColor.Fg.Brand.`default`, baseTokenPath: "color.base.orange.400"),
         ]),
         ColorTokenSection(title: "Fg / Secondary", items: [
             ColorTokenItem(name: "default", color: SemanticColor.Fg.Secondary.`default`, baseTokenPath: "color.base.blue.400"),
+        ]),
+        ColorTokenSection(title: "Fg / Information", items: [
+            ColorTokenItem(name: "default", color: SemanticColor.Fg.Information.`default`, baseTokenPath: "color.base.blue.400"),
+            ColorTokenItem(name: "subtle", color: SemanticColor.Fg.Information.subtle, baseTokenPath: "color.base.blue.600"),
         ]),
         ColorTokenSection(title: "Fg / Success", items: [
             ColorTokenItem(name: "bold", color: SemanticColor.Fg.Success.bold, baseTokenPath: "color.base.green.100"),
@@ -87,10 +92,6 @@ enum ColorTokenDataSource {
             ColorTokenItem(name: "bold", color: SemanticColor.Fg.Attention.bold, baseTokenPath: "color.base.yellow.200"),
             ColorTokenItem(name: "default", color: SemanticColor.Fg.Attention.`default`, baseTokenPath: "color.base.yellow.400"),
             ColorTokenItem(name: "subtle", color: SemanticColor.Fg.Attention.subtle, baseTokenPath: "color.base.yellow.600"),
-        ]),
-        ColorTokenSection(title: "Fg / Information", items: [
-            ColorTokenItem(name: "default", color: SemanticColor.Fg.Information.`default`, baseTokenPath: "color.base.blue.400"),
-            ColorTokenItem(name: "subtle", color: SemanticColor.Fg.Information.subtle, baseTokenPath: "color.base.blue.600"),
         ]),
         ColorTokenSection(title: "Stroke / Neutral", items: [
             ColorTokenItem(name: "default", color: SemanticColor.Stroke.Neutral.`default`, baseTokenPath: "color.base.gray.600"),
