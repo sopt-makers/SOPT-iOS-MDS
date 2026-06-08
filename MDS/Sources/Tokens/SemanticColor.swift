@@ -111,6 +111,10 @@ public enum SemanticColor {
             public enum Default {
                 public static let disabled = BaseColor.gray500
             }
+
+            public enum Ghost {
+                public static let disabled = BaseColor.gray700
+            }
         }
 
         public enum Brand {
@@ -119,6 +123,11 @@ public enum SemanticColor {
 
         public enum Secondary {
             public static let `default` = BaseColor.blue400
+        }
+
+        public enum Information {
+            public static let `default` = BaseColor.blue400
+            public static let subtle = BaseColor.blue600
         }
 
         public enum Success {
@@ -137,11 +146,6 @@ public enum SemanticColor {
             public static let bold = BaseColor.yellow200
             public static let `default` = BaseColor.yellow400
             public static let subtle = BaseColor.yellow600
-        }
-
-        public enum Information {
-            public static let `default` = BaseColor.blue400
-            public static let subtle = BaseColor.blue600
         }
     }
 
