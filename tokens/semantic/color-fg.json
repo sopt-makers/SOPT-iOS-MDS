@@ -22,6 +22,10 @@
           "$value": "{color.base.gray.500}",
           "$type": "color"
         },
+        "ghost-disabled": {
+          "$value": "{color.base.gray.700}",
+          "$type": "color"
+        },
         "inverse": {
           "$value": "{color.base.gray.950}",
           "$type": "color"
@@ -36,6 +40,16 @@
       "secondary": {
         "default": {
           "$value": "{color.base.blue.400}",
+          "$type": "color"
+        }
+      },
+      "information": {
+        "default": {
+          "$value": "{color.base.blue.400}",
+          "$type": "color"
+        },
+        "subtle": {
+          "$value": "{color.base.blue.600}",
           "$type": "color"
         }
       },
@@ -78,16 +92,6 @@
         },
         "subtle": {
           "$value": "{color.base.yellow.600}",
-          "$type": "color"
-        }
-      },
-      "information": {
-        "default": {
-          "$value": "{color.base.blue.400}",
-          "$type": "color"
-        },
-        "subtle": {
-          "$value": "{color.base.blue.600}",
           "$type": "color"
         }
       }
