@@ -24,6 +24,7 @@ public final class MDSToggle: UIControl {
     }
 
     private let toggleSize: Size
+    private var thumbLeadingConstraint: NSLayoutConstraint?
 
     // MARK: - UI Components
 
@@ -35,7 +36,6 @@ public final class MDSToggle: UIControl {
 
     private let thumbView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
         view.isUserInteractionEnabled = false
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
@@ -84,10 +84,12 @@ public final class MDSToggle: UIControl {
             trackView.heightAnchor.constraint(equalToConstant: sizeToken.height),
 
             thumbView.centerYAnchor.constraint(equalTo: trackView.centerYAnchor),
-            thumbView.leadingAnchor.constraint(equalTo: trackView.leadingAnchor, constant: 2),
             thumbView.widthAnchor.constraint(equalToConstant: sizeToken.thumbSize),
             thumbView.heightAnchor.constraint(equalToConstant: sizeToken.thumbSize)
         ])
+        
+        thumbLeadingConstraint = thumbView.leadingAnchor.constraint(equalTo: trackView.leadingAnchor, constant: 2)
+        thumbLeadingConstraint?.isActive = true
 
         trackView.layer.cornerRadius = sizeToken.height / 2
         thumbView.layer.cornerRadius = sizeToken.thumbSize / 2
@@ -106,23 +108,22 @@ public final class MDSToggle: UIControl {
 
     private func updateAppearance(animated: Bool) {
         let sizeToken = SizeToken(size: toggleSize)
-        let trackColor = getTrackColor()
-
+        let colorToken = ColorToken(isEnabled: isEnabled, isSelected: isOn)
+        
+        let thumbLeadingConstant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - 2) : 2
+        
         if animated {
             UIView.animate(withDuration: 0.2) {
-                self.trackView.backgroundColor = trackColor
+                self.trackView.backgroundColor = colorToken.trackColor
+                self.thumbView.backgroundColor = colorToken.thumbColor
+                self.thumbLeadingConstraint?.constant = thumbLeadingConstant
                 self.layoutIfNeeded()
             }
         } else {
-            trackView.backgroundColor = trackColor
+            trackView.backgroundColor = colorToken.trackColor
+            thumbView.backgroundColor = colorToken.thumbColor
+            thumbLeadingConstraint?.constant = thumbLeadingConstant
         }
-    }
-
-    private func getTrackColor() -> UIColor {
-        if !isEnabled {
-            return SemanticColor.Fg.Neutral.Ghost.disabled
-        }
-        return isOn ? SemanticColor.Fg.Secondary.default : SemanticColor.Fg.Neutral.ghost
     }
 }
 
@@ -142,6 +143,28 @@ extension MDSToggle {
                 width = 36
                 height = 20
                 thumbSize = 16
+            }
+        }
+    }
+    
+    struct ColorToken {
+        let trackColor: UIColor
+        let thumbColor: UIColor
+        
+        init(isEnabled: Bool, isSelected: Bool) {
+            switch (isEnabled, isSelected) {
+            case (true, true):
+                trackColor = SemanticColor.Fg.Secondary.default
+                thumbColor = SemanticColor.Fg.Neutral.bold
+            case (true, false):
+                trackColor = SemanticColor.Fg.Neutral.ghost
+                thumbColor = SemanticColor.Fg.Neutral.bold
+            case (false, true):
+                trackColor = SemanticColor.Fg.Neutral.Ghost.disabled
+                thumbColor = SemanticColor.Fg.Neutral.Default.disabled
+            case (false, false):
+                trackColor = SemanticColor.Fg.Neutral.Ghost.disabled
+                thumbColor = SemanticColor.Fg.Neutral.Default.disabled
             }
         }
     }
