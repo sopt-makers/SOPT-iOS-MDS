@@ -90,7 +90,6 @@ public final class MDSCheckbox: UIControl {
 
     private func setupLayout() {
         let sizeToken = SizeToken(size: checkboxSize)
-        let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
         
         contentStackView.spacing = sizeToken.padding
 
@@ -133,7 +132,7 @@ public final class MDSCheckbox: UIControl {
         titleLabel.text = title
         titleLabel.font = sizeToken.font
         titleLabel.textColor = colorToken.textColor
-        titleLabel.isHidden = title == nil
+        titleLabel.isHidden = (title ?? "").isEmpty
     }
 }
 
