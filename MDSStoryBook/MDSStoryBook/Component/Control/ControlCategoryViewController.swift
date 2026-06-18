@@ -8,6 +8,7 @@ import UIKit
 final class ControlCategoryViewController: UIViewController {
     private enum Category: String, CaseIterable {
         case checkbox = "Checkbox"
+        case toggle = "Toggle"
     }
 
     private let categories = Category.allCases
@@ -61,6 +62,8 @@ extension ControlCategoryViewController: UITableViewDataSource, UITableViewDeleg
         switch categories[indexPath.row] {
         case .checkbox:
             navigationController?.pushViewController(CheckboxViewController(), animated: true)
+        case .toggle:
+            navigationController?.pushViewController(ToggleViewController(), animated: true)
         }
     }
 }

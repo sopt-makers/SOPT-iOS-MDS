@@ -1,7 +1,7 @@
 import UIKit
 import MDS
 
-final class CheckboxViewController: UIViewController {
+final class ToggleViewController: UIViewController {
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -20,10 +20,10 @@ final class CheckboxViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Checkbox"
+        title = "Toggle"
         view.backgroundColor = SemanticColor.Bg.Layer.basement
         setupLayout()
-        addCheckboxes()
+        addToggles()
     }
 
     private func setupLayout() {
@@ -44,12 +44,12 @@ final class CheckboxViewController: UIViewController {
         ])
     }
 
-    private func addCheckboxes() {
+    private func addToggles() {
         addSection(title: "Large")
-        addCheckboxRow(size: .large)
+        addToggleRow(size: .large)
 
         addSection(title: "Small")
-        addCheckboxRow(size: .small)
+        addToggleRow(size: .small)
     }
 
     private func addSection(title: String) {
@@ -60,34 +60,34 @@ final class CheckboxViewController: UIViewController {
         stackView.addArrangedSubview(label)
     }
 
-    private func addCheckboxRow(size: MDSCheckbox.Size) {
-        let rowStack = UIStackView()
-        rowStack.axis = .vertical
-        rowStack.spacing = 16
-        rowStack.alignment = .leading
+    private func addToggleRow(size: MDSToggle.Size) {
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.spacing = 20
+        horizontalStack.alignment = .center
 
-        // Unselected
-        let unselected = MDSCheckbox(size: size, title: "Label")
-        unselected.isSelected = false
-        rowStack.addArrangedSubview(unselected)
+        // Off
+        let offToggle = MDSToggle(size: size)
+        offToggle.isOn = false
+        horizontalStack.addArrangedSubview(offToggle)
 
-        // Selected
-        let selected = MDSCheckbox(size: size, title: "Label")
-        selected.isSelected = true
-        rowStack.addArrangedSubview(selected)
+        // On
+        let onToggle = MDSToggle(size: size)
+        onToggle.isOn = true
+        horizontalStack.addArrangedSubview(onToggle)
 
-        // Disabled Unselected
-        let disabledUnselected = MDSCheckbox(size: size, title: "Label")
-        disabledUnselected.isSelected = false
-        disabledUnselected.isEnabled = false
-        rowStack.addArrangedSubview(disabledUnselected)
+        // Disabled Off
+        let disabledOffToggle = MDSToggle(size: size)
+        disabledOffToggle.isOn = false
+        disabledOffToggle.isEnabled = false
+        horizontalStack.addArrangedSubview(disabledOffToggle)
 
-        // Disabled Selected
-        let disabledSelected = MDSCheckbox(size: size, title: "Label")
-        disabledSelected.isSelected = true
-        disabledSelected.isEnabled = false
-        rowStack.addArrangedSubview(disabledSelected)
+        // Disabled On
+        let disabledOnToggle = MDSToggle(size: size)
+        disabledOnToggle.isOn = true
+        disabledOnToggle.isEnabled = false
+        horizontalStack.addArrangedSubview(disabledOnToggle)
 
-        stackView.addArrangedSubview(rowStack)
+        stackView.addArrangedSubview(horizontalStack)
     }
 }
