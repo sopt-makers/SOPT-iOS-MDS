@@ -1,19 +1,15 @@
 //
-//  ComponentCategoryViewController.swift
+//  ControlCategoryViewController.swift
 //  MDSStoryBook
 //
 
 import UIKit
 
-final class ComponentCategoryViewController: UIViewController {
+final class ControlCategoryViewController: UIViewController {
     private enum Category: String, CaseIterable {
-        case chip = "Chip"
-        case tag = "Tag"
-        case callout = "Callout"
-        case button = "Button"
-        case control = "Control"
+        case checkbox = "Checkbox"
+        case toggle = "Toggle"
     }
-
 
     private let categories = Category.allCases
 
@@ -26,7 +22,7 @@ final class ComponentCategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Component"
+        title = "Control"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
@@ -49,7 +45,7 @@ final class ComponentCategoryViewController: UIViewController {
     }
 }
 
-extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDelegate {
+extension ControlCategoryViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         categories.count
     }
@@ -64,17 +60,10 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
-        case .chip:
-            navigationController?.pushViewController(ChipViewController(), animated: true)
-        case .tag:
-            navigationController?.pushViewController(TagViewController(), animated: true)
-        case .callout:
-            navigationController?.pushViewController(CalloutViewController(), animated: true)
-        case .button:
-            navigationController?.pushViewController(ButtonCategoryViewController(), animated: true)
-        case .control:
-            navigationController?.pushViewController(ControlCategoryViewController(), animated: true)
+        case .checkbox:
+            navigationController?.pushViewController(CheckboxViewController(), animated: true)
+        case .toggle:
+            navigationController?.pushViewController(ToggleViewController(), animated: true)
         }
-
     }
 }
