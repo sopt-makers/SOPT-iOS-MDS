@@ -11,10 +11,6 @@ public final class MDSCheckbox: UIControl {
 
     // MARK: - Properties
 
-    public var title: String? {
-        didSet { updateAppearance() }
-    }
-
     public override var isSelected: Bool {
         didSet { updateAppearance() }
     }
@@ -57,6 +53,7 @@ public final class MDSCheckbox: UIControl {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.isUserInteractionEnabled = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -64,9 +61,11 @@ public final class MDSCheckbox: UIControl {
 
     public init(size: Size = .large, title: String? = nil) {
         self.checkboxSize = size
-        self.title = title
+        
         super.init(frame: .zero)
+        
         setup()
+        setTitle(title: title)
     }
 
     @available(*, unavailable)
@@ -91,6 +90,7 @@ public final class MDSCheckbox: UIControl {
     private func setupLayout() {
         let sizeToken = SizeToken(size: checkboxSize)
         
+        titleLabel.font = sizeToken.font
         contentStackView.spacing = sizeToken.padding
 
         NSLayoutConstraint.activate([
@@ -108,6 +108,14 @@ public final class MDSCheckbox: UIControl {
             checkImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize),
         ])
     }
+    
+    private func setTitle(title: String?) {
+        if let title {
+            self.titleLabel.text = title
+        } else {
+            self.titleLabel.isHidden = true
+        }
+    }
 
     private func setupAction() {
         addTarget(self, action: #selector(handleTap), for: .touchUpInside)
@@ -121,18 +129,14 @@ public final class MDSCheckbox: UIControl {
     // MARK: - Appearance
 
     private func updateAppearance() {
-        let sizeToken = SizeToken(size: checkboxSize)
-        let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
+        let colorToken = ColorToken(isEnabled: isEnabled, isSelected: isSelected)
         
         boxView.backgroundColor = colorToken.backgroundColor
         boxView.layer.borderColor = colorToken.borderColor.cgColor
         checkImageView.tintColor = colorToken.iconColor
         checkImageView.isHidden = !isSelected
 
-        titleLabel.text = title
-        titleLabel.font = sizeToken.font
         titleLabel.textColor = colorToken.textColor
-        titleLabel.isHidden = (title ?? "").isEmpty
     }
 }
 
@@ -167,7 +171,7 @@ private extension MDSCheckbox {
         let iconColor: UIColor
         let textColor: UIColor
 
-        init(isSelected: Bool, isEnabled: Bool) {
+        init(isEnabled: Bool, isSelected: Bool) {
             switch (isEnabled, isSelected) {
             case (true, true):
                 backgroundColor = SemanticColor.Fg.Secondary.default
