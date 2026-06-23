@@ -60,9 +60,10 @@ public final class MDSRadioButton: UIControl {
 
     // MARK: - Init
 
-    public init(size: Size = .large) {
+    public init(size: Size = .large, label: String? = nil) {
         self.sizeToken = SizeToken(size: size)
         super.init(frame: .zero)
+        self.labelText = label
         setup()
     }
 
@@ -110,7 +111,8 @@ public final class MDSRadioButton: UIControl {
     }
 
     @objc private func handleTap() {
-        isSelected.toggle()
+        guard !isSelected else { return }
+        isSelected = true
         sendActions(for: .valueChanged)
     }
 
