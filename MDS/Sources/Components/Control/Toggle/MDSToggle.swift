@@ -13,13 +13,14 @@ public final class MDSToggle: UIControl {
 
     public var isOn: Bool = false {
         didSet {
-            updateAppearance(animated: true)
+            updateThumbPosition(animated: true)
+            updateColors()
         }
     }
 
     public override var isEnabled: Bool {
         didSet {
-            updateAppearance(animated: false)
+            updateColors()
         }
     }
 
@@ -61,7 +62,8 @@ public final class MDSToggle: UIControl {
         setupHierarchy()
         setupLayout()
         setupAction()
-        updateAppearance(animated: false)
+        updateThumbPosition(animated: true)
+        updateColors()
     }
 
     private func setupHierarchy() {
@@ -101,28 +103,27 @@ public final class MDSToggle: UIControl {
 
     @objc private func handleTap() {
         isOn.toggle()
-        sendActions(for: .valueChanged)
     }
 
     // MARK: - Appearance
-
-    private func updateAppearance(animated: Bool) {
-        let sizeToken = SizeToken(size: toggleSize)
+    
+    private func updateColors() {
         let colorToken = ColorToken(isEnabled: isEnabled, isSelected: isOn)
-        
-        let thumbLeadingConstant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - 2) : 2
-        
+        trackView.backgroundColor = colorToken.trackColor
+        thumbView.backgroundColor = colorToken.thumbColor
+    }
+    
+    private func updateThumbPosition(animated: Bool) {
+        let sizeToken = SizeToken(size: toggleSize)
+        let constant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - 2) : 2
+
         if animated {
-            UIView.animate(withDuration: 0.2) {
-                self.trackView.backgroundColor = colorToken.trackColor
-                self.thumbView.backgroundColor = colorToken.thumbColor
-                self.thumbLeadingConstraint?.constant = thumbLeadingConstant
-                self.layoutIfNeeded()
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                self?.thumbLeadingConstraint?.constant = constant
+                self?.trackView.layoutIfNeeded()
             }
         } else {
-            trackView.backgroundColor = colorToken.trackColor
-            thumbView.backgroundColor = colorToken.thumbColor
-            thumbLeadingConstraint?.constant = thumbLeadingConstant
+            thumbLeadingConstraint?.constant = constant
         }
     }
 }
