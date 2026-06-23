@@ -75,6 +75,5 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
         case .control:
             navigationController?.pushViewController(ControlCategoryViewController(), animated: true)
         }
-
     }
 }
