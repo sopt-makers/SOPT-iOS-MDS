@@ -110,7 +110,8 @@ public final class MDSRadioButton: UIControl {
     }
 
     @objc private func handleTap() {
-        isSelected.toggle()
+        guard !isSelected else { return }
+        isSelected = true
         sendActions(for: .valueChanged)
     }
 
