@@ -366,8 +366,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sopt-makers/SOPT-iOS-MDS";
 			requirement = {
-				branch = default;
-				kind = branch;
+				kind = revision;
+				revision = a2581d6b12f6929243cf083fca93d4bd23588ca7;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
