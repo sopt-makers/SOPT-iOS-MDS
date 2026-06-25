@@ -5,6 +5,7 @@
 
 import UIKit
 
+@MainActor
 public final class MDSRadioGroup {
 
     // MARK: - Properties
