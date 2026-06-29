@@ -29,6 +29,10 @@ public final class MDSAvatar: UIView {
         didSet { applyImageState() }
     }
 
+    public var hasStroke: Bool {
+        didSet { layer.borderWidth = hasStroke ? strokeWeight : 0 }
+    }
+
     public var strokeColor: UIColor {
         didSet { layer.borderColor = strokeColor.cgColor }
     }
@@ -38,9 +42,15 @@ public final class MDSAvatar: UIView {
     // MARK: - Init
 
     /// - Parameter size: 권고 사이즈 — 24, 32, 48, 56, 72, 80, 120, 180 (단위: pt)
-    public init(size: CGFloat, image: UIImage? = nil, strokeColor: UIColor = SemanticColor.Stroke.Neutral.ghost) {
+    public init(
+        size: CGFloat,
+        image: UIImage? = nil,
+        hasStroke: Bool = false,
+        strokeColor: UIColor = SemanticColor.Stroke.Secondary.default
+    ) {
         self.size = size
         self.image = image
+        self.hasStroke = hasStroke
         self.strokeColor = strokeColor
         super.init(frame: .zero)
         setupUI()
@@ -61,13 +71,13 @@ public final class MDSAvatar: UIView {
 
     private func setupUI() {
         layer.cornerRadius = size / 2
-        layer.borderWidth = strokeWeight
+        layer.borderWidth = hasStroke ? strokeWeight : 0
         layer.borderColor = strokeColor.cgColor
         layer.masksToBounds = true
 
         backgroundColor = SemanticColor.Bg.Neutral.ghost
 
-        fallbackIconView.image = MDSIcon.usersFilled.image.withRenderingMode(.alwaysTemplate)
+        fallbackIconView.image = MDSIcon.userFilled.image.withRenderingMode(.alwaysTemplate)
         fallbackIconView.tintColor = SemanticColor.Fg.Neutral.bold
     }
 
@@ -102,6 +112,7 @@ public final class MDSAvatar: UIView {
         if size < 40 { return 1 }
         if size < 64 { return 2 }
         if size < 160 { return 3 }
-        return 4
+        if size < 180 { return 4 }
+        return 4 * (size / 180)
     }
 }
