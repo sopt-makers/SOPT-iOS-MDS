@@ -46,6 +46,11 @@ public enum Typography {
         letterSpacing: BaseTypography.Size.t20 * (BaseTypography.LetterSpacing.`default` / 100)
     )
     public static let title4 = MDSFont(
+        font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t18) ?? .systemFont(ofSize: BaseTypography.Size.t18, weight: .semibold),
+        lineHeight: BaseTypography.LineHeight.t26,
+        letterSpacing: BaseTypography.Size.t18 * (BaseTypography.LetterSpacing.`default` / 100)
+    )
+    public static let title5 = MDSFont(
         font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t16) ?? .systemFont(ofSize: BaseTypography.Size.t16, weight: .semibold),
         lineHeight: BaseTypography.LineHeight.t24,
         letterSpacing: BaseTypography.Size.t16 * (BaseTypography.LetterSpacing.wide / 100)
@@ -59,6 +64,11 @@ public enum Typography {
         font: UIFont(name: "SUIT-Regular", size: BaseTypography.Size.t14) ?? .systemFont(ofSize: BaseTypography.Size.t14, weight: .regular),
         lineHeight: BaseTypography.LineHeight.t22,
         letterSpacing: BaseTypography.Size.t14 * (BaseTypography.LetterSpacing.wide / 100)
+    )
+    public static let body3 = MDSFont(
+        font: UIFont(name: "SUIT-Regular", size: BaseTypography.Size.t12) ?? .systemFont(ofSize: BaseTypography.Size.t12, weight: .regular),
+        lineHeight: BaseTypography.LineHeight.t18,
+        letterSpacing: BaseTypography.Size.t12 * (BaseTypography.LetterSpacing.wide / 100)
     )
     public static let label1 = MDSFont(
         font: UIFont(name: "SUIT-SemiBold", size: BaseTypography.Size.t18) ?? .systemFont(ofSize: BaseTypography.Size.t18, weight: .semibold),
