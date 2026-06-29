@@ -69,6 +69,16 @@
       "4": {
         "$value": {
           "fontWeight": "{typography.base.weight.semibold}",
+          "fontSize": "{typography.base.size.t18}",
+          "lineHeight": "{typography.base.lineHeight.t26}",
+          "letterSpacing": "{typography.base.letterSpacing.default}"
+        },
+        "$type": "typography"
+      }
+    },
+"5": {
+        "$value": {
+          "fontWeight": "{typography.base.weight.semibold}",
           "fontSize": "{typography.base.size.t16}",
           "lineHeight": "{typography.base.lineHeight.t24}",
           "letterSpacing": "{typography.base.letterSpacing.wide}"
@@ -91,6 +101,16 @@
           "fontWeight": "{typography.base.weight.regular}",
           "fontSize": "{typography.base.size.t14}",
           "lineHeight": "{typography.base.lineHeight.t22}",
+          "letterSpacing": "{typography.base.letterSpacing.wide}"
+        },
+        "$type": "typography"
+      }
+    },
+"3": {
+        "$value": {
+          "fontWeight": "{typography.base.weight.regular}",
+          "fontSize": "{typography.base.size.t12}",
+          "lineHeight": "{typography.base.lineHeight.t18}",
           "letterSpacing": "{typography.base.letterSpacing.wide}"
         },
         "$type": "typography"
