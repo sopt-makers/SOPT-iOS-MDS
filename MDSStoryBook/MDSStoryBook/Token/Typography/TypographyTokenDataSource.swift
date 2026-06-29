@@ -20,10 +20,12 @@ enum TypographyTokenDataSource {
             .init(name: "title2", mdsFont: Typography.title2),
             .init(name: "title3", mdsFont: Typography.title3),
             .init(name: "title4", mdsFont: Typography.title4),
+            .init(name: "title5", mdsFont: Typography.title5),
         ]),
         .init(title: "Body", items: [
             .init(name: "body1", mdsFont: Typography.body1),
             .init(name: "body2", mdsFont: Typography.body2),
+            .init(name: "body3", mdsFont: Typography.body3),
         ]),
         .init(title: "Label", items: [
             .init(name: "label1", mdsFont: Typography.label1),
