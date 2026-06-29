@@ -7,6 +7,7 @@ import UIKit
 
 final class ComponentCategoryViewController: UIViewController {
     private enum Category: String, CaseIterable {
+        case avatar = "Avatar"
         case chip = "Chip"
         case tag = "Tag"
         case callout = "Callout"
@@ -64,6 +65,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
+        case .avatar:
+            navigationController?.pushViewController(AvatarViewController(), animated: true)
         case .chip:
             navigationController?.pushViewController(ChipViewController(), animated: true)
         case .tag:
