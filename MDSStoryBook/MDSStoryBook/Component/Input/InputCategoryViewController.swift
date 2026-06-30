@@ -1,21 +1,17 @@
 //
-//  ComponentCategoryViewController.swift
+//  InputCategoryViewController.swift
 //  MDSStoryBook
 //
 
 import UIKit
 
-final class ComponentCategoryViewController: UIViewController {
-    private enum Category: String, CaseIterable {
-        case avatar = "Avatar"
-        case chip = "Chip"
-        case tag = "Tag"
-        case callout = "Callout"
-        case button = "Button"
-        case control = "Control"
-        case input = "Input"
-    }
+final class InputCategoryViewController: UIViewController {
 
+    private enum Category: String, CaseIterable {
+        case searchField = "Search Field"
+        case textField = "Text Field"
+        case textArea = "Text Area"
+    }
 
     private let categories = Category.allCases
 
@@ -28,7 +24,7 @@ final class ComponentCategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Component"
+        title = "Input"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
@@ -51,7 +47,8 @@ final class ComponentCategoryViewController: UIViewController {
     }
 }
 
-extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDelegate {
+extension InputCategoryViewController: UITableViewDataSource, UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         categories.count
     }
@@ -66,20 +63,12 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch categories[indexPath.row] {
-        case .avatar:
-            navigationController?.pushViewController(AvatarViewController(), animated: true)
-        case .chip:
-            navigationController?.pushViewController(ChipViewController(), animated: true)
-        case .tag:
-            navigationController?.pushViewController(TagViewController(), animated: true)
-        case .callout:
-            navigationController?.pushViewController(CalloutViewController(), animated: true)
-        case .button:
-            navigationController?.pushViewController(ButtonCategoryViewController(), animated: true)
-        case .control:
-            navigationController?.pushViewController(ControlCategoryViewController(), animated: true)
-        case .input:
-            navigationController?.pushViewController(InputCategoryViewController(), animated: true)
+        case .searchField:
+            navigationController?.pushViewController(SearchFieldViewController(), animated: true)
+        case .textField:
+            navigationController?.pushViewController(TextFieldViewController(), animated: true)
+        case .textArea:
+            navigationController?.pushViewController(TextAreaViewController(), animated: true)
         }
     }
 }
