@@ -31,13 +31,35 @@ public final class MDSTextArea: UIView {
 
     // MARK: - Public Properties
 
-    public var label: String?
-    public var isRequired: Bool = false
-    public var descriptionText: String?
+    public var label: String? {
+        didSet {
+            labelLabel.text = label
+            labelRowView.isHidden = label == nil
+        }
+    }
+    public var isRequired: Bool = false {
+        didSet { requiredLabel.isHidden = !isRequired }
+    }
+    public var descriptionText: String? {
+        didSet {
+            descriptionLabel.text = descriptionText
+            descriptionLabel.isHidden = descriptionText == nil
+        }
+    }
     public var placeholder: String?
-    public var helperText: String?
-    public var errorMessage: String?
-    public var maxLength: Int?
+    public var helperText: String? {
+        didSet { updateHelperArea() }
+    }
+    public var errorMessage: String? {
+        didSet { if state == .error { updateHelperArea() } }
+    }
+    public var maxLength: Int? {
+        didSet {
+            counterLabel.isHidden = maxLength == nil
+            updateCounterLabel()
+            updateBottomRow()
+        }
+    }
     public var onSendTapped: (() -> Void)?
 
     public var sendButtonIcon: MDSIcon = .sendOutlined {
@@ -201,11 +223,27 @@ public final class MDSTextArea: UIView {
 
     // MARK: - Init
 
-    public init(variant: Variant = .default, hasSendButton: Bool = false, placeholder: String? = nil) {
+    public init(
+        variant: Variant = .default,
+        hasSendButton: Bool = false,
+        placeholder: String? = nil,
+        label: String? = nil,
+        isRequired: Bool = false,
+        descriptionText: String? = nil,
+        helperText: String? = nil,
+        errorMessage: String? = nil,
+        maxLength: Int? = nil
+    ) {
         self.variant = variant
         self.hasSendButton = hasSendButton
         super.init(frame: .zero)
         self.placeholder = placeholder
+        self.label = label
+        self.isRequired = isRequired
+        self.descriptionText = descriptionText
+        self.helperText = helperText
+        self.errorMessage = errorMessage
+        self.maxLength = maxLength
         setupUI()
         setupLayout()
         initialAppearance()
