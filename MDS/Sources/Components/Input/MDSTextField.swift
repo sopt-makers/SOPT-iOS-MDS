@@ -36,13 +36,35 @@ public final class MDSTextField: UIView {
 
     // MARK: - Public Properties
 
-    public var label: String?
-    public var isRequired: Bool = false
-    public var descriptionText: String?
+    public var label: String? {
+        didSet {
+            titleLabel.text = label
+            labelRowView.isHidden = label == nil
+        }
+    }
+    public var isRequired: Bool = false {
+        didSet { requiredLabel.isHidden = !isRequired }
+    }
+    public var descriptionText: String? {
+        didSet {
+            descriptionLabel.text = descriptionText
+            descriptionLabel.isHidden = descriptionText == nil
+        }
+    }
     public var placeholder: String?
-    public var helperText: String?
-    public var errorMessage: String?
-    public var maxLength: Int?
+    public var helperText: String? {
+        didSet { updateHelperArea() }
+    }
+    public var errorMessage: String? {
+        didSet { if state == .error { updateHelperArea() } }
+    }
+    public var maxLength: Int? {
+        didSet {
+            counterLabel.isHidden = maxLength == nil
+            updateCounterLabelContent()
+            updateBottomRow()
+        }
+    }
 
     public var text: String? {
         get { textField.text }
@@ -140,10 +162,25 @@ public final class MDSTextField: UIView {
 
     // MARK: - Init
 
-    public init(variant: Variant = .default, placeholder: String? = nil) {
+    public init(
+        variant: Variant = .default,
+        placeholder: String? = nil,
+        label: String? = nil,
+        isRequired: Bool = false,
+        descriptionText: String? = nil,
+        helperText: String? = nil,
+        errorMessage: String? = nil,
+        maxLength: Int? = nil
+    ) {
         self.variant = variant
         super.init(frame: .zero)
         self.placeholder = placeholder
+        self.label = label
+        self.isRequired = isRequired
+        self.descriptionText = descriptionText
+        self.helperText = helperText
+        self.errorMessage = errorMessage
+        self.maxLength = maxLength
         setupUI()
         setupLayout()
         initialAppearance()
