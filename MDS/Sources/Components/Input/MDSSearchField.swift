@@ -18,6 +18,19 @@ public final class MDSSearchField: UIView {
         case `default`
         case active
         case filled
+
+        func backgroundColor(for variant: MDSSearchField.Variant) -> UIColor {
+            switch variant {
+            case .default: return SemanticColor.Bg.Layer.default
+            case .ghost: return SemanticColor.Bg.Neutral.ghost
+            }
+        }
+
+        var hasBorder: Bool { self == .active }
+
+        var borderColor: CGColor? {
+            self == .active ? SemanticColor.Stroke.Neutral.Default.focused.cgColor : nil
+        }
     }
 
     // MARK: - Public Properties
@@ -152,24 +165,6 @@ public final class MDSSearchField: UIView {
     @objc private func clearButtonTapped() {
         textField.text = nil
         updateAppearance()
-    }
-}
-
-// MARK: - State Appearance
-
-private extension MDSSearchField.State {
-
-    func backgroundColor(for variant: MDSSearchField.Variant) -> UIColor {
-        switch variant {
-        case .default: return SemanticColor.Bg.Layer.default
-        case .ghost: return SemanticColor.Bg.Neutral.ghost
-        }
-    }
-
-    var hasBorder: Bool { self == .active }
-
-    var borderColor: CGColor? {
-        self == .active ? SemanticColor.Stroke.Neutral.Default.focused.cgColor : nil
     }
 }
 
