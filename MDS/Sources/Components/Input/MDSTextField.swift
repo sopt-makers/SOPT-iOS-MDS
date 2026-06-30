@@ -27,6 +27,35 @@ public final class MDSTextField: UIView {
         case filled
         case error
         case disabled
+
+        func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
+            if variant == .ghost { return .clear }
+            return self == .disabled
+                ? SemanticColor.Bg.Neutral.Default.disabled
+                : SemanticColor.Bg.Neutral.ghost
+        }
+
+        var hasBorder: Bool {
+            self == .active || self == .error
+        }
+
+        var borderColor: CGColor? {
+            switch self {
+            case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
+            case .error: return SemanticColor.Stroke.Danger.default.cgColor
+            default: return nil
+            }
+        }
+
+        var ghostColor: UIColor {
+            self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
+        }
+
+        var foregroundColor: UIColor {
+            self == .disabled
+                ? SemanticColor.Fg.Neutral.Default.disabled
+                : SemanticColor.Fg.Neutral.bold
+        }
     }
 
     private enum Layout {
@@ -301,40 +330,6 @@ public final class MDSTextField: UIView {
 
     private func updateBottomRow() {
         bottomRowView.isHidden = helperLabel.isHidden && counterLabel.isHidden
-    }
-}
-
-// MARK: - ResolvedState Appearance
-
-private extension MDSTextField.ResolvedState {
-
-    func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
-        if variant == .ghost { return .clear }
-        return self == .disabled
-            ? SemanticColor.Bg.Neutral.Default.disabled
-            : SemanticColor.Bg.Neutral.ghost
-    }
-
-    var hasBorder: Bool {
-        self == .active || self == .error
-    }
-
-    var borderColor: CGColor? {
-        switch self {
-        case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
-        case .error: return SemanticColor.Stroke.Danger.default.cgColor
-        default: return nil
-        }
-    }
-
-    var ghostColor: UIColor {
-        self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
-    }
-
-    var foregroundColor: UIColor {
-        self == .disabled
-            ? SemanticColor.Fg.Neutral.Default.disabled
-            : SemanticColor.Fg.Neutral.bold
     }
 }
 
