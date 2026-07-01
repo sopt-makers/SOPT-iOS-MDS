@@ -285,6 +285,7 @@ public final class MDSTextField: UIView {
         textField.isEnabled = state != .disabled
         updateFieldStyle()
         updateHelperArea()
+        updateCounterLabelContent()
     }
 
     // 외부 state, 포커스, 텍스트 유무를 조합해 렌더링 상태를 계산한다. UI를 직접 변경하지 않는다.
