@@ -153,11 +153,15 @@ final class TextFieldViewController: UIViewController {
 
         let variantControl = UISegmentedControl(items: ["Default", "Ghost"])
         variantControl.selectedSegmentIndex = 0
+        variantControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        variantControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         variantControl.addTarget(self, action: #selector(variantChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(makeControlRow(title: "Variant", control: variantControl))
 
         let stateControl = UISegmentedControl(items: ["Default", "Error", "Disabled"])
         stateControl.selectedSegmentIndex = 0
+        stateControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        stateControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         stateControl.addTarget(self, action: #selector(stateChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(makeControlRow(title: "State", control: stateControl))
 
