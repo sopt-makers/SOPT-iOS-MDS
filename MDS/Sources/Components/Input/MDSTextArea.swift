@@ -34,6 +34,7 @@ public final class MDSTextArea: UIView {
     public var label: String? {
         didSet {
             titleLabel.text = label
+            titleLabel.setTypography(Typography.title4)
             labelRowView.isHidden = label == nil
         }
     }
@@ -43,6 +44,7 @@ public final class MDSTextArea: UIView {
     public var descriptionText: String? {
         didSet {
             descriptionLabel.text = descriptionText
+            descriptionLabel.setTypography(Typography.label3)
             descriptionLabel.isHidden = descriptionText == nil
         }
     }
@@ -118,6 +120,7 @@ public final class MDSTextArea: UIView {
         label.text = "*"
         label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Brand.default
+        label.setTypography(Typography.title4)
         return label
     }()
 
@@ -322,12 +325,15 @@ public final class MDSTextArea: UIView {
     private func initialAppearance() {
         labelRowView.isHidden = label == nil
         titleLabel.text = label
+        titleLabel.setTypography(Typography.title4)
         requiredLabel.isHidden = !isRequired
 
         descriptionLabel.isHidden = descriptionText == nil
         descriptionLabel.text = descriptionText
+        descriptionLabel.setTypography(Typography.label3)
 
         placeholderLabel.text = placeholder
+        placeholderLabel.setTypography(Typography.body1)
 
         counterLabel.isHidden = maxLength == nil
 
@@ -364,6 +370,7 @@ public final class MDSTextArea: UIView {
         inputContainer.layer.borderColor = state.borderColor
         textView.textColor = state.textColor
         placeholderLabel.textColor = state.ghostColor
+        placeholderLabel.setTypography(Typography.body1)
     }
 
     private func updateHelperArea() {
@@ -372,16 +379,19 @@ public final class MDSTextArea: UIView {
             helperLabel.isHidden = true
             errorRowView.isHidden = false
             errorMessageLabel.text = message
+            errorMessageLabel.setTypography(Typography.body2)
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
             helperLabel.textColor = state.ghostColor
+            helperLabel.setTypography(Typography.body2)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
             errorRowView.isHidden = true
         }
         counterLabel.textColor = state.ghostColor
+        counterLabel.setTypography(Typography.body2)
         updateBottomRow()
     }
 
@@ -389,6 +399,7 @@ public final class MDSTextArea: UIView {
         guard let maxLength else { return }
         counterLabel.text = "\(textView.text.count)/\(maxLength)"
         counterLabel.textColor = resolvedState().ghostColor
+        counterLabel.setTypography(Typography.body2)
     }
 
     private func updateBottomRow() {
@@ -446,6 +457,7 @@ extension MDSTextArea: UITextViewDelegate {
         let newText = (currentText as NSString).replacingCharacters(in: range, with: text)
         guard newText.count <= maxLength else { return false }
         counterLabel.text = "\(newText.count)/\(maxLength)"
+        counterLabel.setTypography(Typography.body2)
         return true
     }
 

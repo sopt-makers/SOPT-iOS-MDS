@@ -103,7 +103,8 @@ extension MDSCallout {
     ) {
         let colorToken = ColorToken(style: style)
         label.text = text
-        
+        label.setTypography(Typography.body2)
+
         containerStackView.backgroundColor = colorToken.background
         containerStackView.layer.borderColor = colorToken.stroke.cgColor
         
@@ -122,10 +123,7 @@ extension MDSCallout {
             config.attributedTitle = AttributedString(
                 NSAttributedString(
                     string: buttonTitle,
-                    attributes: [
-                        .font: Typography.label4.font,
-                        .foregroundColor: SemanticColor.Fg.Neutral.bold
-                    ]
+                    attributes: Typography.label4.attributedStringAttributes(foregroundColor: SemanticColor.Fg.Neutral.bold)
                 )
             )
             config.image = MDSIcon.chevronRightOutlined.image

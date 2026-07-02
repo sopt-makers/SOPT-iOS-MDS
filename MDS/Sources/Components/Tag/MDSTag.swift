@@ -98,6 +98,7 @@ public final class MDSTag: UIView {
         label.font = sizeToken.font.font
         label.textColor = colorToken.foreground
         label.text = text
+        label.setTypography(sizeToken.font)
 
         applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
     }

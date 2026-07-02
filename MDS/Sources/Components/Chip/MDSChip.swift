@@ -61,11 +61,7 @@ public final class MDSChip: UIButton {
         config.attributedTitle = AttributedString(
             NSAttributedString(
                 string: chipTitle ?? "",
-                attributes: [
-                    .font: typography.font,
-                    .kern: typography.letterSpacing,
-                    .foregroundColor: textColor
-                ]
+                attributes: typography.attributedStringAttributes(foregroundColor: textColor)
             )
         )
     }
