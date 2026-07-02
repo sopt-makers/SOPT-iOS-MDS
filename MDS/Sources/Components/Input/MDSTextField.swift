@@ -136,6 +136,7 @@ public final class MDSTextField: UIView {
         label.numberOfLines = 1
         label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
 
