@@ -135,7 +135,8 @@ public final class MDSSearchField: UIView {
                 string: placeholder,
                 attributes: [
                     .foregroundColor: SemanticColor.Fg.Neutral.ghost,
-                    .font: Typography.body1.font
+                    .font: Typography.body1.font,
+                    .kern: Typography.body1.letterSpacing
                 ]
             )
         }

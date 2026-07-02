@@ -126,11 +126,7 @@ public final class MDSFloatingButton: UIControl {
 
         titleLabel.attributedText = NSAttributedString(
             string: label ?? "",
-            attributes: [
-                .font: sizeToken.typography.font,
-                .kern: sizeToken.typography.letterSpacing,
-                .foregroundColor: colorToken.foreground,
-            ]
+            attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
     }
 }

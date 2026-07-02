@@ -134,11 +134,7 @@ public final class MDSRadioButton: UIControl {
         titleLabel.isHidden = false
         titleLabel.attributedText = NSAttributedString(
             string: text,
-            attributes: [
-                .font: sizeToken.typography.font,
-                .kern: sizeToken.typography.letterSpacing,
-                .foregroundColor: colorToken.labelColor
-            ]
+            attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.labelColor)
         )
     }
 }

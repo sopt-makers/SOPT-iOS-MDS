@@ -89,8 +89,8 @@ public final class MDSCheckbox: UIControl {
 
     private func setupLayout() {
         let sizeToken = SizeToken(size: checkboxSize)
-        
-        titleLabel.font = sizeToken.font
+
+        titleLabel.font = sizeToken.font.font
         contentStackView.spacing = sizeToken.padding
 
         NSLayoutConstraint.activate([
@@ -112,6 +112,7 @@ public final class MDSCheckbox: UIControl {
     private func setTitle(title: String?) {
         if let title {
             self.titleLabel.text = title
+            self.titleLabel.setTypography(SizeToken(size: checkboxSize).font)
         } else {
             self.titleLabel.isHidden = true
         }
@@ -137,6 +138,7 @@ public final class MDSCheckbox: UIControl {
         checkImageView.isHidden = !isSelected
 
         titleLabel.textColor = colorToken.textColor
+        titleLabel.setTypography(SizeToken(size: checkboxSize).font)
     }
 }
 
@@ -146,20 +148,20 @@ private extension MDSCheckbox {
     struct SizeToken {
         let iconSize: CGFloat
         let boxSize: CGFloat
-        let font: UIFont
+        let font: MDSFont
         let padding: CGFloat
-        
+
         init(size: Size) {
             switch size {
             case .small:
                 iconSize = 12
                 boxSize = 16
-                font = Typography.label3.font
+                font = Typography.label3
                 padding = 6
             case .large:
                 iconSize = 15
                 boxSize = 20
-                font = Typography.label2.font
+                font = Typography.label2
                 padding = 8
             }
         }
