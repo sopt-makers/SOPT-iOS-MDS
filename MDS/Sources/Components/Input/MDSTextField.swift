@@ -27,6 +27,35 @@ public final class MDSTextField: UIView {
         case filled
         case error
         case disabled
+
+        func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
+            if variant == .ghost { return .clear }
+            return self == .disabled
+                ? SemanticColor.Bg.Neutral.Default.disabled
+                : SemanticColor.Bg.Neutral.ghost
+        }
+
+        var hasBorder: Bool {
+            self == .active || self == .error
+        }
+
+        var borderColor: CGColor? {
+            switch self {
+            case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
+            case .error: return SemanticColor.Stroke.Danger.default.cgColor
+            default: return nil
+            }
+        }
+
+        var ghostColor: UIColor {
+            self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
+        }
+
+        var foregroundColor: UIColor {
+            self == .disabled
+                ? SemanticColor.Fg.Neutral.Default.disabled
+                : SemanticColor.Fg.Neutral.bold
+        }
     }
 
     private enum Layout {
@@ -107,6 +136,7 @@ public final class MDSTextField: UIView {
         label.numberOfLines = 1
         label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
 
@@ -256,6 +286,7 @@ public final class MDSTextField: UIView {
         textField.isEnabled = state != .disabled
         updateFieldStyle()
         updateHelperArea()
+        updateCounterLabelContent()
     }
 
     // 외부 state, 포커스, 텍스트 유무를 조합해 렌더링 상태를 계산한다. UI를 직접 변경하지 않는다.
@@ -301,40 +332,6 @@ public final class MDSTextField: UIView {
 
     private func updateBottomRow() {
         bottomRowView.isHidden = helperLabel.isHidden && counterLabel.isHidden
-    }
-}
-
-// MARK: - ResolvedState Appearance
-
-private extension MDSTextField.ResolvedState {
-
-    func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
-        if variant == .ghost { return .clear }
-        return self == .disabled
-            ? SemanticColor.Bg.Neutral.Default.disabled
-            : SemanticColor.Bg.Neutral.ghost
-    }
-
-    var hasBorder: Bool {
-        self == .active || self == .error
-    }
-
-    var borderColor: CGColor? {
-        switch self {
-        case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
-        case .error: return SemanticColor.Stroke.Danger.default.cgColor
-        default: return nil
-        }
-    }
-
-    var ghostColor: UIColor {
-        self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
-    }
-
-    var foregroundColor: UIColor {
-        self == .disabled
-            ? SemanticColor.Fg.Neutral.Default.disabled
-            : SemanticColor.Fg.Neutral.bold
     }
 }
 

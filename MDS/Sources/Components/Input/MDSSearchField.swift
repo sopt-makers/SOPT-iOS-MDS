@@ -83,8 +83,9 @@ public final class MDSSearchField: UIView {
 
     public init(variant: Variant = .default, placeholder: String? = nil) {
         self.variant = variant
-        super.init(frame: .zero)
         self.placeholder = placeholder
+        
+        super.init(frame: .zero)
         setupUI()
         setupLayout()
         initialAppearance()

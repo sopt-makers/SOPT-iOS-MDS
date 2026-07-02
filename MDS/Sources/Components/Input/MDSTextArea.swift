@@ -33,7 +33,7 @@ public final class MDSTextArea: UIView {
 
     public var label: String? {
         didSet {
-            labelLabel.text = label
+            titleLabel.text = label
             labelRowView.isHidden = label == nil
         }
     }
@@ -104,11 +104,12 @@ public final class MDSTextArea: UIView {
         return stack
     }()
 
-    private let labelLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.numberOfLines = 1
+        label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
 
@@ -259,7 +260,7 @@ public final class MDSTextArea: UIView {
         sendButton.setImage(sendButtonIcon.image.withRenderingMode(.alwaysTemplate), for: .normal)
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
 
-        labelRowView.addArrangedSubview(labelLabel)
+        labelRowView.addArrangedSubview(titleLabel)
         labelRowView.addArrangedSubview(requiredLabel)
 
         errorRowView.addArrangedSubview(errorIconView)
@@ -320,7 +321,7 @@ public final class MDSTextArea: UIView {
     // init 시 한 번 호출. stored properties 값을 기반으로 초기 뷰 상태를 세팅한다.
     private func initialAppearance() {
         labelRowView.isHidden = label == nil
-        labelLabel.text = label
+        titleLabel.text = label
         requiredLabel.isHidden = !isRequired
 
         descriptionLabel.isHidden = descriptionText == nil
@@ -342,6 +343,7 @@ public final class MDSTextArea: UIView {
         textView.isSelectable = state != .disabled
         updateFieldStyle()
         updateHelperArea()
+        updateCounterLabel()
     }
 
     // 외부 state, 포커스, 텍스트 유무를 조합해 렌더링 상태를 계산한다. UI를 직접 변경하지 않는다.
