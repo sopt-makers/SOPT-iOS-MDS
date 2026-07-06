@@ -14,10 +14,14 @@ public struct MDSFont: @unchecked Sendable {
 
     /// font/lineHeight/letterSpacing을 모두 반영한 NSAttributedString.Key 속성을 반환합니다.
     /// UILabel이 아닌 곳(UIButton.Configuration.attributedTitle 등)에서 typography를 적용할 때 사용합니다.
-    public func attributedStringAttributes(foregroundColor: UIColor) -> [NSAttributedString.Key: Any] {
+    public func attributedStringAttributes(
+        foregroundColor: UIColor,
+        alignment: NSTextAlignment = .center
+    ) -> [NSAttributedString.Key: Any] {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.minimumLineHeight = lineHeight
         paragraphStyle.maximumLineHeight = lineHeight
+        paragraphStyle.alignment = alignment
 
         return [
             .font: font,
