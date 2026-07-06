@@ -69,7 +69,7 @@ public final class MDSDialog: UIView {
         return button
     }()
     
-    private let disableButton: MDSActionButton = {
+    private lazy var disableButton: MDSActionButton = {
         let button = MDSActionButton(variant: .secondary, size: .medium)
         button.addTarget(self, action: #selector(secondaryTapped), for: .touchUpInside)
         button.isHidden = true
@@ -77,7 +77,7 @@ public final class MDSDialog: UIView {
         return button
     }()
     
-    private let dangerButton: MDSActionButton = {
+    private lazy var dangerButton: MDSActionButton = {
         let button = MDSActionButton(variant: .danger, size: .medium)
         button.addTarget(self, action: #selector(primaryTapped), for: .touchUpInside)
         button.isHidden = true
