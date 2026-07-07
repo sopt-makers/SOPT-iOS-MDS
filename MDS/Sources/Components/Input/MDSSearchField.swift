@@ -64,7 +64,7 @@ public final class MDSSearchField: UIView {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
-        field.font = Typography.body1.font
+        field.setTypography(Typography.body1)
         field.textColor = SemanticColor.Fg.Neutral.bold
         field.returnKeyType = .search
         return field
@@ -133,11 +133,9 @@ public final class MDSSearchField: UIView {
         if let placeholder {
             textField.attributedPlaceholder = NSAttributedString(
                 string: placeholder,
-                attributes: [
-                    .foregroundColor: SemanticColor.Fg.Neutral.ghost,
-                    .font: Typography.body1.font,
-                    .kern: Typography.body1.letterSpacing
-                ]
+                attributes: Typography.body1.attributedStringAttributes(
+                    foregroundColor: SemanticColor.Fg.Neutral.ghost
+                )
             )
         }
         updateAppearance()

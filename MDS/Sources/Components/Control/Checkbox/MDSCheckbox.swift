@@ -90,7 +90,6 @@ public final class MDSCheckbox: UIControl {
     private func setupLayout() {
         let sizeToken = SizeToken(size: checkboxSize)
 
-        titleLabel.font = sizeToken.font.font
         contentStackView.spacing = sizeToken.padding
 
         NSLayoutConstraint.activate([
