@@ -122,7 +122,7 @@ final class TextAreaViewController: UIViewController {
         previewTextArea.isRequired = showLabel && showRequired
         previewTextArea.descriptionText = showDescription ? "Input description" : nil
         previewTextArea.helperText = showHelperText ? "Helper text" : nil
-        previewTextArea.maxLength = showTextCounter ? 100 : nil
+        previewTextArea.maxLength = showTextCounter ? 200 : nil
         previewTextArea.state = fieldState
     }
 
@@ -299,7 +299,7 @@ final class TextAreaViewController: UIViewController {
 
     @objc private func textCounterToggled(_ sender: UISwitch) {
         showTextCounter = sender.isOn
-        previewTextArea.maxLength = sender.isOn ? 100 : nil
+        previewTextArea.maxLength = sender.isOn ? 200 : nil
     }
 
     @objc private func sendButtonToggled(_ sender: UISwitch) {
