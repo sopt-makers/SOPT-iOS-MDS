@@ -93,16 +93,20 @@ private extension DialogViewController {
         rowLabel.text = label
         rowLabel.font = .systemFont(ofSize: 12, weight: .semibold)
         rowLabel.textColor = .secondaryLabel
+        
+        var checkBox: MDSCheckbox? = nil
+        if hasCheckbox {
+            checkBox = MDSCheckbox(size: .small, title: "check box")
+        }
 
         let dialog = MDSDialog(
             variant: variant,
             title: "Title Text",
-            subTitle: "Description Text\nDescription Text",
-            hasCheckbox: hasCheckbox
+            description: "Description Text\nDescription Text",
+            checkbox: checkBox
         )
         dialog.onPrimaryTap = { print("\(label) - primary tapped") }
         dialog.onSecondaryTap = { print("\(label) - secondary tapped") }
-        dialog.checkBox.title = "Label"
         dialogs.append(dialog)
 
         let rowStack = UIStackView()

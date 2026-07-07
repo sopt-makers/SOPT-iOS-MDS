@@ -9,16 +9,16 @@ import UIKit
 
 public final class MDSDialog: UIView {
     
-    public var title: String
-    public var subTitle: String
+    private let title: String
+    private let subTitle: String
+    private let checkBox: MDSCheckbox?
     
     // primary (or danger) button
     public var onPrimaryTap: (() -> Void)?
-    // disable button
+    // secondary (취소) button
     public var onSecondaryTap: (() -> Void)?
     
     private let variant: Variant
-    private let hasCheckbox: Bool
     
     private let stackView: UIStackView = {
        let stackView = UIStackView()
@@ -30,32 +30,26 @@ public final class MDSDialog: UIView {
     
     private let titleLabel: UILabel = {
        let label = UILabel()
-        label.font = Typography.heading3.font
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.heading3, textColor: SemanticColor.Fg.Neutral.bold)
+        label.numberOfLines = 0
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.body2.font
-        label.textColor = SemanticColor.Fg.Neutral.default
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.default)
         label.numberOfLines = 0
         label.textAlignment = .left
          label.translatesAutoresizingMaskIntoConstraints = false
          return label
      }()
     
-    public var checkBox: MDSCheckbox = {
-        let checkbox = MDSCheckbox(size: .small)
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        return checkbox
-    }()
-    
     private let buttonStackView: UIStackView = {
        let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 9
+        stackView.spacing = 8
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -69,7 +63,7 @@ public final class MDSDialog: UIView {
         return button
     }()
     
-    private lazy var disableButton: MDSActionButton = {
+    private lazy var secondaryButton: MDSActionButton = {
         let button = MDSActionButton(variant: .secondary, size: .medium)
         button.addTarget(self, action: #selector(secondaryTapped), for: .touchUpInside)
         button.isHidden = true
@@ -88,16 +82,16 @@ public final class MDSDialog: UIView {
     public init(
         variant: Variant,
         title: String,
-        subTitle: String,
-        hasCheckbox: Bool
+        description: String,
+        checkbox: MDSCheckbox? = nil
     ) {
         self.variant = variant
         self.title = title
-        self.subTitle = subTitle
-        self.hasCheckbox = hasCheckbox
+        self.subTitle = description
+        self.checkBox = checkbox
         
         super.init(frame: .zero)
-        
+    
         setUI()
         setLayout()
     }
@@ -118,20 +112,20 @@ public final class MDSDialog: UIView {
         switch variant {
         case .default(let primaryButtonTitle, let disableButtonTitle):
             primaryButton.title = primaryButtonTitle
-            disableButton.title = disableButtonTitle
+            secondaryButton.title = disableButtonTitle
             
             primaryButton.isHidden = false
-            disableButton.isHidden = false
+            secondaryButton.isHidden = false
         case .information(let primaryButtonTitle):
             primaryButton.title = primaryButtonTitle
             
             primaryButton.isHidden = false
         case .danger(let primaryButtonTitle, let disableButtonTitle):
             dangerButton.title = primaryButtonTitle
-            disableButton.title = disableButtonTitle
+            secondaryButton.title = disableButtonTitle
             
             dangerButton.isHidden = false
-            disableButton.isHidden = false
+            secondaryButton.isHidden = false
         }
     }
     
@@ -141,14 +135,14 @@ public final class MDSDialog: UIView {
         stackView.setCustomSpacing(8, after: titleLabel)
         stackView.addArrangedSubview(descriptionLabel)
         
-        if hasCheckbox {
+        if let checkBox {
             stackView.setCustomSpacing(24, after: descriptionLabel)
             stackView.addArrangedSubview(checkBox)
         }
         
         stackView.addArrangedSubview(buttonStackView)
         
-        buttonStackView.addArrangedSubview(disableButton)
+        buttonStackView.addArrangedSubview(secondaryButton)
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(dangerButton)
         

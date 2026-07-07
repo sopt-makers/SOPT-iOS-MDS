@@ -16,7 +16,7 @@ public struct MDSFont: @unchecked Sendable {
     /// UILabel이 아닌 곳(UIButton.Configuration.attributedTitle 등)에서 typography를 적용할 때 사용합니다.
     public func attributedStringAttributes(
         foregroundColor: UIColor,
-        alignment: NSTextAlignment = .center
+        alignment: NSTextAlignment = .natural
     ) -> [NSAttributedString.Key: Any] {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.minimumLineHeight = lineHeight
