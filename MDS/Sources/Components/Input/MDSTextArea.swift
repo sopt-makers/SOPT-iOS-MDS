@@ -76,6 +76,7 @@ public final class MDSTextArea: UIView {
             placeholderLabel.isHidden = !textView.text.isEmpty
             updateFieldStyle()
             updateCounterLabel()
+            updateTextViewHeight()
         }
     }
 
@@ -85,8 +86,15 @@ public final class MDSTextArea: UIView {
 
     // MARK: - Private Properties
 
+    /// 입력 영역 기본(최소) 높이.
+    private static let minHeight: CGFloat = 48
+
+    /// 입력 영역 최대 높이. 초과하면 내부 스크롤로 전환된다.
+    private static let maxHeight: CGFloat = 150
+
     private let variant: Variant
     private let hasSendButton: Bool
+    private var textViewHeightConstraint: NSLayoutConstraint?
 
     // MARK: - Subviews
 
@@ -154,7 +162,7 @@ public final class MDSTextArea: UIView {
         view.backgroundColor = .clear
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
-        view.isScrollEnabled = false
+        view.showsHorizontalScrollIndicator = false
         view.textColor = SemanticColor.Fg.Neutral.bold
         view.setTypography(Typography.body1)
         return view
@@ -287,7 +295,17 @@ public final class MDSTextArea: UIView {
     }
 
     private func setupLayout() {
+        // 측정한 텍스트 높이를 따라가는 constraint. 컨테이너 min/max에 걸리면 우선순위가 낮아 깨지고,
+        // max에서는 contentSize가 프레임보다 커지면서 내부 스크롤로 전환된다.
+        let heightConstraint = textView.heightAnchor.constraint(equalToConstant: Self.minHeight - 20)
+        heightConstraint.priority = .defaultHigh
+        textViewHeightConstraint = heightConstraint
+
         NSLayoutConstraint.activate([
+            heightConstraint,
+            inputContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minHeight),
+            inputContainer.heightAnchor.constraint(lessThanOrEqualToConstant: Self.maxHeight),
+
             outerStackView.topAnchor.constraint(equalTo: topAnchor),
             outerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             outerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -406,6 +424,21 @@ public final class MDSTextArea: UIView {
         bottomRowView.isHidden = helperLabel.isHidden && errorRowView.isHidden && counterLabel.isHidden
     }
 
+    // 현재 폭 기준으로 텍스트 높이를 측정해 height constraint에 반영한다.
+    private func updateTextViewHeight() {
+        guard textView.bounds.width > 0 else { return }
+        let fittingHeight = ceil(textView.sizeThatFits(
+            CGSize(width: textView.bounds.width, height: .greatestFiniteMagnitude)
+        ).height)
+        guard textViewHeightConstraint?.constant != fittingHeight else { return }
+        textViewHeightConstraint?.constant = fittingHeight
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        updateTextViewHeight()
+    }
+
     // MARK: - Actions
 
     @objc private func sendButtonTapped() {
@@ -477,5 +510,6 @@ extension MDSTextArea: UITextViewDelegate {
             textView.setTypography(Typography.body1)
         }
         placeholderLabel.isHidden = !textView.text.isEmpty
+        updateTextViewHeight()
     }
 }
