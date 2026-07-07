@@ -334,7 +334,7 @@ public final class MDSTextArea: UIView {
             ])
         } else {
             NSLayoutConstraint.activate([
-                textView.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -14),
+                textView.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -16),
             ])
         }
     }
