@@ -327,8 +327,8 @@ public final class MDSTextArea: UIView {
             inputContainer.addSubview(sendButton)
             NSLayoutConstraint.activate([
                 textView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -14),
-                sendButton.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -14),
-                sendButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor),
+                sendButton.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -16),
+                sendButton.bottomAnchor.constraint(equalTo: inputContainer.bottomAnchor, constant: -13),
                 sendButton.widthAnchor.constraint(equalToConstant: 20),
                 sendButton.heightAnchor.constraint(equalToConstant: 20),
             ])
