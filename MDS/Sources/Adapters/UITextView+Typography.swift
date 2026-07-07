@@ -15,7 +15,12 @@ extension UITextView {
         )
         typingAttributes = attributes
         if let text, !text.isEmpty {
+            // attributedText 교체는 커서/선택(selectedRange)을 초기화하므로 저장 후 복원한다.
+            let selection = selectedRange
             attributedText = NSAttributedString(string: text, attributes: attributes)
+            let length = (text as NSString).length
+            let location = min(selection.location, length)
+            selectedRange = NSRange(location: location, length: min(selection.length, length - location))
         }
     }
 }
