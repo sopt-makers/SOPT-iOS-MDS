@@ -136,7 +136,7 @@ public final class MDSTextField: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = Typography.title4.font
+        label.setTypography(Typography.title4)
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
@@ -145,7 +145,6 @@ public final class MDSTextField: UIView {
     private let requiredLabel: UILabel = {
         let label = UILabel()
         label.text = "*"
-        label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Brand.default
         label.setTypography(Typography.title4)
         return label
@@ -154,7 +153,7 @@ public final class MDSTextField: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = Typography.label3.font
+        label.setTypography(Typography.label3)
         label.textColor = SemanticColor.Fg.Neutral.subtle
         return label
     }()
@@ -163,7 +162,7 @@ public final class MDSTextField: UIView {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
-        field.font = Typography.body1.font
+        field.setTypography(Typography.body1)
         field.layer.cornerRadius = BaseRadius.Base.r10
         field.layer.masksToBounds = true
         return field
@@ -180,7 +179,7 @@ public final class MDSTextField: UIView {
     private let helperLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = Typography.body2.font
+        label.setTypography(Typography.body2)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
@@ -188,7 +187,7 @@ public final class MDSTextField: UIView {
     private let counterLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = Typography.body2.font
+        label.setTypography(Typography.body2)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -262,11 +261,9 @@ public final class MDSTextField: UIView {
         if let placeholder {
             textField.attributedPlaceholder = NSAttributedString(
                 string: placeholder,
-                attributes: [
-                    .foregroundColor: SemanticColor.Fg.Neutral.ghost,
-                    .font: Typography.body1.font,
-                    .kern: Typography.body1.letterSpacing
-                ]
+                attributes: Typography.body1.attributedStringAttributes(
+                    foregroundColor: SemanticColor.Fg.Neutral.ghost
+                )
             )
         }
 

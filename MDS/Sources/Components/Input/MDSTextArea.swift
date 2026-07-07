@@ -72,6 +72,7 @@ public final class MDSTextArea: UIView {
         get { textView.text.isEmpty ? nil : textView.text }
         set {
             textView.text = newValue ?? ""
+            textView.setTypography(Typography.body1)
             placeholderLabel.isHidden = !textView.text.isEmpty
             updateFieldStyle()
             updateCounterLabel()
@@ -108,7 +109,7 @@ public final class MDSTextArea: UIView {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.title4.font
+        label.setTypography(Typography.title4)
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.numberOfLines = 1
         label.setContentHuggingPriority(.required, for: .horizontal)
@@ -118,7 +119,6 @@ public final class MDSTextArea: UIView {
     private let requiredLabel: UILabel = {
         let label = UILabel()
         label.text = "*"
-        label.font = Typography.title4.font
         label.textColor = SemanticColor.Fg.Brand.default
         label.setTypography(Typography.title4)
         return label
@@ -126,7 +126,7 @@ public final class MDSTextArea: UIView {
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.label3.font
+        label.setTypography(Typography.label3)
         label.textColor = SemanticColor.Fg.Neutral.subtle
         label.numberOfLines = 0
         return label
@@ -155,16 +155,16 @@ public final class MDSTextArea: UIView {
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
         view.isScrollEnabled = false
-        view.font = Typography.body1.font
         view.textColor = SemanticColor.Fg.Neutral.bold
+        view.setTypography(Typography.body1)
         return view
     }()
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Typography.body1.font
         label.textColor = SemanticColor.Fg.Neutral.ghost
+        label.setTypography(Typography.body1)
         label.numberOfLines = 0
         return label
     }()
@@ -186,7 +186,7 @@ public final class MDSTextArea: UIView {
 
     private let helperLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.body2.font
+        label.setTypography(Typography.body2)
         label.numberOfLines = 0
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
@@ -212,7 +212,7 @@ public final class MDSTextArea: UIView {
 
     private let errorMessageLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.body2.font
+        label.setTypography(Typography.body2)
         label.textColor = SemanticColor.Fg.Danger.default
         label.numberOfLines = 0
         return label
@@ -220,7 +220,7 @@ public final class MDSTextArea: UIView {
 
     private let counterLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.body2.font
+        label.setTypography(Typography.body2)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -471,6 +471,11 @@ extension MDSTextArea: UITextViewDelegate {
     }
 
     public func textViewDidChange(_ textView: UITextView) {
+        // 텍스트를 전부 지우면 typingAttributes가 초기화되므로 다시 지정한다.
+        // 입력 중에는 호출하지 않는다. attributedText 재설정이 한글 조합을 끊기 때문.
+        if textView.text.isEmpty {
+            textView.setTypography(Typography.body1)
+        }
         placeholderLabel.isHidden = !textView.text.isEmpty
     }
 }
