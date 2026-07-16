@@ -79,7 +79,8 @@ public final class MDSTextField: UIView {
         didSet {
             descriptionLabel.text = descriptionText
             descriptionLabel.setTypography(Typography.body2)
-            descriptionLabel.isHidden = descriptionText == nil
+            descriptionContainerView.isHidden = descriptionText == nil
+            updateLabelDescriptionSpacing()
         }
     }
     public var placeholder: String?
@@ -120,7 +121,7 @@ public final class MDSTextField: UIView {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 2
+        stack.spacing = 10
         stack.alignment = .fill
         return stack
     }()
@@ -152,8 +153,11 @@ public final class MDSTextField: UIView {
         return label
     }()
 
+    private let descriptionContainerView = UIView()
+
     private let descriptionLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.setTypography(Typography.body2)
         label.textColor = SemanticColor.Fg.Neutral.default
@@ -242,11 +246,13 @@ public final class MDSTextField: UIView {
         bottomRowView.addArrangedSubview(helperLabel)
         bottomRowView.addArrangedSubview(counterLabel)
 
+        descriptionContainerView.addSubview(descriptionLabel)
+
         outerStackView.addArrangedSubview(labelRowView)
-        outerStackView.addArrangedSubview(descriptionLabel)
+        outerStackView.addArrangedSubview(descriptionContainerView)
         outerStackView.addArrangedSubview(textField)
         outerStackView.addArrangedSubview(bottomRowView)
-        outerStackView.setCustomSpacing(10, after: descriptionLabel)
+        outerStackView.setCustomSpacing(10, after: descriptionContainerView)
         outerStackView.setCustomSpacing(6, after: textField)
 
         addSubview(outerStackView)
@@ -260,8 +266,10 @@ public final class MDSTextField: UIView {
             outerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textField.heightAnchor.constraint(equalToConstant: Layout.textFieldHeight),
 
-            descriptionLabel.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
-            descriptionLabel.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
+            descriptionLabel.topAnchor.constraint(equalTo: descriptionContainerView.topAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: descriptionContainerView.bottomAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionContainerView.leadingAnchor, constant: 2),
+            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainerView.trailingAnchor, constant: -2),
         ])
     }
 
@@ -281,15 +289,22 @@ public final class MDSTextField: UIView {
         titleLabel.setTypography(Typography.title4)
         requiredLabel.isHidden = !isRequired
 
-        descriptionLabel.isHidden = descriptionText == nil
+        descriptionContainerView.isHidden = descriptionText == nil
         descriptionLabel.text = descriptionText
         descriptionLabel.setTypography(Typography.body2)
+        updateLabelDescriptionSpacing()
 
         counterLabel.isHidden = maxLength == nil
 
         updateFieldStyle()
         updateHelperArea()
         updateCounterLabelContent()
+    }
+
+    // description이 없을 때는 setCustomSpacing(after: descriptionLabel)이 적용되지 않아
+    // label-input 간격이 기본값(outerStackView.spacing)으로 떨어지므로, label 뒤쪽 spacing을 직접 전환한다.
+    private func updateLabelDescriptionSpacing() {
+        outerStackView.setCustomSpacing(descriptionContainerView.isHidden ? 10 : 2, after: labelRowView)
     }
 
     // MARK: - State
