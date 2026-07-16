@@ -10,7 +10,7 @@ import UIKit
 public final class MDSDialog: UIView {
     
     private let title: String
-    private let subTitle: String
+    private let subTitle: String?
     private let checkBox: MDSCheckbox?
     
     // primary (or danger) button
@@ -38,7 +38,7 @@ public final class MDSDialog: UIView {
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.setTypography(Typography.body2)
         label.textColor = SemanticColor.Fg.Neutral.default
@@ -84,14 +84,18 @@ public final class MDSDialog: UIView {
     public init(
         variant: Variant,
         title: String,
-        description: String,
-        checkbox: MDSCheckbox? = nil
+        description: String? = nil,
+        checkBoxTitle: String?
     ) {
         self.variant = variant
         self.title = title
         self.subTitle = description
-        self.checkBox = checkbox
-        
+        if let checkBoxTitle {
+            self.checkBox = MDSCheckbox(size: .small, title: checkBoxTitle)
+        } else {
+            self.checkBox = nil
+        }
+
         super.init(frame: .zero)
     
         setUI()
@@ -112,19 +116,30 @@ public final class MDSDialog: UIView {
         descriptionLabel.text = subTitle
         
         switch variant {
-        case .default(let primaryButtonTitle, let disableButtonTitle):
-            primaryButton.title = primaryButtonTitle
-            secondaryButton.title = disableButtonTitle
+        case let .default(primaryTitle, primaryPrefix, primarySuffix, secondaryTitle, secondaryPrefix, secondarySuffix):
+            
+            primaryButton.title = primaryTitle
+            primaryButton.prefixIcon = primaryPrefix
+            primaryButton.suffixIcon = primarySuffix
+            secondaryButton.title = secondaryTitle
+            secondaryButton.prefixIcon = secondaryPrefix
+            secondaryButton.suffixIcon = secondarySuffix
             
             primaryButton.isHidden = false
             secondaryButton.isHidden = false
-        case .information(let primaryButtonTitle):
-            primaryButton.title = primaryButtonTitle
+        case let .information(primaryTitle, primaryPrefix, primarySuffix):
+            primaryButton.title = primaryTitle
+            primaryButton.prefixIcon = primaryPrefix
+            primaryButton.suffixIcon = primarySuffix
             
             primaryButton.isHidden = false
-        case .danger(let primaryButtonTitle, let disableButtonTitle):
-            dangerButton.title = primaryButtonTitle
-            secondaryButton.title = disableButtonTitle
+        case let .danger(primaryTitle, primaryPrefix, primarySuffix, secondaryTitle, secondaryPrefix, secondarySuffix):
+            dangerButton.title = primaryTitle
+            dangerButton.prefixIcon = primaryPrefix
+            dangerButton.suffixIcon = primarySuffix
+            secondaryButton.title = secondaryTitle
+            secondaryButton.prefixIcon = secondaryPrefix
+            secondaryButton.suffixIcon = secondarySuffix
             
             dangerButton.isHidden = false
             secondaryButton.isHidden = false
@@ -134,11 +149,14 @@ public final class MDSDialog: UIView {
     private func setLayout() {
         addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
-        stackView.setCustomSpacing(8, after: titleLabel)
-        stackView.addArrangedSubview(descriptionLabel)
-        
+
+        if subTitle != nil {
+            stackView.addArrangedSubview(descriptionLabel)
+            stackView.setCustomSpacing(8, after: titleLabel)
+        }
+
         if let checkBox {
-            stackView.setCustomSpacing(24, after: descriptionLabel)
+            stackView.setCustomSpacing(24, after: subTitle != nil ? descriptionLabel : titleLabel)
             stackView.addArrangedSubview(checkBox)
         }
         
