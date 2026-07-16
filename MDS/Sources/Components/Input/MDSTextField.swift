@@ -78,7 +78,7 @@ public final class MDSTextField: UIView {
     public var descriptionText: String? {
         didSet {
             descriptionLabel.text = descriptionText
-            descriptionLabel.setTypography(Typography.label3)
+            descriptionLabel.setTypography(Typography.body2)
             descriptionLabel.isHidden = descriptionText == nil
         }
     }
@@ -120,7 +120,7 @@ public final class MDSTextField: UIView {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 12
+        stack.spacing = 2
         stack.alignment = .fill
         return stack
     }()
@@ -153,8 +153,8 @@ public final class MDSTextField: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.setTypography(Typography.label3)
-        label.textColor = SemanticColor.Fg.Neutral.subtle
+        label.setTypography(Typography.body2)
+        label.textColor = SemanticColor.Fg.Neutral.default
         return label
     }()
 
@@ -179,7 +179,7 @@ public final class MDSTextField: UIView {
     private let helperLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.setTypography(Typography.body2)
+        label.setTypography(Typography.body3)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return label
     }()
@@ -187,7 +187,7 @@ public final class MDSTextField: UIView {
     private let counterLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.setTypography(Typography.body2)
+        label.setTypography(Typography.body3)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -242,6 +242,8 @@ public final class MDSTextField: UIView {
         outerStackView.addArrangedSubview(descriptionLabel)
         outerStackView.addArrangedSubview(textField)
         outerStackView.addArrangedSubview(bottomRowView)
+        outerStackView.setCustomSpacing(10, after: descriptionLabel)
+        outerStackView.setCustomSpacing(6, after: textField)
 
         addSubview(outerStackView)
     }
@@ -253,6 +255,13 @@ public final class MDSTextField: UIView {
             outerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             outerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textField.heightAnchor.constraint(equalToConstant: Layout.textFieldHeight),
+
+            labelRowView.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
+            labelRowView.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
+            descriptionLabel.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
+            descriptionLabel.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
+            bottomRowView.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
+            bottomRowView.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
         ])
     }
 
@@ -274,7 +283,7 @@ public final class MDSTextField: UIView {
 
         descriptionLabel.isHidden = descriptionText == nil
         descriptionLabel.text = descriptionText
-        descriptionLabel.setTypography(Typography.label3)
+        descriptionLabel.setTypography(Typography.body2)
 
         counterLabel.isHidden = maxLength == nil
 
@@ -317,12 +326,12 @@ public final class MDSTextField: UIView {
             helperLabel.isHidden = false
             helperLabel.text = message
             helperLabel.textColor = SemanticColor.Fg.Danger.default
-            helperLabel.setTypography(Typography.body2)
+            helperLabel.setTypography(Typography.body3)
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
             helperLabel.textColor = effectiveState.ghostColor
-            helperLabel.setTypography(Typography.body2)
+            helperLabel.setTypography(Typography.body3)
         } else {
             helperLabel.isHidden = true
         }
@@ -333,7 +342,7 @@ public final class MDSTextField: UIView {
         guard let maxLength else { return }
         counterLabel.text = "\(textField.text?.count ?? 0)/\(maxLength)"
         counterLabel.textColor = resolvedState().ghostColor
-        counterLabel.setTypography(Typography.body2)
+        counterLabel.setTypography(Typography.body3)
     }
 
     private func updateBottomRow() {
@@ -355,7 +364,7 @@ extension MDSTextField: UITextFieldDelegate {
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
         guard newText.count <= maxLength else { return false }
         counterLabel.text = "\(newText.count)/\(maxLength)"
-        counterLabel.setTypography(Typography.body2)
+        counterLabel.setTypography(Typography.body3)
         return true
     }
 
