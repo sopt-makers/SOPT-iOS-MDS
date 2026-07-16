@@ -130,6 +130,8 @@ public final class MDSTextField: UIView {
         stack.axis = .horizontal
         stack.spacing = 4
         stack.alignment = .center
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
         return stack
     }()
 
@@ -173,6 +175,8 @@ public final class MDSTextField: UIView {
         stack.axis = .horizontal
         stack.spacing = 20
         stack.alignment = .center
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
         return stack
     }()
 
@@ -256,12 +260,8 @@ public final class MDSTextField: UIView {
             outerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textField.heightAnchor.constraint(equalToConstant: Layout.textFieldHeight),
 
-            labelRowView.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
-            labelRowView.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
             descriptionLabel.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
             descriptionLabel.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
-            bottomRowView.leadingAnchor.constraint(equalTo: outerStackView.leadingAnchor, constant: 2),
-            bottomRowView.trailingAnchor.constraint(equalTo: outerStackView.trailingAnchor, constant: -2),
         ])
     }
 
