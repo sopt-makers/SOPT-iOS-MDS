@@ -142,7 +142,10 @@ public final class MDSActionButton: UIControl {
 
         titleLabel.attributedText = NSAttributedString(
             string: title ?? "",
-            attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
+            attributes: sizeToken.typography.attributedStringAttributes(
+                foregroundColor: colorToken.foreground,
+                alignment: .center
+            )
         )
 
         prefixImageView.image = prefixIcon?.withRenderingMode(.alwaysTemplate)

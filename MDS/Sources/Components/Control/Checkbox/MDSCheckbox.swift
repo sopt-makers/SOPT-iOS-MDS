@@ -18,6 +18,10 @@ public final class MDSCheckbox: UIControl {
     public override var isEnabled: Bool {
         didSet { updateAppearance() }
     }
+    
+    public var title: String? {
+        didSet { setTitle(title: title) }
+    }
 
     private let checkboxSize: Size
 
@@ -110,6 +114,7 @@ public final class MDSCheckbox: UIControl {
     
     private func setTitle(title: String?) {
         if let title {
+            self.titleLabel.isHidden = false
             self.titleLabel.text = title
             self.titleLabel.setTypography(SizeToken(size: checkboxSize).font)
         } else {

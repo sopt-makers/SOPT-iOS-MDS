@@ -14,6 +14,7 @@ final class ComponentCategoryViewController: UIViewController {
         case button = "Button"
         case control = "Control"
         case input = "Input"
+        case dialog = "Dialog"
     }
 
 
@@ -80,6 +81,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
             navigationController?.pushViewController(ControlCategoryViewController(), animated: true)
         case .input:
             navigationController?.pushViewController(InputCategoryViewController(), animated: true)
+        case .dialog:
+            navigationController?.pushViewController(DialogViewController(), animated: true)
         }
     }
 }
