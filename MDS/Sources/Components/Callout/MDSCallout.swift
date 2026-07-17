@@ -24,7 +24,7 @@ public final class MDSCallout: UIView {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 10
+        view.spacing = BaseSpacing.Base.s16
         view.alignment = .leading
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

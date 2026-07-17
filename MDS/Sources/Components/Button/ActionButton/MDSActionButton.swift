@@ -180,23 +180,23 @@ private extension MDSActionButton {
                 iconSize = 16
                 typography = Typography.label4
             case .small:
-                height = 36
+                height = 38
                 cornerRadius = BaseRadius.Base.r8
-                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
+                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
                 iconGap = 4
                 iconSize = 16
                 typography = Typography.label3
             case .medium:
                 height = 46
                 cornerRadius = BaseRadius.Base.r10
-                contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20)
+                contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
                 iconGap = 4
                 iconSize = 20
                 typography = Typography.label2
             case .large:
                 height = 56
                 cornerRadius = BaseRadius.Base.r12
-                contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 24, bottom: 16, trailing: 24)
+                contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 20)
                 iconGap = 4
                 iconSize = 24
                 typography = Typography.label1
