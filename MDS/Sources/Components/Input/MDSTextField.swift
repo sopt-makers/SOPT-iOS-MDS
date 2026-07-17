@@ -11,7 +11,7 @@ public final class MDSTextField: UIView {
 
     public enum Variant {
         case `default`
-        case ghost
+        case bold
     }
 
     /// 외부에서 설정 가능한 상태. .active / .filled는 포커스·텍스트 유무로 자동 결정됩니다.
@@ -29,7 +29,7 @@ public final class MDSTextField: UIView {
         case disabled
 
         func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
-            if variant == .ghost { return .clear }
+            if variant == .bold { return .clear }
             return self == .disabled
                 ? SemanticColor.Bg.Neutral.Default.disabled
                 : SemanticColor.Bg.Neutral.ghost

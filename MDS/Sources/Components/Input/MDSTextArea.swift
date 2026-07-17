@@ -11,7 +11,7 @@ public final class MDSTextArea: UIView {
 
     public enum Variant {
         case `default`
-        case ghost
+        case bold
     }
 
     /// 외부에서 설정 가능한 상태. .active / .filled는 포커스·텍스트 유무로 자동 결정됩니다.
@@ -476,7 +476,7 @@ private extension MDSTextArea.ResolvedState {
     func backgroundColor(for variant: MDSTextArea.Variant) -> UIColor {
         switch variant {
         case .default: return SemanticColor.Bg.Layer.default
-        case .ghost: return SemanticColor.Bg.Neutral.ghost
+        case .bold: return SemanticColor.Bg.Neutral.ghost
         }
     }
 

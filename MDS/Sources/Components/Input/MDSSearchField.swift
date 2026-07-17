@@ -11,7 +11,7 @@ public final class MDSSearchField: UIView {
 
     public enum Variant {
         case `default`
-        case ghost
+        case bold
     }
 
     private enum State {
@@ -22,7 +22,7 @@ public final class MDSSearchField: UIView {
         func backgroundColor(for variant: MDSSearchField.Variant) -> UIColor {
             switch variant {
             case .default: return SemanticColor.Bg.Layer.default
-            case .ghost: return SemanticColor.Bg.Neutral.ghost
+            case .bold: return SemanticColor.Bg.Neutral.ghost
             }
         }
 
