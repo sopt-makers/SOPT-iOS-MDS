@@ -53,7 +53,7 @@ final class SearchFieldViewController: UIViewController {
     private func setupContent() {
         let variants: [(title: String, variant: MDSSearchField.Variant)] = [
             ("Default", .default),
-            ("Ghost", .ghost),
+            ("Bold", .bold),
         ]
         variants.forEach { item in
             contentStack.addArrangedSubview(makeVariantSection(title: item.title, variant: item.variant))

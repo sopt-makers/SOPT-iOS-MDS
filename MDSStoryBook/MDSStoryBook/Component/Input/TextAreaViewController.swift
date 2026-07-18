@@ -153,7 +153,7 @@ final class TextAreaViewController: UIViewController {
             stack.bottomAnchor.constraint(equalTo: card.bottomAnchor),
         ])
 
-        let variantControl = UISegmentedControl(items: ["Default", "Ghost"])
+        let variantControl = UISegmentedControl(items: ["Default", "Bold"])
         variantControl.selectedSegmentIndex = 0
         variantControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         variantControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
@@ -258,7 +258,7 @@ final class TextAreaViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func variantChanged(_ sender: UISegmentedControl) {
-        fieldVariant = sender.selectedSegmentIndex == 0 ? .default : .ghost
+        fieldVariant = sender.selectedSegmentIndex == 0 ? .default : .bold
         setupTextArea()
     }
 
