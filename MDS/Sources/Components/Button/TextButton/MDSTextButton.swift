@@ -49,14 +49,7 @@ public final class MDSTextButton: UIControl {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    private let underlineView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = true
-        return view
-    }()
-    
+
     // MARK: - Init
     
     public init(
@@ -83,7 +76,6 @@ public final class MDSTextButton: UIControl {
     
     private func setupHierarchy() {
         addSubview(contentStackView)
-        addSubview(underlineView)
         contentStackView.addArrangedSubview(textLabel)
         contentStackView.addArrangedSubview(chevronImageView)
     }
@@ -99,11 +91,6 @@ public final class MDSTextButton: UIControl {
             
             chevronImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
             chevronImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize),
-            
-            underlineView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-            underlineView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-            underlineView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
-            underlineView.heightAnchor.constraint(equalToConstant: 1),
         ])
     }
     
@@ -124,13 +111,6 @@ public final class MDSTextButton: UIControl {
             attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
         chevronImageView.tintColor = colorToken.foreground
-        
-        if isHighlighted {
-            underlineView.isHidden = false
-            underlineView.backgroundColor = colorToken.foreground
-        } else {
-            underlineView.isHidden = true
-        }
     }
 }
 
