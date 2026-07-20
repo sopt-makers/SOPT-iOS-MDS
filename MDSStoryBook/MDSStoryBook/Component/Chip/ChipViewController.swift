@@ -84,8 +84,9 @@ final class ChipViewController: UIViewController {
             cardStack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
         ])
 
-        cardStack.addArrangedSubview(makeChipItem(size: size, isInteractive: true))
-        cardStack.addArrangedSubview(makeChipItem(size: size, isInteractive: false))
+        cardStack.addArrangedSubview(makeChipItem(size: size, variant: .interactive))
+        cardStack.addArrangedSubview(makeChipItem(size: size, variant: .selected))
+        cardStack.addArrangedSubview(makeChipItem(size: size, variant: .disabled))
 
         let sectionStack = UIStackView()
         sectionStack.axis = .vertical
@@ -95,7 +96,13 @@ final class ChipViewController: UIViewController {
         return sectionStack
     }
 
-    private func makeChipItem(size: MDSChip.Size, isInteractive: Bool) -> UIView {
+    private enum ChipVariant {
+        case interactive
+        case selected
+        case disabled
+    }
+
+    private func makeChipItem(size: MDSChip.Size, variant: ChipVariant) -> UIView {
         let itemStack = UIStackView()
         itemStack.axis = .vertical
         itemStack.spacing = 12
@@ -108,16 +115,20 @@ final class ChipViewController: UIViewController {
         descriptionLabel.textAlignment = .center
 
         let chip = MDSChip(size: size)
+        chip.chipTitle = "Chip"
 
-        if isInteractive {
-            chip.chipTitle = "Chip"
+        switch variant {
+        case .interactive:
             descriptionLabel.text = "탭하여 선택 상태 변경"
             chip.addTarget(self, action: #selector(chipTapped(_:)), for: .touchUpInside)
-        } else {
-            chip.chipTitle = "Chip"
+        case .selected:
             chip.isSelected = true
             chip.isUserInteractionEnabled = false
             descriptionLabel.text = "항상 Selected 상태"
+        case .disabled:
+            chip.isEnabled = false
+            chip.isUserInteractionEnabled = false
+            descriptionLabel.text = "항상 Disabled 상태"
         }
 
         itemStack.addArrangedSubview(chip)
