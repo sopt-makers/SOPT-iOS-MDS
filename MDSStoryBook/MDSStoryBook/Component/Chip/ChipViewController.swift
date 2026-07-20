@@ -26,7 +26,7 @@ final class ChipViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Chip"
+        title = "CHIP"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupChips()
