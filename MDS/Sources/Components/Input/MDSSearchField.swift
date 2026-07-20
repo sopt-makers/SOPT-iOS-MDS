@@ -110,7 +110,7 @@ public final class MDSSearchField: UIView {
         addSubview(clearButton)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 48),
+            heightAnchor.constraint(equalToConstant: 46),
 
             searchIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
             searchIconView.centerYAnchor.constraint(equalTo: centerYAnchor),

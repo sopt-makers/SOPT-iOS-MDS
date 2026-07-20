@@ -5,24 +5,6 @@
 
 import UIKit
 
-/// UITextField는 UITextView의 textContainerInset과 달리 수직 padding을 지정할 방법이 없어,
-/// textRect/editingRect/placeholderRect를 오버라이드해 상하 padding을 직접 준다.
-private final class PaddedTextField: UITextField {
-    var verticalPadding: CGFloat = 0
-
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        super.textRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
-    }
-
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        super.editingRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
-    }
-
-    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        super.placeholderRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
-    }
-}
-
 public final class MDSTextField: UIView {
 
     // MARK: - Nested Types
@@ -71,7 +53,7 @@ public final class MDSTextField: UIView {
     }
 
     private enum Layout {
-        static let textFieldHeight: CGFloat = 48
+        static let textFieldHeight: CGFloat = 46
         static let horizontalPadding: CGFloat = BaseSpacing.Base.s16
     }
 
@@ -179,14 +161,13 @@ public final class MDSTextField: UIView {
         return label
     }()
 
-    private let textField: PaddedTextField = {
-        let field = PaddedTextField()
+    private let textField: UITextField = {
+        let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
         field.setTypography(Typography.body1)
         field.layer.cornerRadius = BaseRadius.Base.r10
         field.layer.masksToBounds = true
-        field.verticalPadding = BaseSpacing.Base.s10
         return field
     }()
 
