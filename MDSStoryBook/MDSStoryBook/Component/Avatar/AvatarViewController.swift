@@ -12,13 +12,16 @@ final class AvatarViewController: UIViewController {
         let title: String
         let hasStroke: Bool
         let hasImage: Bool
+        let avatarVariant: MDSAvatar.Variant
     }
 
     private let variants: [Variant] = [
-        Variant(title: "Fallback", hasStroke: false, hasImage: false),
-        Variant(title: "Fallback + Stroke", hasStroke: true, hasImage: false),
-        Variant(title: "Image", hasStroke: false, hasImage: true),
-        Variant(title: "Image + Stroke", hasStroke: true, hasImage: true),
+        Variant(title: "Fallback", hasStroke: false, hasImage: false, avatarVariant: .default),
+        Variant(title: "Fallback + Stroke", hasStroke: true, hasImage: false, avatarVariant: .default),
+        Variant(title: "Image", hasStroke: false, hasImage: true, avatarVariant: .default),
+        Variant(title: "Image + Stroke", hasStroke: true, hasImage: true, avatarVariant: .default),
+        Variant(title: "Subtle", hasStroke: false, hasImage: false, avatarVariant: .subtle),
+        Variant(title: "Subtle + Stroke", hasStroke: true, hasImage: false, avatarVariant: .subtle),
     ]
 
     private let recommendedSizes: [CGFloat] = [24, 32, 48, 56, 72, 80, 120, 180]
@@ -88,7 +91,12 @@ final class AvatarViewController: UIViewController {
 
     private func makeVariantSection(variant: Variant, sizes: [CGFloat]) -> UIView {
         let header = makeSectionHeader(variant.title)
-        let card = makeCard(sizes: sizes, hasStroke: variant.hasStroke, hasImage: variant.hasImage)
+        let card = makeCard(
+            sizes: sizes,
+            hasStroke: variant.hasStroke,
+            hasImage: variant.hasImage,
+            avatarVariant: variant.avatarVariant
+        )
 
         let sectionStack = UIStackView()
         sectionStack.axis = .vertical
@@ -98,7 +106,12 @@ final class AvatarViewController: UIViewController {
         return sectionStack
     }
 
-    private func makeCard(sizes: [CGFloat], hasStroke: Bool, hasImage: Bool) -> UIView {
+    private func makeCard(
+        sizes: [CGFloat],
+        hasStroke: Bool,
+        hasImage: Bool,
+        avatarVariant: MDSAvatar.Variant = .default
+    ) -> UIView {
         let card = UIView()
         card.backgroundColor = SemanticColor.Bg.Dim.default
         card.layer.cornerRadius = 12
@@ -123,14 +136,26 @@ final class AvatarViewController: UIViewController {
                 ? rainbowColors[index % rainbowColors.count]
                 : SemanticColor.Stroke.Secondary.default
             cardStack.addArrangedSubview(
-                makeSizeRow(size: size, hasStroke: hasStroke, hasImage: hasImage, strokeColor: strokeColor)
+                makeSizeRow(
+                    size: size,
+                    hasStroke: hasStroke,
+                    hasImage: hasImage,
+                    strokeColor: strokeColor,
+                    avatarVariant: avatarVariant
+                )
             )
         }
 
         return card
     }
 
-    private func makeSizeRow(size: CGFloat, hasStroke: Bool, hasImage: Bool, strokeColor: UIColor) -> UIView {
+    private func makeSizeRow(
+        size: CGFloat,
+        hasStroke: Bool,
+        hasImage: Bool,
+        strokeColor: UIColor,
+        avatarVariant: MDSAvatar.Variant = .default
+    ) -> UIView {
         let rowStack = UIStackView()
         rowStack.axis = .horizontal
         rowStack.alignment = .center
@@ -146,6 +171,7 @@ final class AvatarViewController: UIViewController {
 
         let avatar = MDSAvatar(
             size: size,
+            variant: avatarVariant,
             image: hasImage ? makeSampleImage(size: size) : nil,
             hasStroke: hasStroke,
             strokeColor: strokeColor
