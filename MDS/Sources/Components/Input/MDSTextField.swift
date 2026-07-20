@@ -5,6 +5,24 @@
 
 import UIKit
 
+/// UITextField는 UITextView의 textContainerInset과 달리 수직 padding을 지정할 방법이 없어,
+/// textRect/editingRect/placeholderRect를 오버라이드해 상하 padding을 직접 준다.
+private final class PaddedTextField: UITextField {
+    var verticalPadding: CGFloat = 0
+
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        super.textRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
+    }
+
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        super.editingRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
+    }
+
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        super.placeholderRect(forBounds: bounds).insetBy(dx: 0, dy: verticalPadding)
+    }
+}
+
 public final class MDSTextField: UIView {
 
     // MARK: - Nested Types
@@ -15,9 +33,10 @@ public final class MDSTextField: UIView {
     }
 
     /// 외부에서 설정 가능한 상태. .active / .filled는 포커스·텍스트 유무로 자동 결정됩니다.
+    /// error는 Figma상 별도 state가 아니라 default/active/filled 어디에나 겹칠 수 있는 독립된 플래그라
+    /// state가 아닌 errorMessage의 유무로 표현한다 (disabled일 때는 error보다 우선한다).
     public enum State {
         case `default`
-        case error
         case disabled
     }
 
@@ -25,7 +44,6 @@ public final class MDSTextField: UIView {
         case `default`
         case active
         case filled
-        case error
         case disabled
 
         func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
@@ -35,16 +53,10 @@ public final class MDSTextField: UIView {
                 : SemanticColor.Bg.Neutral.ghost
         }
 
-        var hasBorder: Bool {
-            self == .active || self == .error
-        }
+        var hasBorder: Bool { self == .active }
 
         var borderColor: CGColor? {
-            switch self {
-            case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
-            case .error: return SemanticColor.Stroke.Danger.default.cgColor
-            default: return nil
-            }
+            self == .active ? SemanticColor.Stroke.Neutral.Default.focused.cgColor : nil
         }
 
         var ghostColor: UIColor {
@@ -60,7 +72,7 @@ public final class MDSTextField: UIView {
 
     private enum Layout {
         static let textFieldHeight: CGFloat = 48
-        static let horizontalPadding: CGFloat = 16
+        static let horizontalPadding: CGFloat = BaseSpacing.Base.s16
     }
 
     // MARK: - Public Properties
@@ -68,7 +80,7 @@ public final class MDSTextField: UIView {
     public var label: String? {
         didSet {
             titleLabel.text = label
-            titleLabel.setTypography(Typography.title4)
+            titleLabel.setTypography(Typography.title5)
             labelRowView.isHidden = label == nil
         }
     }
@@ -88,7 +100,10 @@ public final class MDSTextField: UIView {
         didSet { updateHelperArea() }
     }
     public var errorMessage: String? {
-        didSet { if state == .error { updateHelperArea() } }
+        didSet {
+            updateFieldStyle()
+            updateHelperArea()
+        }
     }
     public var maxLength: Int? {
         didSet {
@@ -121,7 +136,7 @@ public final class MDSTextField: UIView {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 10
+        stack.spacing = BaseSpacing.Base.s10
         stack.alignment = .fill
         return stack
     }()
@@ -132,14 +147,14 @@ public final class MDSTextField: UIView {
         stack.spacing = 4
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
         return stack
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.setTypography(Typography.title4)
+        label.setTypography(Typography.title5)
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
@@ -164,13 +179,14 @@ public final class MDSTextField: UIView {
         return label
     }()
 
-    private let textField: UITextField = {
-        let field = UITextField()
+    private let textField: PaddedTextField = {
+        let field = PaddedTextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
         field.setTypography(Typography.body1)
         field.layer.cornerRadius = BaseRadius.Base.r10
         field.layer.masksToBounds = true
+        field.verticalPadding = BaseSpacing.Base.s10
         return field
     }()
 
@@ -180,7 +196,7 @@ public final class MDSTextField: UIView {
         stack.spacing = 20
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
         return stack
     }()
 
@@ -189,6 +205,32 @@ public final class MDSTextField: UIView {
         label.numberOfLines = 0
         label.setTypography(Typography.body3)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return label
+    }()
+
+    private let errorRowView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 4
+        stack.alignment = .center
+        stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return stack
+    }()
+
+    private let errorIconView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = MDSIcon.infoCircleOutlined.image.withRenderingMode(.alwaysTemplate)
+        view.tintColor = SemanticColor.Fg.Danger.default
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+
+    private let errorMessageLabel: UILabel = {
+        let label = UILabel()
+        label.setTypography(Typography.body3)
+        label.textColor = SemanticColor.Fg.Danger.default
+        label.numberOfLines = 0
         return label
     }()
 
@@ -243,7 +285,11 @@ public final class MDSTextField: UIView {
         labelRowView.addArrangedSubview(titleLabel)
         labelRowView.addArrangedSubview(requiredLabel)
 
+        errorRowView.addArrangedSubview(errorIconView)
+        errorRowView.addArrangedSubview(errorMessageLabel)
+
         bottomRowView.addArrangedSubview(helperLabel)
+        bottomRowView.addArrangedSubview(errorRowView)
         bottomRowView.addArrangedSubview(counterLabel)
 
         descriptionContainerView.addSubview(descriptionLabel)
@@ -266,10 +312,13 @@ public final class MDSTextField: UIView {
             outerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textField.heightAnchor.constraint(equalToConstant: Layout.textFieldHeight),
 
+            errorIconView.widthAnchor.constraint(equalToConstant: 14),
+            errorIconView.heightAnchor.constraint(equalToConstant: 14),
+
             descriptionLabel.topAnchor.constraint(equalTo: descriptionContainerView.topAnchor),
             descriptionLabel.bottomAnchor.constraint(equalTo: descriptionContainerView.bottomAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionContainerView.leadingAnchor, constant: 2),
-            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainerView.trailingAnchor, constant: -2),
+            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionContainerView.leadingAnchor, constant: BaseSpacing.Base.s2),
+            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainerView.trailingAnchor, constant: -BaseSpacing.Base.s2),
         ])
     }
 
@@ -286,7 +335,7 @@ public final class MDSTextField: UIView {
 
         labelRowView.isHidden = label == nil
         titleLabel.text = label
-        titleLabel.setTypography(Typography.title4)
+        titleLabel.setTypography(Typography.title5)
         requiredLabel.isHidden = !isRequired
 
         descriptionContainerView.isHidden = descriptionText == nil
@@ -304,7 +353,7 @@ public final class MDSTextField: UIView {
     // description이 없을 때는 setCustomSpacing(after: descriptionLabel)이 적용되지 않아
     // label-input 간격이 기본값(outerStackView.spacing)으로 떨어지므로, label 뒤쪽 spacing을 직접 전환한다.
     private func updateLabelDescriptionSpacing() {
-        outerStackView.setCustomSpacing(descriptionContainerView.isHidden ? 10 : 2, after: labelRowView)
+        outerStackView.setCustomSpacing(descriptionContainerView.isHidden ? BaseSpacing.Base.s10 : BaseSpacing.Base.s2, after: labelRowView)
     }
 
     // MARK: - State
@@ -319,36 +368,45 @@ public final class MDSTextField: UIView {
     // 외부 state, 포커스, 텍스트 유무를 조합해 렌더링 상태를 계산한다. UI를 직접 변경하지 않는다.
     private func resolvedState() -> ResolvedState {
         if state == .disabled { return .disabled }
-        if state == .error { return .error }
         if textField.isFirstResponder { return .active }
         if !(textField.text?.isEmpty ?? true) { return .filled }
         return .default
+    }
+
+    // error는 default/active/filled 어디에나 겹칠 수 있는 독립 플래그. disabled에는 밀린다.
+    private func isShowingError(for state: ResolvedState) -> Bool {
+        state != .disabled && errorMessage != nil
     }
 
     // MARK: - Update
 
     private func updateFieldStyle() {
         let effectiveState = resolvedState()
+        let showsError = isShowingError(for: effectiveState)
         textField.backgroundColor = effectiveState.backgroundColor(for: variant)
-        textField.layer.borderWidth = effectiveState.hasBorder ? 1 : 0
-        textField.layer.borderColor = effectiveState.borderColor
+        textField.layer.borderWidth = (showsError || effectiveState.hasBorder) ? 1 : 0
+        textField.layer.borderColor = showsError
+            ? SemanticColor.Stroke.Danger.default.cgColor
+            : effectiveState.borderColor
         textField.textColor = effectiveState.foregroundColor
     }
 
     private func updateHelperArea() {
         let effectiveState = resolvedState()
-        if effectiveState == .error, let message = errorMessage {
-            helperLabel.isHidden = false
-            helperLabel.text = message
-            helperLabel.textColor = SemanticColor.Fg.Danger.default
-            helperLabel.setTypography(Typography.body3)
+        if isShowingError(for: effectiveState), let message = errorMessage {
+            helperLabel.isHidden = true
+            errorRowView.isHidden = false
+            errorMessageLabel.text = message
+            errorMessageLabel.setTypography(Typography.body3)
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
             helperLabel.textColor = effectiveState.ghostColor
             helperLabel.setTypography(Typography.body3)
+            errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
+            errorRowView.isHidden = true
         }
         updateBottomRow()
     }
@@ -361,7 +419,7 @@ public final class MDSTextField: UIView {
     }
 
     private func updateBottomRow() {
-        bottomRowView.isHidden = helperLabel.isHidden && counterLabel.isHidden
+        bottomRowView.isHidden = helperLabel.isHidden && errorRowView.isHidden && counterLabel.isHidden
     }
 }
 
