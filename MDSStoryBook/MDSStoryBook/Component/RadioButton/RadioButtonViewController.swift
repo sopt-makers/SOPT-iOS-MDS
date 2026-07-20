@@ -87,13 +87,14 @@ private extension RadioButtonViewController {
         rowLabel.font = .systemFont(ofSize: 12, weight: .semibold)
         rowLabel.textColor = .secondaryLabel
 
-        let buttons: [MDSRadioButton] = ["Option 1", "Option 2", "Option 3"].enumerated().map { index, text in
+        let buttons: [MDSRadioButton] = ["Option 1", "Option 2", "Option 3", "Option 4"].enumerated().map { index, text in
             let button = MDSRadioButton(size: size)
             button.labelText = text
-            button.isEnabled = index != 2
+            button.isEnabled = index < 2
             return button
         }
         buttons[0].isSelected = true
+        buttons[3].isSelected = true
 
         let group = MDSRadioGroup()
         group.add(buttons)
@@ -113,13 +114,13 @@ private extension RadioButtonViewController {
         card.backgroundColor = SemanticColor.Bg.Dim.default
         card.layer.cornerRadius = 12
 
-        let buttonStack = UIStackView()
-        buttonStack.axis = axis
-        buttonStack.spacing = axis == .horizontal ? 20 : 12
-        buttonStack.alignment = .leading
-        buttonStack.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        buttonStack.isLayoutMarginsRelativeArrangement = true
+        // Horizontal 섹션은 옵션 4개를 한 줄에 다 놓으면 좁은 화면에서 넘칠 수 있어 2x2로 감싼다.
+        let buttonStack: UIStackView = axis == .horizontal
+            ? makeGrid(buttons: buttons, columns: 2)
+            : makeColumn(buttons: buttons)
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        buttonStack.isLayoutMarginsRelativeArrangement = true
+        buttonStack.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         card.addSubview(buttonStack)
 
         NSLayoutConstraint.activate([
@@ -129,8 +130,32 @@ private extension RadioButtonViewController {
             buttonStack.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
         ])
 
-        buttons.forEach { buttonStack.addArrangedSubview($0) }
-
         return card
+    }
+
+    func makeColumn(buttons: [MDSRadioButton]) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: buttons)
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .leading
+        return stack
+    }
+
+    func makeGrid(buttons: [MDSRadioButton], columns: Int) -> UIStackView {
+        let rowsStack = UIStackView()
+        rowsStack.axis = .vertical
+        rowsStack.spacing = 12
+        rowsStack.alignment = .leading
+
+        for start in stride(from: 0, to: buttons.count, by: columns) {
+            let rowButtons = Array(buttons[start..<min(start + columns, buttons.count)])
+            let rowStack = UIStackView(arrangedSubviews: rowButtons)
+            rowStack.axis = .horizontal
+            rowStack.spacing = 20
+            rowStack.alignment = .leading
+            rowsStack.addArrangedSubview(rowStack)
+        }
+
+        return rowsStack
     }
 }
