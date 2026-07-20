@@ -199,7 +199,7 @@ public final class MDSTextArea: UIView {
     private let textView: UITextView = {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = SemanticColor.Bg.Layer.default
+        view.backgroundColor = .clear
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
         view.showsHorizontalScrollIndicator = false
@@ -450,6 +450,7 @@ public final class MDSTextArea: UIView {
         inputContainer.layer.borderColor = showsError
             ? SemanticColor.Stroke.Danger.default.cgColor
             : state.borderColor
+        textView.backgroundColor = state.backgroundColor(for: variant)
         textView.textColor = state.textColor(for: variant)
         placeholderLabel.textColor = state.ghostColor(for: variant)
         placeholderLabel.setTypography(Typography.body1)

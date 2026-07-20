@@ -126,7 +126,7 @@ public final class MDSTextField: UIView {
     private let labelRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 4
+        stack.spacing = BaseSpacing.Base.s4
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
         stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
@@ -174,7 +174,7 @@ public final class MDSTextField: UIView {
     private let bottomRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 20
+        stack.spacing = BaseSpacing.Base.s20
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
         stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
@@ -192,7 +192,7 @@ public final class MDSTextField: UIView {
     private let errorRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 4
+        stack.spacing = BaseSpacing.Base.s4
         stack.alignment = .center
         stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return stack
