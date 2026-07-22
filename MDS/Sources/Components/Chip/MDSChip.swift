@@ -5,20 +5,74 @@
 
 import UIKit
 
-public final class MDSChip: UIButton {
+public final class MDSChip: UIControl {
 
     // MARK: - Properties
 
     public var chipTitle: String? {
-        didSet { setNeedsUpdateConfiguration() }
+        didSet { updateAppearance() }
+    }
+
+    public var prefixIcon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    public var suffixIcon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    public override var isSelected: Bool {
+        didSet { updateAppearance() }
+    }
+
+    public override var isEnabled: Bool {
+        didSet { updateAppearance() }
     }
 
     private let chipSize: Size
 
+    // MARK: - Subviews
+
+    private let contentStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        view.alignment = .center
+        view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let prefixImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.isHidden = true
+        return view
+    }()
+
+    private let titleLabel: UILabel = {
+        let view = UILabel()
+        view.numberOfLines = 1
+        view.textAlignment = .center
+        return view
+    }()
+
+    private let suffixImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.isHidden = true
+        return view
+    }()
+
     // MARK: - Init
 
-    public init(size: Size = .medium) {
+    public init(
+        size: Size = .medium,
+        prefixIcon: MDSIcon? = nil,
+        suffixIcon: MDSIcon? = nil
+    ) {
         self.chipSize = size
+        self.prefixIcon = prefixIcon
+        self.suffixIcon = suffixIcon
         super.init(frame: .zero)
         setup()
     }
@@ -29,40 +83,86 @@ public final class MDSChip: UIButton {
     // MARK: - Setup
 
     private func setup() {
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = chipSize.contentInsets
-        config.cornerStyle = .capsule
-        configuration = config
+        setupHierarchy()
+        setupLayout()
+        updateAppearance()
+    }
 
-        configurationUpdateHandler = { [weak self] button in
-            guard let self, var config = button.configuration else { return }
-            self.applyAppearance(to: &config, isSelected: button.isSelected, isEnabled: button.isEnabled)
-            button.configuration = config
-        }
+    private func setupHierarchy() {
+        addSubview(contentStackView)
+        contentStackView.addArrangedSubview(prefixImageView)
+        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(suffixImageView)
+    }
+
+    private func setupLayout() {
+        let insets = chipSize.contentInsets
+        let iconSize = chipSize.iconSize
+        contentStackView.spacing = chipSize.iconGap
+
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+
+            prefixImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            prefixImageView.heightAnchor.constraint(equalToConstant: iconSize),
+            suffixImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            suffixImageView.heightAnchor.constraint(equalToConstant: iconSize),
+        ])
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = bounds.height / 2
     }
 
     // MARK: - Appearance
 
-    private func applyAppearance(to config: inout UIButton.Configuration, isSelected: Bool, isEnabled: Bool) {
-        config.background.backgroundColor = !isEnabled
-            ? SemanticColor.Bg.Neutral.ghost
-            : isSelected ? SemanticColor.Bg.Neutral.subtle : SemanticColor.Bg.Neutral.ghost
+    private func updateAppearance() {
+        let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
 
-        config.background.strokeColor = !isEnabled
-            ? SemanticColor.Stroke.Neutral.Default.disabled
-            : isSelected ? SemanticColor.Stroke.Neutral.inverse : SemanticColor.Stroke.Neutral.subtle
-        config.background.strokeWidth = 1
+        layer.masksToBounds = true
+        layer.borderWidth = 1
+        layer.borderColor = colorToken.stroke.cgColor
+        backgroundColor = colorToken.background
 
-        let textColor = !isEnabled
-            ? SemanticColor.Fg.Neutral.ghost
-            : isSelected ? SemanticColor.Fg.Neutral.bold : SemanticColor.Fg.Neutral.default
-
-        let typography = chipSize.typography
-        config.attributedTitle = AttributedString(
-            NSAttributedString(
-                string: chipTitle ?? "",
-                attributes: typography.attributedStringAttributes(foregroundColor: textColor)
-            )
+        titleLabel.attributedText = NSAttributedString(
+            string: chipTitle ?? "",
+            attributes: chipSize.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
+
+        prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
+        prefixImageView.isHidden = prefixIcon == nil
+        prefixImageView.tintColor = colorToken.foreground
+
+        suffixImageView.image = suffixIcon?.image.withRenderingMode(.alwaysTemplate)
+        suffixImageView.isHidden = suffixIcon == nil
+        suffixImageView.tintColor = colorToken.foreground
+    }
+}
+
+// MARK: - Color Token
+
+private extension MDSChip {
+
+    struct ColorToken {
+        let background: UIColor
+        let foreground: UIColor
+        let stroke: UIColor
+
+        init(isSelected: Bool, isEnabled: Bool) {
+            guard isEnabled else {
+                background = SemanticColor.Bg.Neutral.ghost
+                foreground = SemanticColor.Fg.Neutral.ghost
+                stroke = SemanticColor.Stroke.Neutral.Default.disabled
+                return
+            }
+
+            background = isSelected ? SemanticColor.Bg.Neutral.subtle : SemanticColor.Bg.Neutral.ghost
+            foreground = isSelected ? SemanticColor.Fg.Neutral.bold : SemanticColor.Fg.Neutral.default
+            stroke = isSelected ? SemanticColor.Stroke.Neutral.inverse : SemanticColor.Stroke.Neutral.subtle
+        }
     }
 }
