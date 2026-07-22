@@ -93,7 +93,7 @@ final class TypographyTokenCell: UITableViewCell {
             ?? ""
 
         propsLabel.text = String(
-            format: "size: %.0fpx   weight: %@   lineHeight: %.0fpx\nletterSpacing: %.0f%%",
+            format: "size: %.0fpx   weight: %@   lineHeight: %.0fpx\nletterSpacing: %.1f%%",
             mdsFont.font.pointSize,
             weightName,
             mdsFont.lineHeight,
