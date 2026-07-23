@@ -12,6 +12,7 @@ final class TextAreaViewController: UIViewController {
 
     private var fieldVariant: MDSTextArea.Variant = .default
     private var fieldState: MDSTextArea.State = .default
+    private var showError = false
     private var showLabel = false
     private var showRequired = false
     private var showDescription = false
@@ -100,8 +101,7 @@ final class TextAreaViewController: UIViewController {
         let ta = MDSTextArea(
             variant: fieldVariant,
             hasSendButton: showSendButton,
-            placeholder: "Placeholder text",
-            errorMessage: "Error message"
+            placeholder: "Placeholder text"
         )
         ta.translatesAutoresizingMaskIntoConstraints = false
         previewCard.addSubview(ta)
@@ -124,6 +124,7 @@ final class TextAreaViewController: UIViewController {
         previewTextArea.helperText = showHelperText ? "Helper text" : nil
         previewTextArea.maxLength = showTextCounter ? 200 : nil
         previewTextArea.state = fieldState
+        previewTextArea.errorMessage = showError ? "Error message" : nil
     }
 
     // MARK: - Controls
@@ -160,7 +161,7 @@ final class TextAreaViewController: UIViewController {
         variantControl.addTarget(self, action: #selector(variantChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(makeControlRow(title: "Variant", control: variantControl))
 
-        let stateControl = UISegmentedControl(items: ["Default", "Error", "Disabled"])
+        let stateControl = UISegmentedControl(items: ["Default", "Disabled"])
         stateControl.selectedSegmentIndex = 0
         stateControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         stateControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
@@ -169,6 +170,7 @@ final class TextAreaViewController: UIViewController {
 
         stack.addArrangedSubview(makeSeparator())
 
+        stack.addArrangedSubview(makeSwitchRow(title: "Error", action: #selector(errorToggled(_:))).view)
         stack.addArrangedSubview(makeSwitchRow(title: "Label", action: #selector(labelToggled(_:))).view)
 
         let requiredRow = makeSwitchRow(title: "Required (*)", action: #selector(requiredToggled(_:)))
@@ -263,12 +265,13 @@ final class TextAreaViewController: UIViewController {
     }
 
     @objc private func stateChanged(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 1: fieldState = .error
-        case 2: fieldState = .disabled
-        default: fieldState = .default
-        }
+        fieldState = sender.selectedSegmentIndex == 1 ? .disabled : .default
         previewTextArea.state = fieldState
+    }
+
+    @objc private func errorToggled(_ sender: UISwitch) {
+        showError = sender.isOn
+        previewTextArea.errorMessage = showError ? "Error message" : nil
     }
 
     @objc private func labelToggled(_ sender: UISwitch) {

@@ -7,6 +7,13 @@ import UIKit
 
 public final class MDSAvatar: UIView {
 
+    // MARK: - Nested Types
+
+    public enum Variant {
+        case ghost
+        case subtle
+    }
+
     // MARK: - Private Views
 
     private let profileImageView: UIImageView = {
@@ -38,17 +45,20 @@ public final class MDSAvatar: UIView {
     }
 
     private let size: CGFloat
+    private let variant: Variant
 
     // MARK: - Init
 
     /// - Parameter size: 권고 사이즈 — 24, 32, 48, 56, 72, 80, 120, 180 (단위: pt)
     public init(
         size: CGFloat,
+        variant: Variant = .ghost,
         image: UIImage? = nil,
         hasStroke: Bool = false,
         strokeColor: UIColor = SemanticColor.Stroke.Secondary.default
     ) {
         self.size = size
+        self.variant = variant
         self.image = image
         self.hasStroke = hasStroke
         self.strokeColor = strokeColor
@@ -75,10 +85,10 @@ public final class MDSAvatar: UIView {
         layer.borderColor = strokeColor.cgColor
         layer.masksToBounds = true
 
-        backgroundColor = SemanticColor.Bg.Neutral.ghost
+        backgroundColor = variant.backgroundColor
 
         fallbackIconView.image = MDSIcon.userFilled.image.withRenderingMode(.alwaysTemplate)
-        fallbackIconView.tintColor = SemanticColor.Fg.Neutral.bold
+        fallbackIconView.tintColor = variant.iconTintColor
     }
 
     private func setupLayout() {
@@ -114,5 +124,22 @@ public final class MDSAvatar: UIView {
         if size < 160 { return 3 }
         if size < 180 { return 4 }
         return 4 * (size / 180)
+    }
+}
+
+// MARK: - Variant Appearance
+
+private extension MDSAvatar.Variant {
+    var backgroundColor: UIColor {
+        switch self {
+        case .ghost: return SemanticColor.Bg.Neutral.ghost
+        case .subtle: return SemanticColor.Bg.Neutral.subtle
+        }
+    }
+
+    var iconTintColor: UIColor {
+        switch self {
+        case .ghost, .subtle: return SemanticColor.Fg.Neutral.ghost
+        }
     }
 }

@@ -8,7 +8,7 @@
 public extension MDSTag {
 
     public enum Size {
-        case small, medium, large
+        case small, medium
     }
 
     public enum Shape {

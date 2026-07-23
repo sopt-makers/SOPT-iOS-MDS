@@ -78,15 +78,15 @@ public final class MDSTag: UIView {
         style: Style,
         icon: UIImage?
     ) {
-        let sizeToken = SizeToken(size: size, shape: shape)
+        let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
 
         heightAnchor.constraint(equalToConstant: sizeToken.height).isActive = true
 
         stackView.layoutMargins = UIEdgeInsets(
-            top: 0,
+            top: sizeToken.verticalPadding,
             left: sizeToken.horizontalPadding,
-            bottom: 0,
+            bottom: sizeToken.verticalPadding,
             right: sizeToken.horizontalPadding
         )
         stackView.spacing = sizeToken.gap
@@ -126,31 +126,25 @@ private extension MDSTag {
     struct SizeToken {
         let height: CGFloat
         let horizontalPadding: CGFloat
+        let verticalPadding: CGFloat
         let iconSize: CGFloat
         let gap: CGFloat
         let font: MDSFont
 
-        init(size: MDSTag.Size, shape: MDSTag.Shape) {
-            let isPill = shape == .pill
+        init(size: MDSTag.Size) {
+            horizontalPadding = BaseSpacing.Base.s8
+            verticalPadding = BaseSpacing.Base.s4
+            gap = BaseSpacing.Base.s4
+
             switch size {
             case .small:
-                height = 22
-                horizontalPadding = isPill ? 8 : 6
-                iconSize = 14
-                gap = 2
+                height = 24
+                iconSize = 12
                 font = Typography.label4
             case .medium:
-                height = 24
-                horizontalPadding = isPill ? 8 : 6
-                iconSize = 16
-                gap = 2
+                height = 26
+                iconSize = 14
                 font = Typography.label3
-            case .large:
-                height = 28
-                horizontalPadding = isPill ? 8 : 6
-                iconSize = 18
-                gap = 4
-                font = Typography.label2
             }
         }
     }

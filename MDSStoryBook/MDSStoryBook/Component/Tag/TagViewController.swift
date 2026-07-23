@@ -52,9 +52,8 @@ final class TagViewController: UIViewController {
 
     private func setupTags() {
         let sizes: [(title: String, size: MDSTag.Size)] = [
-            ("Small (h=22)", .small),
-            ("Medium (h=24)", .medium),
-            ("Large (h=28)", .large),
+            ("Small (h=24)", .small),
+            ("Medium (h=26)", .medium),
         ]
 
         sizes.forEach { item in

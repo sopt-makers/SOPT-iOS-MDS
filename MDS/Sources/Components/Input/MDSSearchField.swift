@@ -72,7 +72,7 @@ public final class MDSSearchField: UIView {
 
     private let clearButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(MDSIcon.xCloseOutlined.image.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(MDSIcon.xCircleFilled.image.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = SemanticColor.Fg.Neutral.bold
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
@@ -110,7 +110,7 @@ public final class MDSSearchField: UIView {
         addSubview(clearButton)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 48),
+            heightAnchor.constraint(equalToConstant: 46),
 
             searchIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
             searchIconView.centerYAnchor.constraint(equalTo: centerYAnchor),

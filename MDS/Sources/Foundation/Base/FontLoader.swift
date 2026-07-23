@@ -6,16 +6,10 @@
 //
 
 import CoreText
-import Foundation
+import UIKit
 
-@MainActor
 internal enum FontLoader {
-    private static var isRegistered = false
-
-    static func registerIfNeeded() {
-        guard !isRegistered else { return }
-        isRegistered = true
-
+    private static let register: Void = {
         let fontNames = [
             "SUIT-Thin",
             "SUIT-ExtraLight",
@@ -32,5 +26,10 @@ internal enum FontLoader {
             guard let url = Bundle.module.url(forResource: name, withExtension: "otf") else { return }
             CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         }
+    }()
+
+    static func font(name: String, size: CGFloat, fallbackWeight: UIFont.Weight) -> UIFont {
+        _ = register
+        return UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: fallbackWeight)
     }
 }

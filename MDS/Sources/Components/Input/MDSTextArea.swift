@@ -15,9 +15,10 @@ public final class MDSTextArea: UIView {
     }
 
     /// 외부에서 설정 가능한 상태. .active / .filled는 포커스·텍스트 유무로 자동 결정됩니다.
+    /// error는 Figma상 별도 state가 아니라 default/active/filled 어디에나 겹칠 수 있는 독립된 플래그라
+    /// state가 아닌 errorMessage의 유무로 표현한다 (disabled일 때는 error보다 우선한다).
     public enum State {
         case `default`
-        case error
         case disabled
     }
 
@@ -25,8 +26,38 @@ public final class MDSTextArea: UIView {
         case `default`
         case active
         case filled
-        case error
         case disabled
+
+        func backgroundColor(for variant: MDSTextArea.Variant) -> UIColor {
+            switch variant {
+            case .default: return SemanticColor.Bg.Layer.default
+            case .bold: return SemanticColor.Bg.Neutral.ghost
+            }
+        }
+
+        var hasBorder: Bool { self == .active }
+
+        var borderColor: CGColor? {
+            self == .active ? SemanticColor.Stroke.Neutral.Default.focused.cgColor : nil
+        }
+
+        // Figma: disabled 상태의 dim 정도는 variant에 따라 갈린다 —
+        // .default(지면 위)는 ghost-disabled로 더 어둡게, .bold(카드/모달 위)는 default-disabled를 유지한다.
+        func ghostColor(for variant: MDSTextArea.Variant) -> UIColor {
+            guard self == .disabled else { return SemanticColor.Fg.Neutral.ghost }
+            switch variant {
+            case .default: return SemanticColor.Fg.Neutral.Ghost.disabled
+            case .bold: return SemanticColor.Fg.Neutral.Default.disabled
+            }
+        }
+
+        func textColor(for variant: MDSTextArea.Variant) -> UIColor {
+            switch self {
+            case .default: return SemanticColor.Fg.Neutral.ghost
+            case .active, .filled: return SemanticColor.Fg.Neutral.bold
+            default: return ghostColor(for: variant)
+            }
+        }
     }
 
     // MARK: - Public Properties
@@ -34,7 +65,7 @@ public final class MDSTextArea: UIView {
     public var label: String? {
         didSet {
             titleLabel.text = label
-            titleLabel.setTypography(Typography.title4)
+            titleLabel.setTypography(Typography.title5)
             labelRowView.isHidden = label == nil
         }
     }
@@ -54,7 +85,10 @@ public final class MDSTextArea: UIView {
         didSet { updateHelperArea() }
     }
     public var errorMessage: String? {
-        didSet { if state == .error { updateHelperArea() } }
+        didSet {
+            updateFieldStyle()
+            updateHelperArea()
+        }
     }
     public var maxLength: Int? {
         didSet {
@@ -103,7 +137,7 @@ public final class MDSTextArea: UIView {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 10
+        stack.spacing = BaseSpacing.Base.s10
         stack.alignment = .fill
         return stack
     }()
@@ -111,16 +145,16 @@ public final class MDSTextArea: UIView {
     private let labelRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 4
+        stack.spacing = BaseSpacing.Base.s4
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
         return stack
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.title4)
+        label.setTypography(Typography.title5)
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.numberOfLines = 1
         label.setContentHuggingPriority(.required, for: .horizontal)
@@ -149,7 +183,7 @@ public final class MDSTextArea: UIView {
     private let inputGroupView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 6
+        stack.spacing = BaseSpacing.Base.s6
         stack.alignment = .fill
         return stack
     }()
@@ -193,10 +227,10 @@ public final class MDSTextArea: UIView {
     private let bottomRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 20
+        stack.spacing = BaseSpacing.Base.s20
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: BaseSpacing.Base.s2, bottom: 0, trailing: BaseSpacing.Base.s2)
         return stack
     }()
 
@@ -211,7 +245,7 @@ public final class MDSTextArea: UIView {
     private let errorRowView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 4
+        stack.spacing = BaseSpacing.Base.s4
         stack.alignment = .center
         stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return stack
@@ -322,9 +356,9 @@ public final class MDSTextArea: UIView {
             outerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             outerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            textView.topAnchor.constraint(equalTo: inputContainer.topAnchor, constant: 10),
-            textView.leadingAnchor.constraint(equalTo: inputContainer.leadingAnchor, constant: 16),
-            textView.bottomAnchor.constraint(equalTo: inputContainer.bottomAnchor, constant: -10),
+            textView.topAnchor.constraint(equalTo: inputContainer.topAnchor, constant: BaseSpacing.Base.s10),
+            textView.leadingAnchor.constraint(equalTo: inputContainer.leadingAnchor, constant: BaseSpacing.Base.s16),
+            textView.bottomAnchor.constraint(equalTo: inputContainer.bottomAnchor, constant: -BaseSpacing.Base.s10),
 
             placeholderLabel.topAnchor.constraint(equalTo: textView.topAnchor),
             placeholderLabel.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
@@ -335,22 +369,22 @@ public final class MDSTextArea: UIView {
 
             descriptionLabel.topAnchor.constraint(equalTo: descriptionContainerView.topAnchor),
             descriptionLabel.bottomAnchor.constraint(equalTo: descriptionContainerView.bottomAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionContainerView.leadingAnchor, constant: 2),
-            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainerView.trailingAnchor, constant: -2),
+            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionContainerView.leadingAnchor, constant: BaseSpacing.Base.s2),
+            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainerView.trailingAnchor, constant: -BaseSpacing.Base.s2),
         ])
 
         if hasSendButton {
             inputContainer.addSubview(sendButton)
             NSLayoutConstraint.activate([
-                textView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -14),
-                sendButton.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -16),
+                textView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -BaseSpacing.Base.s14),
+                sendButton.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -BaseSpacing.Base.s16),
                 sendButton.bottomAnchor.constraint(equalTo: inputContainer.bottomAnchor, constant: -13),
                 sendButton.widthAnchor.constraint(equalToConstant: 20),
                 sendButton.heightAnchor.constraint(equalToConstant: 20),
             ])
         } else {
             NSLayoutConstraint.activate([
-                textView.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -16),
+                textView.trailingAnchor.constraint(equalTo: inputContainer.trailingAnchor, constant: -BaseSpacing.Base.s16),
             ])
         }
     }
@@ -359,7 +393,7 @@ public final class MDSTextArea: UIView {
     private func initialAppearance() {
         labelRowView.isHidden = label == nil
         titleLabel.text = label
-        titleLabel.setTypography(Typography.title4)
+        titleLabel.setTypography(Typography.title5)
         requiredLabel.isHidden = !isRequired
 
         descriptionContainerView.isHidden = descriptionText == nil
@@ -380,7 +414,7 @@ public final class MDSTextArea: UIView {
     // description이 없을 때는 setCustomSpacing(after: descriptionLabel)이 적용되지 않아
     // label-input 간격이 기본값(outerStackView.spacing)으로 떨어지므로, label 뒤쪽 spacing을 직접 전환한다.
     private func updateLabelDescriptionSpacing() {
-        outerStackView.setCustomSpacing(descriptionContainerView.isHidden ? 10 : 2, after: labelRowView)
+        outerStackView.setCustomSpacing(descriptionContainerView.isHidden ? BaseSpacing.Base.s10 : BaseSpacing.Base.s2, after: labelRowView)
     }
 
     // MARK: - State
@@ -396,27 +430,35 @@ public final class MDSTextArea: UIView {
     // 외부 state, 포커스, 텍스트 유무를 조합해 렌더링 상태를 계산한다. UI를 직접 변경하지 않는다.
     private func resolvedState() -> ResolvedState {
         if state == .disabled { return .disabled }
-        if state == .error { return .error }
         if textView.isFirstResponder { return .active }
         if !textView.text.isEmpty { return .filled }
         return .default
+    }
+
+    // error는 default/active/filled 어디에나 겹칠 수 있는 독립 플래그. disabled에는 밀린다.
+    private func isShowingError(for state: ResolvedState) -> Bool {
+        state != .disabled && errorMessage != nil
     }
 
     // MARK: - Update
 
     private func updateFieldStyle() {
         let state = resolvedState()
+        let showsError = isShowingError(for: state)
         inputContainer.backgroundColor = state.backgroundColor(for: variant)
-        inputContainer.layer.borderWidth = state.hasBorder ? 1 : 0
-        inputContainer.layer.borderColor = state.borderColor
-        textView.textColor = state.textColor
-        placeholderLabel.textColor = state.ghostColor
+        inputContainer.layer.borderWidth = (showsError || state.hasBorder) ? 1 : 0
+        inputContainer.layer.borderColor = showsError
+            ? SemanticColor.Stroke.Danger.default.cgColor
+            : state.borderColor
+        textView.backgroundColor = state.backgroundColor(for: variant)
+        textView.textColor = state.textColor(for: variant)
+        placeholderLabel.textColor = state.ghostColor(for: variant)
         placeholderLabel.setTypography(Typography.body1)
     }
 
     private func updateHelperArea() {
         let state = resolvedState()
-        if state == .error, let message = errorMessage {
+        if isShowingError(for: state), let message = errorMessage {
             helperLabel.isHidden = true
             errorRowView.isHidden = false
             errorMessageLabel.text = message
@@ -424,14 +466,14 @@ public final class MDSTextArea: UIView {
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
-            helperLabel.textColor = state.ghostColor
+            helperLabel.textColor = state.ghostColor(for: variant)
             helperLabel.setTypography(Typography.body3)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
             errorRowView.isHidden = true
         }
-        counterLabel.textColor = state.ghostColor
+        counterLabel.textColor = state.ghostColor(for: variant)
         counterLabel.setTypography(Typography.body3)
         updateBottomRow()
     }
@@ -439,7 +481,7 @@ public final class MDSTextArea: UIView {
     private func updateCounterLabel() {
         guard let maxLength else { return }
         counterLabel.text = "\(textView.text.count)/\(maxLength)"
-        counterLabel.textColor = resolvedState().ghostColor
+        counterLabel.textColor = resolvedState().ghostColor(for: variant)
         counterLabel.setTypography(Typography.body3)
     }
 
@@ -466,36 +508,6 @@ public final class MDSTextArea: UIView {
 
     @objc private func sendButtonTapped() {
         onSendTapped?()
-    }
-}
-
-// MARK: - ResolvedState Appearance
-
-private extension MDSTextArea.ResolvedState {
-
-    func backgroundColor(for variant: MDSTextArea.Variant) -> UIColor {
-        switch variant {
-        case .default: return SemanticColor.Bg.Layer.default
-        case .bold: return SemanticColor.Bg.Neutral.ghost
-        }
-    }
-
-    var hasBorder: Bool { self == .active || self == .error }
-
-    var borderColor: CGColor? {
-        switch self {
-        case .active: return SemanticColor.Stroke.Neutral.Default.focused.cgColor
-        case .error: return SemanticColor.Stroke.Danger.default.cgColor
-        default: return nil
-        }
-    }
-
-    var textColor: UIColor {
-        self == .disabled ? SemanticColor.Fg.Neutral.Default.disabled : SemanticColor.Fg.Neutral.bold
-    }
-
-    var ghostColor: UIColor {
-        self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
     }
 }
 

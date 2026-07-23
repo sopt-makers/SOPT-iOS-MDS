@@ -182,7 +182,7 @@ StyleDictionary.registerFormat({
       const letterSpacingRef = refToBaseTypography(orig.letterSpacing, tokenPath, 'letterSpacing');
 
       output += `    public static let ${name} = MDSFont(\n`;
-      output += `        font: UIFont(name: "${fontName}", size: ${fontSizeRef}) ?? .systemFont(ofSize: ${fontSizeRef}, weight: ${swiftWeight}),\n`;
+      output += `        font: FontLoader.font(name: "${fontName}", size: ${fontSizeRef}, fallbackWeight: ${swiftWeight}),\n`;
       output += `        lineHeight: ${lineHeightRef},\n`;
       output += `        letterSpacing: ${fontSizeRef} * (${letterSpacingRef} / 100)\n`;
       output += `    )\n`;

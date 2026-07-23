@@ -132,10 +132,8 @@ public final class MDSRadioButton: UIControl {
             return
         }
         titleLabel.isHidden = false
-        titleLabel.attributedText = NSAttributedString(
-            string: text,
-            attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.labelColor)
-        )
+        titleLabel.text = text
+        titleLabel.setTypography(sizeToken.typography, textColor: colorToken.labelColor)
     }
 }
 
@@ -151,14 +149,14 @@ extension MDSRadioButton {
         init(size: Size) {
             switch size {
             case .small:
-                circleSize = 22
+                circleSize = 16
                 dotSize = 8
-                gap = 4
+                gap = 7
                 typography = Typography.label3
             case .large:
-                circleSize = 26
+                circleSize = 22
                 dotSize = 10
-                gap = 8
+                gap = 10
                 typography = Typography.label2
             }
         }
@@ -180,7 +178,7 @@ extension MDSRadioButton {
             case (true, false):
                 circleFillColor = .clear
                 circleBorderColor = SemanticColor.Stroke.Neutral.default
-                circleBorderWidth = 1.5
+                circleBorderWidth = 1
                 dotColor = .clear
                 labelColor = SemanticColor.Fg.Neutral.bold
             case (true, true):
@@ -192,14 +190,14 @@ extension MDSRadioButton {
             case (false, false):
                 circleFillColor = .clear
                 circleBorderColor = SemanticColor.Stroke.Neutral.Default.disabled
-                circleBorderWidth = 1.5
+                circleBorderWidth = 1
                 dotColor = .clear
                 labelColor = SemanticColor.Fg.Neutral.Default.disabled
             case (false, true):
                 circleFillColor = SemanticColor.Fg.Neutral.Ghost.disabled
                 circleBorderColor = .clear
                 circleBorderWidth = 0
-                dotColor = SemanticColor.Fg.Neutral.Default.disabled
+                dotColor = SemanticColor.Fg.Neutral.ghost
                 labelColor = SemanticColor.Fg.Neutral.Default.disabled
             }
         }

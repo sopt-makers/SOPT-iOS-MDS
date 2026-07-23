@@ -24,8 +24,14 @@ final class AvatarViewController: UIViewController {
     private let recommendedSizes: [CGFloat] = [24, 32, 48, 56, 72, 80, 120, 180]
 
     private let rainbowColors: [UIColor] = [
-        .systemRed, .systemOrange, .systemYellow, .systemGreen,
-        .systemBlue, .systemIndigo, .systemPurple, .systemPink
+        SemanticColor.Stroke.Brand.default,
+        SemanticColor.Stroke.Brand.subtle,
+        SemanticColor.Stroke.Danger.default,
+        SemanticColor.Stroke.Information.subtle,
+        SemanticColor.Stroke.Neutral.default,
+        SemanticColor.Stroke.Neutral.ghost,
+        SemanticColor.Stroke.Neutral.inverse,
+        SemanticColor.Stroke.Neutral.subtle,
     ]
 
     private let scrollView: UIScrollView = {
