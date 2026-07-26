@@ -7,6 +7,11 @@ import UIKit
 
 extension MDSChip {
 
+    public enum ChipType {
+        case outlined
+        case solid
+    }
+
     public enum Size {
         case small
         case medium

@@ -17,6 +17,7 @@ final class ChipViewController: UIViewController {
     private let contentStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
+        stack.distribution = .fillEqually
         stack.spacing = 32
         stack.layoutMargins = UIEdgeInsets(top: 24, left: 20, bottom: 24, right: 20)
         stack.isLayoutMarginsRelativeArrangement = true
@@ -51,35 +52,53 @@ final class ChipViewController: UIViewController {
     }
 
     private func setupChips() {
-        let sizes: [(title: String, size: MDSChip.Size)] = [
-            ("Small", .small),
-            ("Medium", .medium),
+        let types: [(title: String, type: MDSChip.ChipType)] = [
+            ("Outlined", .outlined),
+            ("Solid", .solid),
         ]
         let iconCombinations: [(title: String, prefix: MDSIcon?, suffix: MDSIcon?)] = [
             ("No Icon", nil, nil),
-            ("Prefix", .plusOutlined, nil),
-            ("Suffix", nil, .chevronRightOutlined),
             ("Prefix + Suffix", .plusOutlined, .chevronRightOutlined),
         ]
 
-        sizes.forEach { sizeItem in
+        types.forEach { typeItem in
             iconCombinations.forEach { iconItem in
+                let items: [UIView] = [
+                    makeChipItem(type: typeItem.type, size: .medium, prefixIcon: iconItem.prefix, suffixIcon: iconItem.suffix, variant: .interactive),
+                    makeChipItem(type: typeItem.type, size: .medium, prefixIcon: iconItem.prefix, suffixIcon: iconItem.suffix, variant: .selected),
+                    makeChipItem(type: typeItem.type, size: .medium, prefixIcon: iconItem.prefix, suffixIcon: iconItem.suffix, variant: .disabled),
+                ]
                 contentStack.addArrangedSubview(makeSection(
-                    title: "\(sizeItem.title) / \(iconItem.title)",
-                    size: sizeItem.size,
-                    prefixIcon: iconItem.prefix,
-                    suffixIcon: iconItem.suffix
+                    title: "\(typeItem.title) / \(iconItem.title)",
+                    items: items
                 ))
             }
         }
+
+        contentStack.addArrangedSubview(makeSection(
+            title: "Size",
+            items: [
+                makeSizeItem(title: "Small", size: .small),
+                makeSizeItem(title: "Medium", size: .medium),
+            ]
+        ))
     }
 
-    private func makeSection(title: String, size: MDSChip.Size, prefixIcon: MDSIcon?, suffixIcon: MDSIcon?) -> UIView {
+    private func makeSection(title: String, items: [UIView]) -> UIView {
         let sectionTitle = UILabel()
         sectionTitle.text = title
         sectionTitle.font = .systemFont(ofSize: 13, weight: .semibold)
         sectionTitle.textColor = .secondaryLabel
 
+        let sectionStack = UIStackView()
+        sectionStack.axis = .vertical
+        sectionStack.spacing = 8
+        sectionStack.addArrangedSubview(sectionTitle)
+        sectionStack.addArrangedSubview(makeCard(items: items))
+        return sectionStack
+    }
+
+    private func makeCard(items: [UIView]) -> UIView {
         let card = UIView()
         card.backgroundColor = SemanticColor.Bg.Dim.default
         card.layer.cornerRadius = 12
@@ -110,16 +129,8 @@ final class ChipViewController: UIViewController {
             cardStack.widthAnchor.constraint(greaterThanOrEqualTo: cardScroll.widthAnchor),
         ])
 
-        cardStack.addArrangedSubview(makeChipItem(size: size, prefixIcon: prefixIcon, suffixIcon: suffixIcon, variant: .interactive))
-        cardStack.addArrangedSubview(makeChipItem(size: size, prefixIcon: prefixIcon, suffixIcon: suffixIcon, variant: .selected))
-        cardStack.addArrangedSubview(makeChipItem(size: size, prefixIcon: prefixIcon, suffixIcon: suffixIcon, variant: .disabled))
-
-        let sectionStack = UIStackView()
-        sectionStack.axis = .vertical
-        sectionStack.spacing = 8
-        sectionStack.addArrangedSubview(sectionTitle)
-        sectionStack.addArrangedSubview(card)
-        return sectionStack
+        items.forEach { cardStack.addArrangedSubview($0) }
+        return card
     }
 
     private enum ChipVariant {
@@ -128,7 +139,7 @@ final class ChipViewController: UIViewController {
         case disabled
     }
 
-    private func makeChipItem(size: MDSChip.Size, prefixIcon: MDSIcon?, suffixIcon: MDSIcon?, variant: ChipVariant) -> UIView {
+    private func makeChipItem(type: MDSChip.ChipType, size: MDSChip.Size, prefixIcon: MDSIcon?, suffixIcon: MDSIcon?, variant: ChipVariant) -> UIView {
         let itemStack = UIStackView()
         itemStack.axis = .vertical
         itemStack.spacing = 12
@@ -140,7 +151,7 @@ final class ChipViewController: UIViewController {
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
 
-        let chip = MDSChip(size: size, prefixIcon: prefixIcon, suffixIcon: suffixIcon)
+        let chip = MDSChip(size: size, type: type, prefixIcon: prefixIcon, suffixIcon: suffixIcon)
         chip.chipTitle = "Chip"
 
         switch variant {
@@ -156,6 +167,26 @@ final class ChipViewController: UIViewController {
             chip.isUserInteractionEnabled = false
             descriptionLabel.text = "항상 Disabled 상태"
         }
+
+        itemStack.addArrangedSubview(chip)
+        itemStack.addArrangedSubview(descriptionLabel)
+        return itemStack
+    }
+
+    private func makeSizeItem(title: String, size: MDSChip.Size) -> UIView {
+        let itemStack = UIStackView()
+        itemStack.axis = .vertical
+        itemStack.spacing = 12
+        itemStack.alignment = .center
+
+        let descriptionLabel = UILabel()
+        descriptionLabel.font = .systemFont(ofSize: 11)
+        descriptionLabel.textColor = SemanticColor.Fg.Neutral.subtle
+        descriptionLabel.text = title
+
+        let chip = MDSChip(size: size, type: .outlined)
+        chip.chipTitle = "Chip"
+        chip.isUserInteractionEnabled = false
 
         itemStack.addArrangedSubview(chip)
         itemStack.addArrangedSubview(descriptionLabel)

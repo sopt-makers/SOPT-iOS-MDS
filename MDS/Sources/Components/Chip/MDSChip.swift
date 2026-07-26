@@ -30,6 +30,7 @@ public final class MDSChip: UIControl {
     }
 
     private let chipSize: Size
+    private let chipType: ChipType
 
     // MARK: - Subviews
 
@@ -67,10 +68,12 @@ public final class MDSChip: UIControl {
 
     public init(
         size: Size = .medium,
+        type: ChipType = .outlined,
         prefixIcon: MDSIcon? = nil,
         suffixIcon: MDSIcon? = nil
     ) {
         self.chipSize = size
+        self.chipType = type
         self.prefixIcon = prefixIcon
         self.suffixIcon = suffixIcon
         super.init(frame: .zero)
@@ -121,11 +124,11 @@ public final class MDSChip: UIControl {
     // MARK: - Appearance
 
     private func updateAppearance() {
-        let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
+        let colorToken = ColorToken(type: chipType, isSelected: isSelected, isEnabled: isEnabled)
 
         layer.masksToBounds = true
-        layer.borderWidth = 1
-        layer.borderColor = colorToken.stroke.cgColor
+        layer.borderWidth = colorToken.stroke == nil ? 0 : 1
+        layer.borderColor = colorToken.stroke?.cgColor
         backgroundColor = colorToken.background
 
         titleLabel.attributedText = NSAttributedString(
@@ -150,19 +153,26 @@ private extension MDSChip {
     struct ColorToken {
         let background: UIColor
         let foreground: UIColor
-        let stroke: UIColor
+        let stroke: UIColor?
 
-        init(isSelected: Bool, isEnabled: Bool) {
+        init(type: MDSChip.ChipType, isSelected: Bool, isEnabled: Bool) {
             guard isEnabled else {
                 background = SemanticColor.Bg.Neutral.ghost
                 foreground = SemanticColor.Fg.Neutral.ghost
-                stroke = SemanticColor.Stroke.Neutral.Default.disabled
+                stroke = type == .outlined ? SemanticColor.Stroke.Neutral.Default.disabled : nil
                 return
             }
 
-            background = isSelected ? SemanticColor.Bg.Neutral.subtle : SemanticColor.Bg.Neutral.ghost
-            foreground = isSelected ? SemanticColor.Fg.Neutral.bold : SemanticColor.Fg.Neutral.default
-            stroke = isSelected ? SemanticColor.Stroke.Neutral.inverse : SemanticColor.Stroke.Neutral.subtle
+            switch type {
+            case .outlined:
+                background = isSelected ? SemanticColor.Bg.Neutral.subtle : SemanticColor.Bg.Neutral.ghost
+                foreground = isSelected ? SemanticColor.Fg.Neutral.bold : SemanticColor.Fg.Neutral.default
+                stroke = isSelected ? SemanticColor.Stroke.Neutral.inverse : SemanticColor.Stroke.Neutral.subtle
+            case .solid:
+                background = isSelected ? SemanticColor.Bg.Neutral.inverse : SemanticColor.Bg.Neutral.ghost
+                foreground = isSelected ? SemanticColor.Fg.Neutral.inverse : SemanticColor.Fg.Neutral.default
+                stroke = nil
+            }
         }
     }
 }
