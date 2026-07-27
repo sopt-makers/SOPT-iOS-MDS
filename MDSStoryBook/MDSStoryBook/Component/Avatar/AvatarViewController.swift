@@ -16,10 +16,10 @@ final class AvatarViewController: UIViewController {
     }
 
     private let variants: [Variant] = [
-        Variant(title: "Fallback", hasStroke: false, hasImage: false, avatarVariant: .default),
-        Variant(title: "Fallback + Stroke", hasStroke: true, hasImage: false, avatarVariant: .default),
-        Variant(title: "Image", hasStroke: false, hasImage: true, avatarVariant: .default),
-        Variant(title: "Image + Stroke", hasStroke: true, hasImage: true, avatarVariant: .default),
+        Variant(title: "Fallback", hasStroke: false, hasImage: false, avatarVariant: .ghost),
+        Variant(title: "Fallback + Stroke", hasStroke: true, hasImage: false, avatarVariant: .ghost),
+        Variant(title: "Image", hasStroke: false, hasImage: true, avatarVariant: .ghost),
+        Variant(title: "Image + Stroke", hasStroke: true, hasImage: true, avatarVariant: .ghost),
         Variant(title: "Subtle", hasStroke: false, hasImage: false, avatarVariant: .subtle),
         Variant(title: "Subtle + Stroke", hasStroke: true, hasImage: false, avatarVariant: .subtle),
     ]
@@ -110,7 +110,7 @@ final class AvatarViewController: UIViewController {
         sizes: [CGFloat],
         hasStroke: Bool,
         hasImage: Bool,
-        avatarVariant: MDSAvatar.Variant = .default
+        avatarVariant: MDSAvatar.Variant = .ghost
     ) -> UIView {
         let card = UIView()
         card.backgroundColor = SemanticColor.Bg.Dim.default
@@ -154,7 +154,7 @@ final class AvatarViewController: UIViewController {
         hasStroke: Bool,
         hasImage: Bool,
         strokeColor: UIColor,
-        avatarVariant: MDSAvatar.Variant = .default
+        avatarVariant: MDSAvatar.Variant = .ghost
     ) -> UIView {
         let rowStack = UIStackView()
         rowStack.axis = .horizontal
