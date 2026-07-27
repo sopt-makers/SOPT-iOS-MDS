@@ -19,7 +19,7 @@ extension UILabel {
             .kern: style.letterSpacing,
             .foregroundColor: textColor ?? self.textColor ?? UIColor.label,
             .paragraphStyle: paragraphStyle,
-            .baselineOffset: (style.lineHeight - style.font.lineHeight) / 4
+            .baselineOffset: (style.lineHeight - style.font.lineHeight) / 2
         ]
 
         attributedText = NSAttributedString(string: text ?? "", attributes: attributes)
