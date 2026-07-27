@@ -27,7 +27,7 @@ final class ChipViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "CHIP"
+        title = "Chip"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupChips()
@@ -152,7 +152,7 @@ final class ChipViewController: UIViewController {
         descriptionLabel.textAlignment = .center
 
         let chip = MDSChip(size: size, type: type, prefixIcon: prefixIcon, suffixIcon: suffixIcon)
-        chip.chipTitle = "Chip"
+        chip.chipTitle = "CHIP"
 
         switch variant {
         case .interactive:

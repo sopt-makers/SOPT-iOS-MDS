@@ -66,6 +66,7 @@ public final class MDSSearchField: UIView {
         field.borderStyle = .none
         field.setTypography(Typography.body1)
         field.textColor = SemanticColor.Fg.Neutral.bold
+        field.tintColor = SemanticColor.Fg.Neutral.bold
         field.returnKeyType = .search
         return field
     }()

@@ -66,7 +66,7 @@ final class SearchFieldViewController: UIViewController {
         sectionTitle.font = .systemFont(ofSize: 20, weight: .bold)
         sectionTitle.textColor = .label
 
-        let field = MDSSearchField(variant: variant, placeholder: "Search")
+        let field = MDSSearchField(variant: variant, placeholder: "Placeholder")
         field.translatesAutoresizingMaskIntoConstraints = false
 
         let card = UIView()

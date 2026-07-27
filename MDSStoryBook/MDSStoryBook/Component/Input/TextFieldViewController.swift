@@ -99,7 +99,7 @@ final class TextFieldViewController: UIViewController {
 
         let tf = MDSTextField(
             variant: fieldVariant,
-            placeholder: "Placeholder text"
+            placeholder: "Placeholder"
         )
         tf.translatesAutoresizingMaskIntoConstraints = false
         previewCard.addSubview(tf)
@@ -118,7 +118,7 @@ final class TextFieldViewController: UIViewController {
     private func applyCurrentOptions() {
         previewTextField.label = showLabel ? "Label" : nil
         previewTextField.isRequired = showLabel && showRequired
-        previewTextField.descriptionText = showDescription ? "Input description" : nil
+        previewTextField.descriptionText = showDescription ? "Description" : nil
         previewTextField.helperText = showHelperText ? "Helper text" : nil
         previewTextField.maxLength = showTextCounter ? 50 : nil
         previewTextField.state = fieldState
@@ -289,7 +289,7 @@ final class TextFieldViewController: UIViewController {
 
     @objc private func descriptionToggled(_ sender: UISwitch) {
         showDescription = sender.isOn
-        previewTextField.descriptionText = sender.isOn ? "Input description" : nil
+        previewTextField.descriptionText = sender.isOn ? "Description" : nil
     }
 
     @objc private func helperTextToggled(_ sender: UISwitch) {
