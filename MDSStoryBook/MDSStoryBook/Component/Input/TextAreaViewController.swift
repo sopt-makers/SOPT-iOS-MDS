@@ -101,7 +101,7 @@ final class TextAreaViewController: UIViewController {
         let ta = MDSTextArea(
             variant: fieldVariant,
             hasSendButton: showSendButton,
-            placeholder: "Placeholder text"
+            placeholder: "Placeholder"
         )
         ta.translatesAutoresizingMaskIntoConstraints = false
         previewCard.addSubview(ta)
@@ -120,7 +120,7 @@ final class TextAreaViewController: UIViewController {
     private func applyCurrentOptions() {
         previewTextArea.label = showLabel ? "Label" : nil
         previewTextArea.isRequired = showLabel && showRequired
-        previewTextArea.descriptionText = showDescription ? "Input description" : nil
+        previewTextArea.descriptionText = showDescription ? "Description" : nil
         previewTextArea.helperText = showHelperText ? "Helper text" : nil
         previewTextArea.maxLength = showTextCounter ? 200 : nil
         previewTextArea.state = fieldState
@@ -292,7 +292,7 @@ final class TextAreaViewController: UIViewController {
 
     @objc private func descriptionToggled(_ sender: UISwitch) {
         showDescription = sender.isOn
-        previewTextArea.descriptionText = sender.isOn ? "Input description" : nil
+        previewTextArea.descriptionText = sender.isOn ? "Description" : nil
     }
 
     @objc private func helperTextToggled(_ sender: UISwitch) {

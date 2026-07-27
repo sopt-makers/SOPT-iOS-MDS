@@ -29,10 +29,10 @@ public final class MDSTextField: UIView {
         case disabled
 
         func backgroundColor(for variant: MDSTextField.Variant) -> UIColor {
-            if variant == .bold { return .clear }
-            return self == .disabled
-                ? SemanticColor.Bg.Neutral.Default.disabled
-                : SemanticColor.Bg.Neutral.ghost
+            switch variant {
+            case .default: return SemanticColor.Bg.Layer.default
+            case .bold: return SemanticColor.Bg.Neutral.ghost
+            }
         }
 
         var hasBorder: Bool { self == .active }
@@ -43,6 +43,14 @@ public final class MDSTextField: UIView {
 
         var ghostColor: UIColor {
             self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
+        }
+
+        func placeholderColor(for variant: MDSTextField.Variant) -> UIColor {
+            guard self == .disabled else { return SemanticColor.Fg.Neutral.ghost }
+            switch variant {
+            case .default: return SemanticColor.Fg.Neutral.Ghost.disabled
+            case .bold: return SemanticColor.Fg.Neutral.Default.disabled
+            }
         }
 
         var foregroundColor: UIColor {
@@ -305,15 +313,6 @@ public final class MDSTextField: UIView {
 
     // init 시 한 번 호출. stored properties 값을 기반으로 초기 뷰 상태를 세팅한다.
     private func initialAppearance() {
-        if let placeholder {
-            textField.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
-                attributes: Typography.body1.attributedStringAttributes(
-                    foregroundColor: SemanticColor.Fg.Neutral.ghost
-                )
-            )
-        }
-
         labelRowView.isHidden = label == nil
         titleLabel.text = label
         titleLabel.setTypography(Typography.title5)
@@ -370,6 +369,14 @@ public final class MDSTextField: UIView {
             ? SemanticColor.Stroke.Danger.default.cgColor
             : effectiveState.borderColor
         textField.textColor = effectiveState.foregroundColor
+        if let placeholder {
+            textField.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: Typography.body1.attributedStringAttributes(
+                    foregroundColor: effectiveState.placeholderColor(for: variant)
+                )
+            )
+        }
     }
 
     private func updateHelperArea() {

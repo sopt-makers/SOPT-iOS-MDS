@@ -41,9 +41,7 @@ public final class MDSTextArea: UIView {
             self == .active ? SemanticColor.Stroke.Neutral.Default.focused.cgColor : nil
         }
 
-        // Figma: disabled 상태의 dim 정도는 variant에 따라 갈린다 —
-        // .default(지면 위)는 ghost-disabled로 더 어둡게, .bold(카드/모달 위)는 default-disabled를 유지한다.
-        func ghostColor(for variant: MDSTextArea.Variant) -> UIColor {
+        func placeholderColor(for variant: MDSTextArea.Variant) -> UIColor {
             guard self == .disabled else { return SemanticColor.Fg.Neutral.ghost }
             switch variant {
             case .default: return SemanticColor.Fg.Neutral.Ghost.disabled
@@ -51,11 +49,15 @@ public final class MDSTextArea: UIView {
             }
         }
 
+        var supportingTextColor: UIColor {
+            self == .disabled ? SemanticColor.Fg.Neutral.Ghost.disabled : SemanticColor.Fg.Neutral.ghost
+        }
+
         func textColor(for variant: MDSTextArea.Variant) -> UIColor {
             switch self {
             case .default: return SemanticColor.Fg.Neutral.ghost
             case .active, .filled: return SemanticColor.Fg.Neutral.bold
-            default: return ghostColor(for: variant)
+            case .disabled: return SemanticColor.Fg.Neutral.Ghost.disabled
             }
         }
     }
@@ -220,7 +222,7 @@ public final class MDSTextArea: UIView {
     private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = SemanticColor.Fg.Neutral.bold
+        button.tintColor = SemanticColor.Fg.Neutral.default
         return button
     }()
 
@@ -452,8 +454,9 @@ public final class MDSTextArea: UIView {
             : state.borderColor
         textView.backgroundColor = state.backgroundColor(for: variant)
         textView.textColor = state.textColor(for: variant)
-        placeholderLabel.textColor = state.ghostColor(for: variant)
+        placeholderLabel.textColor = state.placeholderColor(for: variant)
         placeholderLabel.setTypography(Typography.body1)
+        sendButton.tintColor = state == .disabled ? SemanticColor.Fg.Neutral.Default.disabled : SemanticColor.Fg.Neutral.default
     }
 
     private func updateHelperArea() {
@@ -466,14 +469,14 @@ public final class MDSTextArea: UIView {
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
-            helperLabel.textColor = state.ghostColor(for: variant)
+            helperLabel.textColor = state.supportingTextColor
             helperLabel.setTypography(Typography.body3)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
             errorRowView.isHidden = true
         }
-        counterLabel.textColor = state.ghostColor(for: variant)
+        counterLabel.textColor = state.supportingTextColor
         counterLabel.setTypography(Typography.body3)
         updateBottomRow()
     }
@@ -481,7 +484,7 @@ public final class MDSTextArea: UIView {
     private func updateCounterLabel() {
         guard let maxLength else { return }
         counterLabel.text = "\(textView.text.count)/\(maxLength)"
-        counterLabel.textColor = resolvedState().ghostColor(for: variant)
+        counterLabel.textColor = resolvedState().supportingTextColor
         counterLabel.setTypography(Typography.body3)
     }
 
