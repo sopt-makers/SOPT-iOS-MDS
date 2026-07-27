@@ -85,7 +85,9 @@ public final class MDSTextField: UIView {
             updateLabelDescriptionSpacing()
         }
     }
-    public var placeholder: String?
+    public var placeholder: String? {
+        didSet { updatePlaceholder() }
+    }
     public var helperText: String? {
         didSet { updateHelperArea() }
     }
@@ -369,14 +371,20 @@ public final class MDSTextField: UIView {
             ? SemanticColor.Stroke.Danger.default.cgColor
             : effectiveState.borderColor
         textField.textColor = effectiveState.foregroundColor
-        if let placeholder {
-            textField.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
-                attributes: Typography.body1.attributedStringAttributes(
-                    foregroundColor: effectiveState.placeholderColor(for: variant)
-                )
-            )
+        updatePlaceholder()
+    }
+
+    private func updatePlaceholder() {
+        guard let placeholder else {
+            textField.attributedPlaceholder = nil
+            return
         }
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: Typography.body1.attributedStringAttributes(
+                foregroundColor: resolvedState().placeholderColor(for: variant)
+            )
+        )
     }
 
     private func updateHelperArea() {

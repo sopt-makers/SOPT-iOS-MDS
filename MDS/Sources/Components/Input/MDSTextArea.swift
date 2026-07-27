@@ -82,16 +82,22 @@ public final class MDSTextArea: UIView {
             updateLabelDescriptionSpacing()
         }
     }
-    public var placeholder: String?
+
+    public var placeholder: String? {
+        didSet { placeholderLabel.text = placeholder }
+    }
+
     public var helperText: String? {
         didSet { updateHelperArea() }
     }
+
     public var errorMessage: String? {
         didSet {
             updateFieldStyle()
             updateHelperArea()
         }
     }
+
     public var maxLength: Int? {
         didSet {
             counterLabel.isHidden = maxLength == nil
@@ -403,7 +409,6 @@ public final class MDSTextArea: UIView {
         descriptionLabel.setTypography(Typography.body2)
         updateLabelDescriptionSpacing()
 
-        placeholderLabel.text = placeholder
         placeholderLabel.setTypography(Typography.body1)
 
         counterLabel.isHidden = maxLength == nil
