@@ -160,7 +160,7 @@ final class TagViewController: UIViewController {
         itemStack.spacing = 6
         itemStack.alignment = .center
 
-        let tag = MDSTag(text: "Tag", size: size, shape: shape, variant: variant, style: style, icon: icon)
+        let tag = MDSTag(text: "TAG", size: size, shape: shape, variant: variant, style: style, icon: icon)
 
         let descLabel = UILabel()
         descLabel.text = description

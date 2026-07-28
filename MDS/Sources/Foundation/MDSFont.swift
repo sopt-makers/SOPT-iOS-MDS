@@ -28,7 +28,7 @@ public struct MDSFont: @unchecked Sendable {
             .kern: letterSpacing,
             .foregroundColor: foregroundColor,
             .paragraphStyle: paragraphStyle,
-            .baselineOffset: (lineHeight - font.lineHeight) / 4
+            .baselineOffset: (lineHeight - font.lineHeight) / 2
         ]
     }
 }
