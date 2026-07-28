@@ -289,8 +289,8 @@ public final class MDSTextField: UIView {
         outerStackView.addArrangedSubview(descriptionContainerView)
         outerStackView.addArrangedSubview(textField)
         outerStackView.addArrangedSubview(bottomRowView)
-        outerStackView.setCustomSpacing(10, after: descriptionContainerView)
-        outerStackView.setCustomSpacing(6, after: textField)
+        outerStackView.setCustomSpacing(BaseSpacing.Base.s10, after: descriptionContainerView)
+        outerStackView.setCustomSpacing(BaseSpacing.Base.s6, after: textField)
 
         addSubview(outerStackView)
     }

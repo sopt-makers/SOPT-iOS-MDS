@@ -175,29 +175,29 @@ private extension MDSActionButton {
             case .xsmall:
                 height = 32
                 cornerRadius = BaseRadius.Base.r16
-                contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
-                iconGap = 2
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s8, leading: BaseSpacing.Base.s12, bottom: BaseSpacing.Base.s8, trailing: BaseSpacing.Base.s12)
+                iconGap = BaseSpacing.Base.s2
                 iconSize = 16
                 typography = Typography.label4
             case .small:
                 height = 38
                 cornerRadius = BaseRadius.Base.r8
-                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
-                iconGap = 4
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s10, leading: BaseSpacing.Base.s12, bottom: BaseSpacing.Base.s10, trailing: BaseSpacing.Base.s12)
+                iconGap = BaseSpacing.Base.s4
                 iconSize = 16
                 typography = Typography.label3
             case .medium:
                 height = 46
                 cornerRadius = BaseRadius.Base.r10
-                contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-                iconGap = 4
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s12, leading: BaseSpacing.Base.s16, bottom: BaseSpacing.Base.s12, trailing: BaseSpacing.Base.s16)
+                iconGap = BaseSpacing.Base.s4
                 iconSize = 20
                 typography = Typography.label2
             case .large:
                 height = 56
                 cornerRadius = BaseRadius.Base.r12
-                contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 20)
-                iconGap = 4
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s14, leading: BaseSpacing.Base.s20, bottom: BaseSpacing.Base.s14, trailing: BaseSpacing.Base.s20)
+                iconGap = BaseSpacing.Base.s4
                 iconSize = 24
                 typography = Typography.label1
             }

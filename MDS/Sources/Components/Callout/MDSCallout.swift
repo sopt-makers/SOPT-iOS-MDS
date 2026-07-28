@@ -15,7 +15,7 @@ public final class MDSCallout: UIView {
         view.alignment = .top
         view.isLayoutMarginsRelativeArrangement = true
         view.layoutMargins = UIEdgeInsets(top: 14, left: 18, bottom: 14, right: 14)
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = BaseRadius.Base.r10
         view.layer.borderWidth = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

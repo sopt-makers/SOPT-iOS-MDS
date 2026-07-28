@@ -199,25 +199,25 @@ private extension MDSReactionButton {
             switch size {
             case .xsmall:
                 height = 20
-                contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s2, leading: BaseSpacing.Base.s4, bottom: BaseSpacing.Base.s2, trailing: BaseSpacing.Base.s4)
                 iconSize = 16
-                itemGap = 4
+                itemGap = BaseSpacing.Base.s4
                 typography = Typography.label4
             case .small:
                 height = 32
-                contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 14)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s8, leading: BaseSpacing.Base.s14, bottom: BaseSpacing.Base.s8, trailing: BaseSpacing.Base.s14)
                 iconSize = 16
-                itemGap = 4
+                itemGap = BaseSpacing.Base.s4
                 typography = Typography.label4
             case .medium:
                 height = 38
-                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s10, leading: BaseSpacing.Base.s16, bottom: BaseSpacing.Base.s10, trailing: BaseSpacing.Base.s16)
                 iconSize = 16
-                itemGap = 4
+                itemGap = BaseSpacing.Base.s4
                 typography = Typography.label3
             case .large:
                 height = 54
-                contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 24, bottom: 15, trailing: 24)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s14, leading: BaseSpacing.Base.s24, bottom: BaseSpacing.Base.s14, trailing: BaseSpacing.Base.s24)
                 iconSize = 24
                 itemGap = 6
                 typography = Typography.label1
