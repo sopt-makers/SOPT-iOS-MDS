@@ -117,13 +117,14 @@ public final class MDSToggle: UIControl {
         let sizeToken = SizeToken(size: toggleSize)
         let constant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - BaseSpacing.Base.s2) : BaseSpacing.Base.s2
 
-        if animated {
-            UIView.animate(withDuration: 0.2) { [weak self] in
-                self?.thumbLeadingConstraint?.constant = constant
-                self?.trackView.layoutIfNeeded()
-            }
-        } else {
+        guard animated, window != nil else {
             thumbLeadingConstraint?.constant = constant
+            return
+        }
+
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.thumbLeadingConstraint?.constant = constant
+            self?.trackView.layoutIfNeeded()
         }
     }
 }
