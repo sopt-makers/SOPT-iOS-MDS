@@ -161,12 +161,12 @@ private extension MDSCheckbox {
                 iconSize = 12
                 boxSize = 16
                 font = Typography.label3
-                padding = 6
+                padding = BaseSpacing.Base.s6
             case .large:
-                iconSize = 15
+                iconSize = 14
                 boxSize = 20
                 font = Typography.label2
-                padding = 8
+                padding = BaseSpacing.Base.s10
             }
         }
     }

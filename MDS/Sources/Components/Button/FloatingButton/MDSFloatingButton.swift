@@ -146,14 +146,14 @@ private extension MDSFloatingButton {
             cornerRadius = BaseRadius.Base.r16
             switch size {
             case .default:
-                contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s10, leading: BaseSpacing.Base.s10, bottom: BaseSpacing.Base.s10, trailing: BaseSpacing.Base.s10)
                 iconSize = 28
-                iconGap = 0
+                iconGap = BaseSpacing.Base.s0
                 typography = Typography.label1
             case .extended:
-                contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 14, bottom: 12, trailing: 14)
+                contentInsets = NSDirectionalEdgeInsets(top: BaseSpacing.Base.s12, leading: BaseSpacing.Base.s14, bottom: BaseSpacing.Base.s12, trailing: BaseSpacing.Base.s14)
                 iconSize = 24
-                iconGap = 4
+                iconGap = BaseSpacing.Base.s4
                 typography = Typography.label1
             }
         }

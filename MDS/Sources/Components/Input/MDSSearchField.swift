@@ -113,16 +113,16 @@ public final class MDSSearchField: UIView {
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 46),
 
-            searchIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
+            searchIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: BaseSpacing.Base.s14),
             searchIconView.centerYAnchor.constraint(equalTo: centerYAnchor),
             searchIconView.widthAnchor.constraint(equalToConstant: 20),
             searchIconView.heightAnchor.constraint(equalToConstant: 20),
 
-            textField.leadingAnchor.constraint(equalTo: searchIconView.trailingAnchor, constant: 8),
+            textField.leadingAnchor.constraint(equalTo: searchIconView.trailingAnchor, constant: BaseSpacing.Base.s8),
             textField.centerYAnchor.constraint(equalTo: centerYAnchor),
-            textField.trailingAnchor.constraint(equalTo: clearButton.leadingAnchor, constant: -8),
+            textField.trailingAnchor.constraint(equalTo: clearButton.leadingAnchor, constant: -BaseSpacing.Base.s8),
 
-            clearButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
+            clearButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -BaseSpacing.Base.s14),
             clearButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             clearButton.widthAnchor.constraint(equalToConstant: 20),
             clearButton.heightAnchor.constraint(equalToConstant: 20),

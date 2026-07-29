@@ -6,8 +6,7 @@
 //
 
 public extension MDSFloatingButton {
-
-    public enum Size {
+    enum Size {
         case `default`
         case extended
     }

@@ -13,7 +13,6 @@ final class ToggleViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 40
-        stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -21,7 +20,7 @@ final class ToggleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Toggle"
-        view.backgroundColor = SemanticColor.Bg.Layer.basement
+        view.backgroundColor = .systemGroupedBackground
         setupLayout()
         addToggles()
     }
@@ -55,8 +54,8 @@ final class ToggleViewController: UIViewController {
     private func addSection(title: String) {
         let label = UILabel()
         label.text = title
-        label.textColor = SemanticColor.Fg.Neutral.bold
-        label.font = Typography.title1.font
+        label.textColor = .label
+        label.font = .systemFont(ofSize: 20, weight: .bold)
         stackView.addArrangedSubview(label)
     }
 
@@ -65,6 +64,9 @@ final class ToggleViewController: UIViewController {
         horizontalStack.axis = .horizontal
         horizontalStack.spacing = 20
         horizontalStack.alignment = .center
+        horizontalStack.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        horizontalStack.isLayoutMarginsRelativeArrangement = true
+        horizontalStack.translatesAutoresizingMaskIntoConstraints = false
 
         // Off
         let offToggle = MDSToggle(size: size)
@@ -88,6 +90,18 @@ final class ToggleViewController: UIViewController {
         disabledOnToggle.isEnabled = false
         horizontalStack.addArrangedSubview(disabledOnToggle)
 
-        stackView.addArrangedSubview(horizontalStack)
+        let card = UIView()
+        card.backgroundColor = SemanticColor.Bg.Dim.default
+        card.layer.cornerRadius = 12
+        card.addSubview(horizontalStack)
+
+        NSLayoutConstraint.activate([
+            horizontalStack.topAnchor.constraint(equalTo: card.topAnchor),
+            horizontalStack.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            horizontalStack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            horizontalStack.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
+        ])
+
+        stackView.addArrangedSubview(card)
     }
 }

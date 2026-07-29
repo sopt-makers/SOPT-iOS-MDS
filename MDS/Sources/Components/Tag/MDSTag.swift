@@ -91,7 +91,7 @@ public final class MDSTag: UIView {
         )
         stackView.spacing = sizeToken.gap
 
-        layer.cornerRadius = shape == .pill ? sizeToken.height / 2 : 4
+        layer.cornerRadius = shape == .pill ? sizeToken.height / 2 : BaseRadius.Base.r4
         layer.masksToBounds = true
 
         backgroundColor = colorToken.background

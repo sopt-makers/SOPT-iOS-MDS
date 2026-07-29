@@ -13,7 +13,6 @@ final class CheckboxViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 40
-        stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -21,7 +20,7 @@ final class CheckboxViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Checkbox"
-        view.backgroundColor = SemanticColor.Bg.Layer.basement
+        view.backgroundColor = .systemGroupedBackground
         setupLayout()
         addCheckboxes()
     }
@@ -55,8 +54,8 @@ final class CheckboxViewController: UIViewController {
     private func addSection(title: String) {
         let label = UILabel()
         label.text = title
-        label.textColor = SemanticColor.Fg.Neutral.bold
-        label.font = Typography.title1.font
+        label.textColor = .label
+        label.font = .systemFont(ofSize: 20, weight: .bold)
         stackView.addArrangedSubview(label)
     }
 
@@ -65,6 +64,9 @@ final class CheckboxViewController: UIViewController {
         rowStack.axis = .vertical
         rowStack.spacing = 16
         rowStack.alignment = .leading
+        rowStack.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        rowStack.isLayoutMarginsRelativeArrangement = true
+        rowStack.translatesAutoresizingMaskIntoConstraints = false
 
         // Unselected
         let unselected = MDSCheckbox(size: size, title: "Label")
@@ -88,6 +90,18 @@ final class CheckboxViewController: UIViewController {
         disabledSelected.isEnabled = false
         rowStack.addArrangedSubview(disabledSelected)
 
-        stackView.addArrangedSubview(rowStack)
+        let card = UIView()
+        card.backgroundColor = SemanticColor.Bg.Dim.default
+        card.layer.cornerRadius = 12
+        card.addSubview(rowStack)
+
+        NSLayoutConstraint.activate([
+            rowStack.topAnchor.constraint(equalTo: card.topAnchor),
+            rowStack.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            rowStack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            rowStack.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
+        ])
+
+        stackView.addArrangedSubview(card)
     }
 }

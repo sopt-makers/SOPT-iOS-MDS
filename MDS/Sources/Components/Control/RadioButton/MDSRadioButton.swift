@@ -156,7 +156,7 @@ extension MDSRadioButton {
             case .large:
                 circleSize = 22
                 dotSize = 10
-                gap = 10
+                gap = BaseSpacing.Base.s10
                 typography = Typography.label2
             }
         }

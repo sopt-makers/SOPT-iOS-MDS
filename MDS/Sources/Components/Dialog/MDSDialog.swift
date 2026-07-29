@@ -23,7 +23,7 @@ public final class MDSDialog: UIView {
     private let stackView: UIStackView = {
        let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 20
+        stackView.spacing = BaseSpacing.Base.s20
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -51,7 +51,7 @@ public final class MDSDialog: UIView {
     private let buttonStackView: UIStackView = {
        let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 8
+        stackView.spacing = BaseSpacing.Base.s8
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -152,11 +152,11 @@ public final class MDSDialog: UIView {
 
         if subTitle != nil {
             stackView.addArrangedSubview(descriptionLabel)
-            stackView.setCustomSpacing(8, after: titleLabel)
+            stackView.setCustomSpacing(BaseSpacing.Base.s8, after: titleLabel)
         }
 
         if let checkBox {
-            stackView.setCustomSpacing(24, after: subTitle != nil ? descriptionLabel : titleLabel)
+            stackView.setCustomSpacing(BaseSpacing.Base.s24, after: subTitle != nil ? descriptionLabel : titleLabel)
             stackView.addArrangedSubview(checkBox)
         }
         
@@ -167,10 +167,10 @@ public final class MDSDialog: UIView {
         buttonStackView.addArrangedSubview(dangerButton)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: BaseSpacing.Base.s20),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: BaseSpacing.Base.s20),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -BaseSpacing.Base.s20),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -BaseSpacing.Base.s20)
         ])
     }
     

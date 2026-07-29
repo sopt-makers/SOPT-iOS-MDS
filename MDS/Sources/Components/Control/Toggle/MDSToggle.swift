@@ -41,7 +41,7 @@ public final class MDSToggle: UIControl {
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 2
+        view.layer.shadowRadius = BaseRadius.Base.r2
         return view
     }()
 
@@ -115,15 +115,16 @@ public final class MDSToggle: UIControl {
     
     private func updateThumbPosition(animated: Bool) {
         let sizeToken = SizeToken(size: toggleSize)
-        let constant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - 2) : 2
+        let constant: CGFloat = isOn ? (sizeToken.width - sizeToken.thumbSize - BaseSpacing.Base.s2) : BaseSpacing.Base.s2
 
-        if animated {
-            UIView.animate(withDuration: 0.2) { [weak self] in
-                self?.thumbLeadingConstraint?.constant = constant
-                self?.trackView.layoutIfNeeded()
-            }
-        } else {
+        guard animated, window != nil else {
             thumbLeadingConstraint?.constant = constant
+            return
+        }
+
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.thumbLeadingConstraint?.constant = constant
+            self?.trackView.layoutIfNeeded()
         }
     }
 }
