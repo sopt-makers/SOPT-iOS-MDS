@@ -421,7 +421,7 @@ public final class MDSTextArea: UIView {
         descriptionLabel.setTypography(Typography.body2)
         updateLabelDescriptionSpacing()
 
-        placeholderLabel.setTypography(Typography.body1)
+        placeholderLabel.text = placeholder
 
         counterLabel.isHidden = maxLength == nil
 
