@@ -233,6 +233,14 @@ public final class MDSTextField: UIView {
         return label
     }()
 
+    /// helperLabel/errorRowView가 둘 다 숨겨져도 counterLabel을 우측에 고정하기 위한 spacer.
+    /// 항상 표시 상태를 유지하며, 다른 두 뷰보다 낮은 hugging priority로 남는 공간을 우선 흡수한다.
+    private let counterSpacerView: UIView = {
+        let view = UIView()
+        view.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        return view
+    }()
+
     // MARK: - Init
 
     public init(
@@ -281,6 +289,7 @@ public final class MDSTextField: UIView {
 
         bottomRowView.addArrangedSubview(helperLabel)
         bottomRowView.addArrangedSubview(errorRowView)
+        bottomRowView.addArrangedSubview(counterSpacerView)
         bottomRowView.addArrangedSubview(counterLabel)
 
         descriptionContainerView.addSubview(descriptionLabel)
