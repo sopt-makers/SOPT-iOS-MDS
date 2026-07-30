@@ -212,6 +212,7 @@ public final class MDSTextArea: UIView {
         view.textContainer.lineFragmentPadding = 0
         view.showsHorizontalScrollIndicator = false
         view.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
+        view.tintColor = SemanticColor.Fg.Neutral.bold
         return view
     }()
 

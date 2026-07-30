@@ -173,6 +173,7 @@ public final class MDSTextField: UIView {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
         field.setTypography(Typography.body1)
+        field.tintColor = SemanticColor.Fg.Neutral.bold
         field.layer.cornerRadius = BaseRadius.Base.r10
         field.layer.masksToBounds = true
         return field
