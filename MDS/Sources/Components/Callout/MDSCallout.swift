@@ -33,8 +33,7 @@ public final class MDSCallout: UIView {
     private let label: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.setTypography(Typography.body2)
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

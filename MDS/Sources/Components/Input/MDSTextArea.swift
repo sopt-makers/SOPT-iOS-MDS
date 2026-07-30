@@ -165,8 +165,7 @@ public final class MDSTextArea: UIView {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.title5)
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.title5, textColor: SemanticColor.Fg.Neutral.bold)
         label.numberOfLines = 1
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
@@ -175,8 +174,7 @@ public final class MDSTextArea: UIView {
     private let requiredLabel: UILabel = {
         let label = UILabel()
         label.text = "*"
-        label.textColor = SemanticColor.Fg.Brand.default
-        label.setTypography(Typography.title4)
+        label.setTypography(Typography.title4, textColor: SemanticColor.Fg.Brand.default)
         return label
     }()
 
@@ -185,8 +183,7 @@ public final class MDSTextArea: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.setTypography(Typography.body2)
-        label.textColor = SemanticColor.Fg.Neutral.default
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.default)
         label.numberOfLines = 0
         return label
     }()
@@ -214,16 +211,14 @@ public final class MDSTextArea: UIView {
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
         view.showsHorizontalScrollIndicator = false
-        view.textColor = SemanticColor.Fg.Neutral.bold
-        view.setTypography(Typography.body1)
+        view.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
         return view
     }()
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = SemanticColor.Fg.Neutral.ghost
-        label.setTypography(Typography.body1)
+        label.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.ghost)
         label.numberOfLines = 0
         return label
     }()
@@ -273,8 +268,7 @@ public final class MDSTextArea: UIView {
 
     private let errorMessageLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.body3)
-        label.textColor = SemanticColor.Fg.Danger.default
+        label.setTypography(Typography.body3, textColor: SemanticColor.Fg.Danger.default)
         label.numberOfLines = 0
         return label
     }()
@@ -471,8 +465,7 @@ public final class MDSTextArea: UIView {
             : state.borderColor
         textView.backgroundColor = state.backgroundColor(for: variant)
         textView.textColor = state.textColor(for: variant)
-        placeholderLabel.textColor = state.placeholderColor(for: variant)
-        placeholderLabel.setTypography(Typography.body1)
+        placeholderLabel.setTypography(Typography.body1, textColor: state.placeholderColor(for: variant))
         sendButton.tintColor = state == .disabled ? SemanticColor.Fg.Neutral.Default.disabled : SemanticColor.Fg.Neutral.default
     }
 
@@ -486,23 +479,20 @@ public final class MDSTextArea: UIView {
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
-            helperLabel.textColor = state.supportingTextColor
-            helperLabel.setTypography(Typography.body3)
+            helperLabel.setTypography(Typography.body3, textColor: state.supportingTextColor)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
             errorRowView.isHidden = true
         }
-        counterLabel.textColor = state.supportingTextColor
-        counterLabel.setTypography(Typography.body3)
+        counterLabel.setTypography(Typography.body3, textColor: state.supportingTextColor)
         updateBottomRow()
     }
 
     private func updateCounterLabel() {
         guard let maxLength else { return }
         counterLabel.text = "\(textView.text.count)/\(maxLength)"
-        counterLabel.textColor = resolvedState().supportingTextColor
-        counterLabel.setTypography(Typography.body3)
+        counterLabel.setTypography(Typography.body3, textColor: resolvedState().supportingTextColor)
     }
 
     private func updateBottomRow() {

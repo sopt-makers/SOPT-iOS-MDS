@@ -141,8 +141,7 @@ public final class MDSCheckbox: UIControl {
         checkImageView.tintColor = colorToken.iconColor
         checkImageView.isHidden = !isSelected
 
-        titleLabel.textColor = colorToken.textColor
-        titleLabel.setTypography(SizeToken(size: checkboxSize).font)
+        titleLabel.setTypography(SizeToken(size: checkboxSize).font, textColor: colorToken.textColor)
     }
 }
 

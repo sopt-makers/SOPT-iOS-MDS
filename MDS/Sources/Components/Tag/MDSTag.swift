@@ -95,9 +95,8 @@ public final class MDSTag: UIView {
         layer.masksToBounds = true
 
         backgroundColor = colorToken.background
-        label.textColor = colorToken.foreground
         label.text = text
-        label.setTypography(sizeToken.font)
+        label.setTypography(sizeToken.font, textColor: colorToken.foreground)
 
         applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
     }
