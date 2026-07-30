@@ -10,9 +10,9 @@ extension UITextView {
     /// 커서 높이와 줄간격이 style.lineHeight를 따르게 됩니다.
     /// 텍스트를 코드로 교체한 뒤에는 다시 호출해야 합니다.
     public func setTypography(_ style: MDSFont, textColor: UIColor? = nil) {
-        let attributes = style.attributedStringAttributes(
-            foregroundColor: textColor ?? self.textColor ?? .label
-        )
+        let resolvedColor = textColor ?? self.textColor ?? .label
+        self.textColor = resolvedColor
+        let attributes = style.attributedStringAttributes(foregroundColor: resolvedColor)
         typingAttributes = attributes
         if let text, !text.isEmpty {
             // attributedText 교체는 커서/선택(selectedRange)을 초기화하므로 저장 후 복원한다.
