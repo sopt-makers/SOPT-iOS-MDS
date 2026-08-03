@@ -30,7 +30,6 @@ public final class MDSDialog: UIView {
     
     private let titleLabel: UILabel = {
        let label = UILabel()
-        label.setTypography(Typography.heading3)
         label.textColor = SemanticColor.Fg.Neutral.bold
         label.numberOfLines = 0
         label.textAlignment = .left
@@ -40,7 +39,6 @@ public final class MDSDialog: UIView {
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.body2)
         label.textColor = SemanticColor.Fg.Neutral.default
         label.numberOfLines = 0
         label.textAlignment = .left
@@ -113,7 +111,9 @@ public final class MDSDialog: UIView {
         backgroundColor = SemanticColor.Bg.Neutral.ghost
         
         titleLabel.text = title
+        titleLabel.setTypography(Typography.heading3)
         descriptionLabel.text = subTitle
+        descriptionLabel.setTypography(Typography.body2)
         
         switch variant {
         case let .default(primaryTitle, primaryPrefix, primarySuffix, secondaryTitle, secondaryPrefix, secondarySuffix):
