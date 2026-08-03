@@ -64,8 +64,7 @@ public final class MDSSearchField: UIView {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
-        field.setTypography(Typography.body1)
-        field.textColor = SemanticColor.Fg.Neutral.bold
+        field.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
         field.tintColor = SemanticColor.Fg.Neutral.bold
         field.returnKeyType = .search
         return field

@@ -30,7 +30,7 @@ public final class MDSDialog: UIView {
     
     private let titleLabel: UILabel = {
        let label = UILabel()
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.heading3, textColor: SemanticColor.Fg.Neutral.bold)
         label.numberOfLines = 0
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +39,7 @@ public final class MDSDialog: UIView {
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = SemanticColor.Fg.Neutral.default
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.default)
         label.numberOfLines = 0
         label.textAlignment = .left
          label.translatesAutoresizingMaskIntoConstraints = false

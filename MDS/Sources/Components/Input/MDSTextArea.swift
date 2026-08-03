@@ -84,7 +84,10 @@ public final class MDSTextArea: UIView {
     }
 
     public var placeholder: String? {
-        didSet { placeholderLabel.text = placeholder }
+        didSet {
+            placeholderLabel.text = placeholder
+            placeholderLabel.setTypography(Typography.body1)
+        }
     }
 
     public var helperText: String? {
@@ -162,8 +165,7 @@ public final class MDSTextArea: UIView {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.title5)
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.title5, textColor: SemanticColor.Fg.Neutral.bold)
         label.numberOfLines = 1
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
@@ -172,8 +174,7 @@ public final class MDSTextArea: UIView {
     private let requiredLabel: UILabel = {
         let label = UILabel()
         label.text = "*"
-        label.textColor = SemanticColor.Fg.Brand.default
-        label.setTypography(Typography.title4)
+        label.setTypography(Typography.title4, textColor: SemanticColor.Fg.Brand.default)
         return label
     }()
 
@@ -182,8 +183,7 @@ public final class MDSTextArea: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.setTypography(Typography.body2)
-        label.textColor = SemanticColor.Fg.Neutral.default
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.default)
         label.numberOfLines = 0
         return label
     }()
@@ -211,16 +211,15 @@ public final class MDSTextArea: UIView {
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
         view.showsHorizontalScrollIndicator = false
-        view.textColor = SemanticColor.Fg.Neutral.bold
-        view.setTypography(Typography.body1)
+        view.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
+        view.tintColor = SemanticColor.Fg.Neutral.bold
         return view
     }()
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = SemanticColor.Fg.Neutral.ghost
-        label.setTypography(Typography.body1)
+        label.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.ghost)
         label.numberOfLines = 0
         return label
     }()
@@ -270,8 +269,7 @@ public final class MDSTextArea: UIView {
 
     private let errorMessageLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.body3)
-        label.textColor = SemanticColor.Fg.Danger.default
+        label.setTypography(Typography.body3, textColor: SemanticColor.Fg.Danger.default)
         label.numberOfLines = 0
         return label
     }()
@@ -281,6 +279,14 @@ public final class MDSTextArea: UIView {
         label.setTypography(Typography.body3)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
+    }()
+
+    /// helperLabel/errorRowView가 둘 다 숨겨져도 counterLabel을 우측에 고정하기 위한 spacer.
+    /// 항상 표시 상태를 유지하며, 다른 두 뷰보다 낮은 hugging priority로 남는 공간을 우선 흡수한다.
+    private let counterSpacerView: UIView = {
+        let view = UIView()
+        view.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        return view
     }()
 
     // MARK: - Init
@@ -329,6 +335,7 @@ public final class MDSTextArea: UIView {
 
         bottomRowView.addArrangedSubview(helperLabel)
         bottomRowView.addArrangedSubview(errorRowView)
+        bottomRowView.addArrangedSubview(counterSpacerView)
         bottomRowView.addArrangedSubview(counterLabel)
 
         inputContainer.addSubview(textView)
@@ -409,7 +416,7 @@ public final class MDSTextArea: UIView {
         descriptionLabel.setTypography(Typography.body2)
         updateLabelDescriptionSpacing()
 
-        placeholderLabel.setTypography(Typography.body1)
+        placeholderLabel.text = placeholder
 
         counterLabel.isHidden = maxLength == nil
 
@@ -459,8 +466,7 @@ public final class MDSTextArea: UIView {
             : state.borderColor
         textView.backgroundColor = state.backgroundColor(for: variant)
         textView.textColor = state.textColor(for: variant)
-        placeholderLabel.textColor = state.placeholderColor(for: variant)
-        placeholderLabel.setTypography(Typography.body1)
+        placeholderLabel.setTypography(Typography.body1, textColor: state.placeholderColor(for: variant))
         sendButton.tintColor = state == .disabled ? SemanticColor.Fg.Neutral.Default.disabled : SemanticColor.Fg.Neutral.default
     }
 
@@ -474,23 +480,20 @@ public final class MDSTextArea: UIView {
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
-            helperLabel.textColor = state.supportingTextColor
-            helperLabel.setTypography(Typography.body3)
+            helperLabel.setTypography(Typography.body3, textColor: state.supportingTextColor)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
             errorRowView.isHidden = true
         }
-        counterLabel.textColor = state.supportingTextColor
-        counterLabel.setTypography(Typography.body3)
+        counterLabel.setTypography(Typography.body3, textColor: state.supportingTextColor)
         updateBottomRow()
     }
 
     private func updateCounterLabel() {
         guard let maxLength else { return }
         counterLabel.text = "\(textView.text.count)/\(maxLength)"
-        counterLabel.textColor = resolvedState().supportingTextColor
-        counterLabel.setTypography(Typography.body3)
+        counterLabel.setTypography(Typography.body3, textColor: resolvedState().supportingTextColor)
     }
 
     private func updateBottomRow() {

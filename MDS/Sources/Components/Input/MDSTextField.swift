@@ -146,8 +146,7 @@ public final class MDSTextField: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.setTypography(Typography.title5)
-        label.textColor = SemanticColor.Fg.Neutral.bold
+        label.setTypography(Typography.title5, textColor: SemanticColor.Fg.Neutral.bold)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -155,8 +154,7 @@ public final class MDSTextField: UIView {
     private let requiredLabel: UILabel = {
         let label = UILabel()
         label.text = "*"
-        label.textColor = SemanticColor.Fg.Brand.default
-        label.setTypography(Typography.title4)
+        label.setTypography(Typography.title4, textColor: SemanticColor.Fg.Brand.default)
         return label
     }()
 
@@ -166,8 +164,7 @@ public final class MDSTextField: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.setTypography(Typography.body2)
-        label.textColor = SemanticColor.Fg.Neutral.default
+        label.setTypography(Typography.body2, textColor: SemanticColor.Fg.Neutral.default)
         return label
     }()
 
@@ -176,6 +173,7 @@ public final class MDSTextField: UIView {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .none
         field.setTypography(Typography.body1)
+        field.tintColor = SemanticColor.Fg.Neutral.bold
         field.layer.cornerRadius = BaseRadius.Base.r10
         field.layer.masksToBounds = true
         return field
@@ -219,8 +217,7 @@ public final class MDSTextField: UIView {
 
     private let errorMessageLabel: UILabel = {
         let label = UILabel()
-        label.setTypography(Typography.body3)
-        label.textColor = SemanticColor.Fg.Danger.default
+        label.setTypography(Typography.body3, textColor: SemanticColor.Fg.Danger.default)
         label.numberOfLines = 0
         return label
     }()
@@ -231,6 +228,14 @@ public final class MDSTextField: UIView {
         label.setTypography(Typography.body3)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
+    }()
+
+    /// helperLabel/errorRowView가 둘 다 숨겨져도 counterLabel을 우측에 고정하기 위한 spacer.
+    /// 항상 표시 상태를 유지하며, 다른 두 뷰보다 낮은 hugging priority로 남는 공간을 우선 흡수한다.
+    private let counterSpacerView: UIView = {
+        let view = UIView()
+        view.setContentHuggingPriority(UILayoutPriority(1), for: .horizontal)
+        return view
     }()
 
     // MARK: - Init
@@ -281,6 +286,7 @@ public final class MDSTextField: UIView {
 
         bottomRowView.addArrangedSubview(helperLabel)
         bottomRowView.addArrangedSubview(errorRowView)
+        bottomRowView.addArrangedSubview(counterSpacerView)
         bottomRowView.addArrangedSubview(counterLabel)
 
         descriptionContainerView.addSubview(descriptionLabel)
@@ -397,8 +403,7 @@ public final class MDSTextField: UIView {
         } else if let helper = helperText {
             helperLabel.isHidden = false
             helperLabel.text = helper
-            helperLabel.textColor = effectiveState.ghostColor
-            helperLabel.setTypography(Typography.body3)
+            helperLabel.setTypography(Typography.body3, textColor: effectiveState.ghostColor)
             errorRowView.isHidden = true
         } else {
             helperLabel.isHidden = true
@@ -410,8 +415,7 @@ public final class MDSTextField: UIView {
     private func updateCounterLabelContent() {
         guard let maxLength else { return }
         counterLabel.text = "\(textField.text?.count ?? 0)/\(maxLength)"
-        counterLabel.textColor = resolvedState().ghostColor
-        counterLabel.setTypography(Typography.body3)
+        counterLabel.setTypography(Typography.body3, textColor: resolvedState().ghostColor)
     }
 
     private func updateBottomRow() {
