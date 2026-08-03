@@ -111,7 +111,9 @@ public final class MDSDialog: UIView {
         backgroundColor = SemanticColor.Bg.Neutral.ghost
         
         titleLabel.text = title
+        titleLabel.setTypography(Typography.heading3)
         descriptionLabel.text = subTitle
+        descriptionLabel.setTypography(Typography.body2)
         
         switch variant {
         case let .default(primaryTitle, primaryPrefix, primarySuffix, secondaryTitle, secondaryPrefix, secondarySuffix):
