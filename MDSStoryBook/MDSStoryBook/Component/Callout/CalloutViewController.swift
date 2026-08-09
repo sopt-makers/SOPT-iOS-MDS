@@ -71,11 +71,13 @@ final class CalloutViewController: UIViewController {
         sectionStack.spacing = 10
         sectionStack.addArrangedSubview(sectionTitle)
 
-        let cases: [(title: String, icon: MDSIcon?, buttonTitle: String?)] = [
-            ("Text only", nil, nil),
-            ("Icon", MDSIcon.alertCircleOutlined, nil),
-            ("Button", nil, "text button"),
-            ("Icon + Button", MDSIcon.alertCircleOutlined, "text button"),
+        let cases: [(title: String, icon: MDSIcon?, buttonTitle: String?, buttonIcon: MDSIcon?)] = [
+            ("Text only", nil, nil, nil),
+            ("Icon", MDSIcon.alertCircleOutlined, nil, nil),
+            ("Button", nil, "text button", .chevronRightOutlined),
+            ("Button (No Icon)", nil, "text button", nil),
+            ("Button (Custom Icon)", nil, "text button", .alertCircleOutlined),
+            ("Icon + Button", MDSIcon.alertCircleOutlined, "text button", .chevronRightOutlined),
         ]
 
         cases.forEach { item in
@@ -85,7 +87,8 @@ final class CalloutViewController: UIViewController {
                     style: style,
                     text: "Text",
                     icon: item.icon,
-                    buttonTitle: item.buttonTitle
+                    buttonTitle: item.buttonTitle,
+                    buttonIcon: item.buttonIcon
                 )
             )
         }
@@ -98,7 +101,8 @@ final class CalloutViewController: UIViewController {
         style: MDSCallout.Style,
         text: String,
         icon: MDSIcon?,
-        buttonTitle: String?
+        buttonTitle: String?,
+        buttonIcon: MDSIcon?
     ) -> UIView {
         let rowTitle = UILabel()
         rowTitle.text = title
@@ -113,7 +117,8 @@ final class CalloutViewController: UIViewController {
             style: style,
             text: text,
             icon: icon,
-            buttonTitle: buttonTitle
+            buttonTitle: buttonTitle,
+            buttonIcon: buttonIcon
         )
         callout.translatesAutoresizingMaskIntoConstraints = false
         callout.onButtonTap = { print("callout button tapped") }
