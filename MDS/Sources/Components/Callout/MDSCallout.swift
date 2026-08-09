@@ -8,6 +8,8 @@
 import UIKit
 
 public final class MDSCallout: UIView {
+    public var onButtonTap: (() -> Void)?
+
     private let containerStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -46,26 +48,19 @@ public final class MDSCallout: UIView {
         return view
     }()
     
-    // TODO: button MDSButton으로 변경
-    
-    private let textButton: UIButton = {
-        let view = UIButton()
-        view.isHidden = true
-        view.contentHorizontalAlignment = .leading
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-     
+    private var textButton: MDSTextButton?
+
     public init(
         style: Style,
         text: String,
         icon: MDSIcon?,
-        buttonTitle: String?
+        buttonTitle: String?,
+        buttonIcon: MDSIcon? = .chevronRightOutlined
     ) {
         super.init(frame: .zero)
 
         setupLayout()
-        apply(style: style, text: text, icon: icon, buttonTitle: buttonTitle)
+        apply(style: style, text: text, icon: icon, buttonTitle: buttonTitle, buttonIcon: buttonIcon)
     }
     
     required init?(coder: NSCoder) {
@@ -81,8 +76,7 @@ extension MDSCallout {
         containerStackView.addArrangedSubview(contentStackView)
         
         contentStackView.addArrangedSubview(label)
-        contentStackView.addArrangedSubview(textButton)
-        
+
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: topAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -98,7 +92,8 @@ extension MDSCallout {
         style: Style,
         text: String,
         icon: MDSIcon?,
-        buttonTitle: String?
+        buttonTitle: String?,
+        buttonIcon: MDSIcon?
     ) {
         let colorToken = ColorToken(style: style)
         label.text = text
@@ -116,27 +111,25 @@ extension MDSCallout {
             iconImageView.image = nil
         }
         
+        textButton?.removeFromSuperview()
+        textButton = nil
+
         if let buttonTitle {
-            var config = UIButton.Configuration.plain()
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            config.attributedTitle = AttributedString(
-                NSAttributedString(
-                    string: buttonTitle,
-                    attributes: Typography.label4.attributedStringAttributes(foregroundColor: SemanticColor.Fg.Neutral.bold)
-                )
+            let button = MDSTextButton(
+                variant: .emphasis,
+                size: .small,
+                title: buttonTitle,
+                icon: buttonIcon
             )
-            config.image = MDSIcon.chevronRightOutlined.image
-                .resize(to: CGSize(width: 16, height: 16))
-                .withRenderingMode(.alwaysTemplate)
-            config.imagePlacement = .trailing
-            config.imagePadding = 0
-            config.baseForegroundColor = SemanticColor.Fg.Neutral.bold
-            textButton.configuration = config
-            textButton.isHidden = false
-        } else {
-            textButton.isHidden = true
-            textButton.configuration = nil
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+            contentStackView.addArrangedSubview(button)
+            textButton = button
         }
+    }
+
+    @objc private func buttonTapped() {
+        onButtonTap?()
     }
 }
 
@@ -157,14 +150,6 @@ extension MDSCallout {
                 stroke = SemanticColor.Stroke.Information.subtle
                 foreground = SemanticColor.Fg.Information.default
             }
-        }
-    }
-}
-
-extension UIImage {
-    func resize(to size: CGSize) -> UIImage {
-        UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
         }
     }
 }

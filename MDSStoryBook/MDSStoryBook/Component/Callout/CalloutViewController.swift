@@ -116,6 +116,7 @@ final class CalloutViewController: UIViewController {
             buttonTitle: buttonTitle
         )
         callout.translatesAutoresizingMaskIntoConstraints = false
+        callout.onButtonTap = { print("callout button tapped") }
         card.addSubview(callout)
 
         NSLayoutConstraint.activate([
