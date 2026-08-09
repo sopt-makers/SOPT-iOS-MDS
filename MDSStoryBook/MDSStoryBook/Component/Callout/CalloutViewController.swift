@@ -76,7 +76,6 @@ final class CalloutViewController: UIViewController {
             ("Icon", MDSIcon.alertCircleOutlined, nil, nil),
             ("Button", nil, "text button", .chevronRightOutlined),
             ("Button (No Icon)", nil, "text button", nil),
-            ("Button (Custom Icon)", nil, "text button", .alertCircleOutlined),
             ("Icon + Button", MDSIcon.alertCircleOutlined, "text button", .chevronRightOutlined),
         ]
 
