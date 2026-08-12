@@ -55,12 +55,14 @@ public final class MDSCallout: UIView {
         text: String,
         icon: MDSIcon?,
         buttonTitle: String?,
-        buttonIcon: MDSIcon? = .chevronRightOutlined
+        buttonIcon: MDSIcon? = .chevronRightOutlined,
+        onButtonTap: (() -> Void)? = nil
     ) {
         super.init(frame: .zero)
-
+        
         setupLayout()
         apply(style: style, text: text, icon: icon, buttonTitle: buttonTitle, buttonIcon: buttonIcon)
+        self.onButtonTap = onButtonTap
     }
     
     required init?(coder: NSCoder) {
