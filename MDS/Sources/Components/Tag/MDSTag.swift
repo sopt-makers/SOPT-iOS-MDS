@@ -44,7 +44,7 @@ public final class MDSTag: UIView {
         icon: MDSIcon? = nil
     ) {
         super.init(frame: .zero)
-        setupViews()
+        setupViews(iconSize: SizeToken(size: size).iconSize)
         apply(text: text, size: size, shape: shape, variant: variant, style: style, icon: icon)
     }
 
@@ -55,7 +55,7 @@ public final class MDSTag: UIView {
 
     // MARK: - Setup
 
-    private func setupViews() {
+    private func setupViews(iconSize: CGFloat) {
         addSubview(stackView)
         stackView.addArrangedSubview(iconImageView)
         stackView.addArrangedSubview(label)
@@ -64,7 +64,10 @@ public final class MDSTag: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
     }
 
@@ -98,20 +101,7 @@ public final class MDSTag: UIView {
         label.text = text
         label.setTypography(sizeToken.font, textColor: colorToken.foreground)
 
-        applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
-    }
-
-    // NOTE: 호출할 때마다 width/height 제약을 새로 activate하므로 멱등하지 않습니다.
-    // 현재는 init에서 1회만 호출돼 문제가 없지만, 재적용이 필요해지면 제약을 저장해 갱신하도록 바꿔야 합니다.
-    private func applyIcon(_ icon: MDSIcon?, size: CGFloat, tintColor: UIColor) {
-        iconImageView.setIcon(icon, tintColor: tintColor)
-
-        guard icon != nil else { return }
-
-        NSLayoutConstraint.activate([
-            iconImageView.widthAnchor.constraint(equalToConstant: size),
-            iconImageView.heightAnchor.constraint(equalToConstant: size)
-        ])
+        iconImageView.setIcon(icon, tintColor: colorToken.foreground)
     }
 }
 
