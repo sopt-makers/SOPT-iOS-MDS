@@ -28,7 +28,9 @@ public final class MDSReactionButton: UIControl {
     private let size: Size
     private let title: String
     private let icon: MDSIcon?
+    private let iconTint: MDSIcon.Tint
     private let trailingIcon: MDSIcon?
+    private let trailingIconTint: MDSIcon.Tint
     
     // MARK: - Subviews
     
@@ -72,14 +74,18 @@ public final class MDSReactionButton: UIControl {
     public init(
         size: Size = .medium,
         icon: MDSIcon? = nil,
+        iconTint: MDSIcon.Tint = .automatic,
         trailingIcon: MDSIcon? = nil,
+        trailingIconTint: MDSIcon.Tint = .automatic,
         title: String,
         count: Int? = nil,
         isSelected: Bool = false
     ) {
         self.size = size
         self.icon = icon
+        self.iconTint = iconTint
         self.trailingIcon = trailingIcon
+        self.trailingIconTint = trailingIconTint
         self.title = title
         self.count = count
         
@@ -140,26 +146,11 @@ public final class MDSReactionButton: UIControl {
         
         contentStackView.spacing = sizeToken.itemGap
         
-        leadingImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
-        leadingImageView.tintColor = colorToken.foreground
-        
-        trailingImageView.image = trailingIcon?.image.withRenderingMode(.alwaysTemplate)
-        trailingImageView.tintColor = colorToken.foreground
-        
+        leadingImageView.setIcon(icon, tint: iconTint, tintColor: colorToken.foreground)
+        trailingImageView.setIcon(trailingIcon, tint: trailingIconTint, tintColor: colorToken.foreground)
+
         titleLabel.attributedText = NSAttributedString(string: title, attributes: textAttributes)
-        
-        if let icon {
-            leadingImageView.isHidden = false
-        } else {
-            leadingImageView.isHidden = true
-        }
-        
-        if let trailingIcon {
-            trailingImageView.isHidden = false
-        } else {
-            trailingImageView.isHidden = true
-        }
-        
+
         if let count {
             countLabel.isHidden = false
             countLabel.attributedText = NSAttributedString(string: "\(count)", attributes: textAttributes)

@@ -136,13 +136,8 @@ public final class MDSChip: UIControl {
             attributes: chipSize.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
 
-        prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
-        prefixImageView.isHidden = prefixIcon == nil
-        prefixImageView.tintColor = colorToken.foreground
-
-        suffixImageView.image = suffixIcon?.image.withRenderingMode(.alwaysTemplate)
-        suffixImageView.isHidden = suffixIcon == nil
-        suffixImageView.tintColor = colorToken.foreground
+        prefixImageView.setIcon(prefixIcon, tintColor: colorToken.foreground)
+        suffixImageView.setIcon(suffixIcon, tintColor: colorToken.foreground)
     }
 }
 

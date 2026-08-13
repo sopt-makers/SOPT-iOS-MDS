@@ -113,14 +113,7 @@ public final class MDSTextButton: UIControl {
             attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
 
-        if let icon {
-            iconImageView.isHidden = false
-            iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
-            iconImageView.tintColor = colorToken.foreground
-        } else {
-            iconImageView.isHidden = true
-            iconImageView.image = nil
-        }
+        iconImageView.setIcon(icon, tintColor: colorToken.foreground)
     }
 }
 

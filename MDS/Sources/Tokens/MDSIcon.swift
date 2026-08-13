@@ -261,3 +261,16 @@ public enum MDSIcon: String, CaseIterable {
         UIImage(named: rawValue, in: .module, compatibleWith: nil) ?? UIImage()
     }
 }
+
+// MARK: - Tint
+
+public extension MDSIcon {
+
+    /// 컴포넌트가 아이콘에 색을 입히는 방식입니다.
+    enum Tint {
+        /// 컴포넌트의 foreground 색을 따라갑니다.
+        case automatic
+        /// asset 원본 색상을 유지합니다. 브랜드/멀티컬러 아이콘에 사용합니다.
+        case original
+    }
+}

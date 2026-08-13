@@ -12,9 +12,11 @@ public final class MDSFloatingButton: UIControl {
     // MARK: - Properties
 
     public var icon: MDSIcon? {
-        didSet {
-            iconImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
-        }
+        didSet { updateAppearance() }
+    }
+
+    public var iconTint: MDSIcon.Tint {
+        didSet { updateAppearance() }
     }
 
     public var label: String? {
@@ -56,9 +58,15 @@ public final class MDSFloatingButton: UIControl {
 
     // MARK: - Init
 
-    public init(size: Size = .default, icon: MDSIcon? = nil, label: String? = nil) {
+    public init(
+        size: Size = .default,
+        icon: MDSIcon? = nil,
+        iconTint: MDSIcon.Tint = .automatic,
+        label: String? = nil
+    ) {
         self.size = size
         self.icon = icon
+        self.iconTint = iconTint
         self.label = label
         super.init(frame: .zero)
         setup()
@@ -84,8 +92,6 @@ public final class MDSFloatingButton: UIControl {
         contentStackView.addArrangedSubview(iconImageView)
         contentStackView.addArrangedSubview(titleLabel)
         addSubview(contentStackView)
-
-        iconImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
     }
 
     private func setupLayout() {
@@ -119,7 +125,7 @@ public final class MDSFloatingButton: UIControl {
         let sizeToken = SizeToken(size: size)
 
         backgroundColor = colorToken.background
-        iconImageView.tintColor = colorToken.foreground
+        iconImageView.setIcon(icon, tint: iconTint, tintColor: colorToken.foreground)
 
         let hasLabel = !(label?.isEmpty ?? true)
         titleLabel.isHidden = (size == .default) || !hasLabel

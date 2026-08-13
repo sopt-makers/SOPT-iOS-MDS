@@ -101,15 +101,12 @@ public final class MDSTag: UIView {
         applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
     }
 
+    // NOTE: 호출할 때마다 width/height 제약을 새로 activate하므로 멱등하지 않습니다.
+    // 현재는 init에서 1회만 호출돼 문제가 없지만, 재적용이 필요해지면 제약을 저장해 갱신하도록 바꿔야 합니다.
     private func applyIcon(_ icon: MDSIcon?, size: CGFloat, tintColor: UIColor) {
-        guard let icon else {
-            iconImageView.isHidden = true
-            return
-        }
+        iconImageView.setIcon(icon, tintColor: tintColor)
 
-        iconImageView.isHidden = false
-        iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
-        iconImageView.tintColor = tintColor
+        guard icon != nil else { return }
 
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalToConstant: size),

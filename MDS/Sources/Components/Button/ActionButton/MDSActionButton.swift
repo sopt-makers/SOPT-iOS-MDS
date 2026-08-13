@@ -19,7 +19,15 @@ public final class MDSActionButton: UIControl {
         didSet { updateAppearance() }
     }
 
+    public var prefixIconTint: MDSIcon.Tint {
+        didSet { updateAppearance() }
+    }
+
     public var suffixIcon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    public var suffixIconTint: MDSIcon.Tint {
         didSet { updateAppearance() }
     }
 
@@ -73,7 +81,9 @@ public final class MDSActionButton: UIControl {
         size: Size = .large,
         title: String? = nil,
         prefixIcon: MDSIcon? = nil,
-        suffixIcon: MDSIcon? = nil
+        prefixIconTint: MDSIcon.Tint = .automatic,
+        suffixIcon: MDSIcon? = nil,
+        suffixIconTint: MDSIcon.Tint = .automatic
     ) {
         self.variant = variant
         if variant == .danger && size == .xsmall {
@@ -84,7 +94,9 @@ public final class MDSActionButton: UIControl {
         }
         self.title = title
         self.prefixIcon = prefixIcon
+        self.prefixIconTint = prefixIconTint
         self.suffixIcon = suffixIcon
+        self.suffixIconTint = suffixIconTint
         super.init(frame: .zero)
         setup()
     }
@@ -148,13 +160,8 @@ public final class MDSActionButton: UIControl {
             )
         )
 
-        prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
-        prefixImageView.isHidden = prefixIcon == nil
-        prefixImageView.tintColor = colorToken.foreground
-
-        suffixImageView.image = suffixIcon?.image.withRenderingMode(.alwaysTemplate)
-        suffixImageView.isHidden = suffixIcon == nil
-        suffixImageView.tintColor = colorToken.foreground
+        prefixImageView.setIcon(prefixIcon, tint: prefixIconTint, tintColor: colorToken.foreground)
+        suffixImageView.setIcon(suffixIcon, tint: suffixIconTint, tintColor: colorToken.foreground)
     }
 }
 
