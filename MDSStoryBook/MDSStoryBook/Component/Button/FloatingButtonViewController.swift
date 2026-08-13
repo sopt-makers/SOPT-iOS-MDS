@@ -74,7 +74,7 @@ final class FloatingButtonViewController: UIViewController {
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .label
 
-        let icon = UIImage(systemName: "plus")
+        let icon = MDSIcon.plusOutlined
         let label = size == .extended ? "추가하기" : nil
 
         let defaultButton = MDSFloatingButton(size: size, icon: icon, label: label)

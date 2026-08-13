@@ -126,7 +126,7 @@ final class TagViewController: UIViewController {
             tagRow.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
         ])
 
-        let icon = UIImage(systemName: "star.fill")
+        let icon = MDSIcon.pinFilled
         let shapes: [(MDSTag.Shape, String)] = [(.rect, "Rect"), (.pill, "Pill")]
         shapes.forEach { shape, shapeName in
             tagRow.addArrangedSubview(makeTagItem(
@@ -152,7 +152,7 @@ final class TagViewController: UIViewController {
         shape: MDSTag.Shape,
         variant: MDSTag.Variant,
         style: MDSTag.Style,
-        icon: UIImage?,
+        icon: MDSIcon?,
         description: String
     ) -> UIView {
         let itemStack = UIStackView()

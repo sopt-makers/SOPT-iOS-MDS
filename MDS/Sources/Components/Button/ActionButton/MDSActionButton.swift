@@ -15,11 +15,11 @@ public final class MDSActionButton: UIControl {
         didSet { updateAppearance() }
     }
 
-    public var prefixIcon: UIImage? {
+    public var prefixIcon: MDSIcon? {
         didSet { updateAppearance() }
     }
 
-    public var suffixIcon: UIImage? {
+    public var suffixIcon: MDSIcon? {
         didSet { updateAppearance() }
     }
 
@@ -72,8 +72,8 @@ public final class MDSActionButton: UIControl {
         variant: Variant = .primary,
         size: Size = .large,
         title: String? = nil,
-        prefixIcon: UIImage? = nil,
-        suffixIcon: UIImage? = nil
+        prefixIcon: MDSIcon? = nil,
+        suffixIcon: MDSIcon? = nil
     ) {
         self.variant = variant
         if variant == .danger && size == .xsmall {
@@ -148,11 +148,11 @@ public final class MDSActionButton: UIControl {
             )
         )
 
-        prefixImageView.image = prefixIcon?.withRenderingMode(.alwaysTemplate)
+        prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
         prefixImageView.isHidden = prefixIcon == nil
         prefixImageView.tintColor = colorToken.foreground
 
-        suffixImageView.image = suffixIcon?.withRenderingMode(.alwaysTemplate)
+        suffixImageView.image = suffixIcon?.image.withRenderingMode(.alwaysTemplate)
         suffixImageView.isHidden = suffixIcon == nil
         suffixImageView.tintColor = colorToken.foreground
     }

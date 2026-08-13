@@ -27,8 +27,8 @@ public final class MDSReactionButton: UIControl {
     
     private let size: Size
     private let title: String
-    private let icon: UIImage?
-    private let trailingIcon: UIImage?
+    private let icon: MDSIcon?
+    private let trailingIcon: MDSIcon?
     
     // MARK: - Subviews
     
@@ -71,15 +71,15 @@ public final class MDSReactionButton: UIControl {
     
     public init(
         size: Size = .medium,
-        icon: UIImage? = nil,
-        trailingIcon: UIImage? = nil,
+        icon: MDSIcon? = nil,
+        trailingIcon: MDSIcon? = nil,
         title: String,
         count: Int? = nil,
         isSelected: Bool = false
     ) {
         self.size = size
-        self.icon = icon?.withRenderingMode(.alwaysTemplate)
-        self.trailingIcon = trailingIcon?.withRenderingMode(.alwaysTemplate)
+        self.icon = icon
+        self.trailingIcon = trailingIcon
         self.title = title
         self.count = count
         
@@ -140,10 +140,10 @@ public final class MDSReactionButton: UIControl {
         
         contentStackView.spacing = sizeToken.itemGap
         
-        leadingImageView.image = icon
+        leadingImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
         leadingImageView.tintColor = colorToken.foreground
         
-        trailingImageView.image = trailingIcon
+        trailingImageView.image = trailingIcon?.image.withRenderingMode(.alwaysTemplate)
         trailingImageView.tintColor = colorToken.foreground
         
         titleLabel.attributedText = NSAttributedString(string: title, attributes: textAttributes)

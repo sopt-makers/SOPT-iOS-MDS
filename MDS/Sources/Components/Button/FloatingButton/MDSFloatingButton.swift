@@ -11,9 +11,9 @@ public final class MDSFloatingButton: UIControl {
 
     // MARK: - Properties
 
-    public var icon: UIImage? {
+    public var icon: MDSIcon? {
         didSet {
-            iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
+            iconImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
         }
     }
 
@@ -56,7 +56,7 @@ public final class MDSFloatingButton: UIControl {
 
     // MARK: - Init
 
-    public init(size: Size = .default, icon: UIImage? = nil, label: String? = nil) {
+    public init(size: Size = .default, icon: MDSIcon? = nil, label: String? = nil) {
         self.size = size
         self.icon = icon
         self.label = label
@@ -85,7 +85,7 @@ public final class MDSFloatingButton: UIControl {
         contentStackView.addArrangedSubview(titleLabel)
         addSubview(contentStackView)
 
-        iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
+        iconImageView.image = icon?.image.withRenderingMode(.alwaysTemplate)
     }
 
     private func setupLayout() {

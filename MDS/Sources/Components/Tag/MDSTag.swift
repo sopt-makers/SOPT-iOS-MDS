@@ -41,7 +41,7 @@ public final class MDSTag: UIView {
         shape: Shape,
         variant: Variant,
         style: Style,
-        icon: UIImage? = nil
+        icon: MDSIcon? = nil
     ) {
         super.init(frame: .zero)
         setupViews()
@@ -76,7 +76,7 @@ public final class MDSTag: UIView {
         shape: Shape,
         variant: Variant,
         style: Style,
-        icon: UIImage?
+        icon: MDSIcon?
     ) {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
@@ -101,14 +101,14 @@ public final class MDSTag: UIView {
         applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
     }
 
-    private func applyIcon(_ icon: UIImage?, size: CGFloat, tintColor: UIColor) {
+    private func applyIcon(_ icon: MDSIcon?, size: CGFloat, tintColor: UIColor) {
         guard let icon else {
             iconImageView.isHidden = true
             return
         }
 
         iconImageView.isHidden = false
-        iconImageView.image = icon.withRenderingMode(.alwaysTemplate)
+        iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
         iconImageView.tintColor = tintColor
 
         NSLayoutConstraint.activate([

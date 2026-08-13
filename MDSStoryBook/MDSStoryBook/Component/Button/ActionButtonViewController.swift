@@ -114,8 +114,8 @@ private extension ActionButtonViewController {
                 variant: variant,
                 size: size,
                 title: "Button",
-                prefixIcon: MDSIcon.plusOutlined.image,
-                suffixIcon: MDSIcon.chevronRightOutlined.image
+                prefixIcon: .plusOutlined,
+                suffixIcon: .chevronRightOutlined
             )
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
