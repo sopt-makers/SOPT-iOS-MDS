@@ -127,14 +127,23 @@ public final class MDSReactionButton: UIControl {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
-            
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -insets.trailing),
+
             leadingImageView.widthAnchor.constraint(equalToConstant: iconSize),
             leadingImageView.heightAnchor.constraint(equalToConstant: iconSize),
             trailingImageView.widthAnchor.constraint(equalToConstant: iconSize),
             trailingImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
     }
     
     // MARK: - Appearance

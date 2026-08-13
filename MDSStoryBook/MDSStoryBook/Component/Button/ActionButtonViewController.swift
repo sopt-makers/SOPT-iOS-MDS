@@ -87,8 +87,44 @@ private extension ActionButtonViewController {
         sectionStack.addArrangedSubview(makeRow(label: "Default", variant: variant, sizes: sizes, isEnabled: true))
         sectionStack.addArrangedSubview(makeRow(label: "Disabled", variant: variant, sizes: sizes, isEnabled: false))
         sectionStack.addArrangedSubview(makeIconRow(label: "With Icon", variant: variant, sizes: sizes))
+        sectionStack.addArrangedSubview(makeFullWidthRow(variant: variant, size: sizes[sizes.count - 1]))
+        sectionStack.addArrangedSubview(makeIconTintRow(variant: variant, size: sizes[sizes.count - 1]))
 
         return sectionStack
+    }
+
+    // 버튼을 카드 폭 전체로 늘려 아이콘-타이틀 간격이 iconGap 스펙대로 유지되는지 확인하는 행.
+    func makeFullWidthRow(variant: MDSActionButton.Variant, size: MDSActionButton.Size) -> UIView {
+        let button = MDSActionButton(
+            variant: variant,
+            size: size,
+            title: "Button",
+            prefixIcon: .plusOutlined,
+            suffixIcon: .chevronRightOutlined
+        )
+        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        return makeCardRow(label: "Full Width", buttons: [button], alignment: .fill)
+    }
+
+    // 같은 아이콘을 tint 모드만 바꿔 나란히 배치해 양방향 제어를 확인하는 행
+    func makeIconTintRow(variant: MDSActionButton.Variant, size: MDSActionButton.Size) -> UIView {
+        let cases: [(title: String, icon: MDSIcon, tint: MDSIcon.Tint)] = [
+            ("automatic", .googleColorFilled, .automatic),
+            ("original", .googleColorFilled, .original),
+            ("bell auto", .bellActiveFilled, .automatic),
+        ]
+        let buttons: [MDSActionButton] = cases.map { item in
+            let button = MDSActionButton(
+                variant: variant,
+                size: size,
+                title: item.title,
+                prefixIcon: item.icon,
+                prefixIconTint: item.tint
+            )
+            button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            return button
+        }
+        return makeCardRow(label: "Icon Tint", buttons: buttons)
     }
 
     // 지정된 sizes와 enabled 상태의 버튼들을 한 행으로 구성
@@ -123,8 +159,13 @@ private extension ActionButtonViewController {
         return makeCardRow(label: label, buttons: buttons)
     }
 
-    // 레이블 + 카드 컨테이너 + 버튼 목록을 하나의 행으로 조합하는 공통 헬퍼
-    func makeCardRow(label: String, buttons: [MDSActionButton]) -> UIView {
+    // 레이블 + 카드 컨테이너 + 버튼 목록을 하나의 행으로 조합하는 공통 헬퍼.
+    // alignment가 .fill이면 버튼이 카드 폭 전체로 늘어난다 (full-width 확인용).
+    func makeCardRow(
+        label: String,
+        buttons: [MDSActionButton],
+        alignment: UIStackView.Alignment = .leading
+    ) -> UIView {
         let rowLabel = UILabel()
         rowLabel.text = label
         rowLabel.font = .systemFont(ofSize: 12, weight: .semibold)
@@ -137,7 +178,7 @@ private extension ActionButtonViewController {
         let buttonRow = UIStackView()
         buttonRow.axis = .vertical
         buttonRow.spacing = 12
-        buttonRow.alignment = .leading
+        buttonRow.alignment = alignment
         buttonRow.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         buttonRow.isLayoutMarginsRelativeArrangement = true
         buttonRow.translatesAutoresizingMaskIntoConstraints = false
@@ -147,7 +188,10 @@ private extension ActionButtonViewController {
             buttonRow.topAnchor.constraint(equalTo: card.topAnchor),
             buttonRow.bottomAnchor.constraint(equalTo: card.bottomAnchor),
             buttonRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            buttonRow.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
+            // .fill일 때는 카드 폭을 꽉 채워야 버튼이 실제로 늘어난다
+            alignment == .fill
+                ? buttonRow.trailingAnchor.constraint(equalTo: card.trailingAnchor)
+                : buttonRow.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor),
         ])
 
         buttons.forEach { buttonRow.addArrangedSubview($0) }

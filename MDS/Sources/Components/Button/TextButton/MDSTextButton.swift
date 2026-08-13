@@ -85,15 +85,26 @@ public final class MDSTextButton: UIControl {
     private func setupLayout() {
         let sizeToken = SizeToken(size: size)
         
+        textLabel.setContentHuggingPriority(.required, for: .horizontal)
+
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+
             iconImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
             iconImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
     }
     
     // MARK: - Appearance
