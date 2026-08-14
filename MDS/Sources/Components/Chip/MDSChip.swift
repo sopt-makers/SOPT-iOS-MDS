@@ -133,7 +133,10 @@ public final class MDSChip: UIControl {
 
         titleLabel.attributedText = NSAttributedString(
             string: chipTitle ?? "",
-            attributes: chipSize.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
+            attributes: chipSize.typography.attributedStringAttributes(
+                foregroundColor: colorToken.foreground,
+                alignment: .center
+            )
         )
 
         prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
