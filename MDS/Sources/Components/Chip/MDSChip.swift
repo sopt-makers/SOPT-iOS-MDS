@@ -103,17 +103,28 @@ public final class MDSChip: UIControl {
         let iconSize = chipSize.iconSize
         contentStackView.spacing = chipSize.iconGap
 
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -insets.trailing),
 
             prefixImageView.widthAnchor.constraint(equalToConstant: iconSize),
             prefixImageView.heightAnchor.constraint(equalToConstant: iconSize),
             suffixImageView.widthAnchor.constraint(equalToConstant: iconSize),
             suffixImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
     }
 
     public override func layoutSubviews() {
@@ -136,13 +147,8 @@ public final class MDSChip: UIControl {
             attributes: chipSize.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
 
-        prefixImageView.image = prefixIcon?.image.withRenderingMode(.alwaysTemplate)
-        prefixImageView.isHidden = prefixIcon == nil
-        prefixImageView.tintColor = colorToken.foreground
-
-        suffixImageView.image = suffixIcon?.image.withRenderingMode(.alwaysTemplate)
-        suffixImageView.isHidden = suffixIcon == nil
-        suffixImageView.tintColor = colorToken.foreground
+        prefixImageView.setIcon(prefixIcon, tintColor: colorToken.foreground)
+        suffixImageView.setIcon(suffixIcon, tintColor: colorToken.foreground)
     }
 }
 

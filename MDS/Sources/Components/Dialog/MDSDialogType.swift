@@ -11,24 +11,24 @@ public extension MDSDialog {
     enum Variant {
         case `default`(
             primaryButtonTitle: String,
-            primaryButtonPrefixImage: UIImage?,
-            primaryButtonSuffixImage: UIImage?,
+            primaryButtonPrefixIcon: MDSIcon?,
+            primaryButtonSuffixIcon: MDSIcon?,
             secondaryButtonTitle: String,
-            secondaryButtonPrefixImage: UIImage?,
-            secondaryButtonSuffixImage: UIImage?
+            secondaryButtonPrefixIcon: MDSIcon?,
+            secondaryButtonSuffixIcon: MDSIcon?
         )
         case information(
             primaryButtonTitle: String,
-            primaryButtonPrefixImage: UIImage?,
-            primaryButtonSuffixImage: UIImage?
+            primaryButtonPrefixIcon: MDSIcon?,
+            primaryButtonSuffixIcon: MDSIcon?
         )
         case danger(
             primaryButtonTitle: String,
-            primaryButtonPrefixImage: UIImage?,
-            primaryButtonSuffixImage: UIImage?,
+            primaryButtonPrefixIcon: MDSIcon?,
+            primaryButtonSuffixIcon: MDSIcon?,
             secondaryButtonTitle: String,
-            secondaryButtonPrefixImage: UIImage?,
-            secondaryButtonSuffixImage: UIImage?
+            secondaryButtonPrefixIcon: MDSIcon?,
+            secondaryButtonSuffixIcon: MDSIcon?
         )
     }
 }

@@ -11,10 +11,12 @@ public final class MDSFloatingButton: UIControl {
 
     // MARK: - Properties
 
-    public var icon: UIImage? {
-        didSet {
-            iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
-        }
+    public var icon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    public var iconTint: MDSIcon.Tint {
+        didSet { updateAppearance() }
     }
 
     public var label: String? {
@@ -56,9 +58,15 @@ public final class MDSFloatingButton: UIControl {
 
     // MARK: - Init
 
-    public init(size: Size = .default, icon: UIImage? = nil, label: String? = nil) {
+    public init(
+        size: Size = .default,
+        icon: MDSIcon? = nil,
+        iconTint: MDSIcon.Tint = .automatic,
+        label: String? = nil
+    ) {
         self.size = size
         self.icon = icon
+        self.iconTint = iconTint
         self.label = label
         super.init(frame: .zero)
         setup()
@@ -84,8 +92,6 @@ public final class MDSFloatingButton: UIControl {
         contentStackView.addArrangedSubview(iconImageView)
         contentStackView.addArrangedSubview(titleLabel)
         addSubview(contentStackView)
-
-        iconImageView.image = icon?.withRenderingMode(.alwaysTemplate)
     }
 
     private func setupLayout() {
@@ -93,17 +99,28 @@ public final class MDSFloatingButton: UIControl {
         let insets = sizeToken.contentInsets
         let iconSize = sizeToken.iconSize
 
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 48),
 
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -insets.trailing),
 
             iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
             iconImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
 
         if size == .default {
             NSLayoutConstraint.activate([
@@ -119,7 +136,7 @@ public final class MDSFloatingButton: UIControl {
         let sizeToken = SizeToken(size: size)
 
         backgroundColor = colorToken.background
-        iconImageView.tintColor = colorToken.foreground
+        iconImageView.setIcon(icon, tint: iconTint, tintColor: colorToken.foreground)
 
         let hasLabel = !(label?.isEmpty ?? true)
         titleLabel.isHidden = (size == .default) || !hasLabel

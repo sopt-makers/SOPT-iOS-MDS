@@ -78,11 +78,11 @@ final class DialogViewController: UIViewController {
                 makeVariant: {
                     .default(
                         primaryButtonTitle: "Button",
-                        primaryButtonPrefixImage: nil,
-                        primaryButtonSuffixImage: nil,
+                        primaryButtonPrefixIcon: nil,
+                        primaryButtonSuffixIcon: nil,
                         secondaryButtonTitle: "Button",
-                        secondaryButtonPrefixImage: nil,
-                        secondaryButtonSuffixImage: nil
+                        secondaryButtonPrefixIcon: nil,
+                        secondaryButtonSuffixIcon: nil
                     )
                 })
         )
@@ -92,8 +92,8 @@ final class DialogViewController: UIViewController {
                 makeVariant: {
                     .information(
                         primaryButtonTitle: "Button",
-                        primaryButtonPrefixImage: nil,
-                        primaryButtonSuffixImage: nil
+                        primaryButtonPrefixIcon: nil,
+                        primaryButtonSuffixIcon: nil
                     )
                 })
         )
@@ -103,11 +103,11 @@ final class DialogViewController: UIViewController {
                 makeVariant: {
                     .danger(
                         primaryButtonTitle: "Button",
-                        primaryButtonPrefixImage: nil,
-                        primaryButtonSuffixImage: nil,
+                        primaryButtonPrefixIcon: nil,
+                        primaryButtonSuffixIcon: nil,
                         secondaryButtonTitle: "Button",
-                        secondaryButtonPrefixImage: nil,
-                        secondaryButtonSuffixImage: nil
+                        secondaryButtonPrefixIcon: nil,
+                        secondaryButtonSuffixIcon: nil
                     )
                 })
         )

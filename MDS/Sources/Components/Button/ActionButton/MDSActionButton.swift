@@ -15,11 +15,19 @@ public final class MDSActionButton: UIControl {
         didSet { updateAppearance() }
     }
 
-    public var prefixIcon: UIImage? {
+    public var prefixIcon: MDSIcon? {
         didSet { updateAppearance() }
     }
 
-    public var suffixIcon: UIImage? {
+    public var prefixIconTint: MDSIcon.Tint {
+        didSet { updateAppearance() }
+    }
+
+    public var suffixIcon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    public var suffixIconTint: MDSIcon.Tint {
         didSet { updateAppearance() }
     }
 
@@ -72,8 +80,10 @@ public final class MDSActionButton: UIControl {
         variant: Variant = .primary,
         size: Size = .large,
         title: String? = nil,
-        prefixIcon: UIImage? = nil,
-        suffixIcon: UIImage? = nil
+        prefixIcon: MDSIcon? = nil,
+        prefixIconTint: MDSIcon.Tint = .automatic,
+        suffixIcon: MDSIcon? = nil,
+        suffixIconTint: MDSIcon.Tint = .automatic
     ) {
         self.variant = variant
         if variant == .danger && size == .xsmall {
@@ -84,7 +94,9 @@ public final class MDSActionButton: UIControl {
         }
         self.title = title
         self.prefixIcon = prefixIcon
+        self.prefixIconTint = prefixIconTint
         self.suffixIcon = suffixIcon
+        self.suffixIconTint = suffixIconTint
         super.init(frame: .zero)
         setup()
     }
@@ -117,19 +129,30 @@ public final class MDSActionButton: UIControl {
         layer.cornerRadius = sizeToken.cornerRadius
         layer.masksToBounds = true
 
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: sizeToken.height),
 
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -insets.trailing),
 
             prefixImageView.widthAnchor.constraint(equalToConstant: iconSize),
             prefixImageView.heightAnchor.constraint(equalToConstant: iconSize),
             suffixImageView.widthAnchor.constraint(equalToConstant: iconSize),
             suffixImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
     }
 
     // MARK: - Appearance
@@ -148,13 +171,8 @@ public final class MDSActionButton: UIControl {
             )
         )
 
-        prefixImageView.image = prefixIcon?.withRenderingMode(.alwaysTemplate)
-        prefixImageView.isHidden = prefixIcon == nil
-        prefixImageView.tintColor = colorToken.foreground
-
-        suffixImageView.image = suffixIcon?.withRenderingMode(.alwaysTemplate)
-        suffixImageView.isHidden = suffixIcon == nil
-        suffixImageView.tintColor = colorToken.foreground
+        prefixImageView.setIcon(prefixIcon, tint: prefixIconTint, tintColor: colorToken.foreground)
+        suffixImageView.setIcon(suffixIcon, tint: suffixIconTint, tintColor: colorToken.foreground)
     }
 }
 

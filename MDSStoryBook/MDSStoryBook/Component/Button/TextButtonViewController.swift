@@ -108,16 +108,24 @@ private extension TextButtonViewController {
         card.backgroundColor = SemanticColor.Bg.Dim.default
         card.layer.cornerRadius = 12
 
-        let button = MDSTextButton(variant: variant, size: size, title: "Text button")
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(textButtonTapped(_:)), for: .touchUpInside)
-        button.isEnabled = isEnabled
-        card.addSubview(button)
+        // 아이콘 없는 버전과 있는 버전을 나란히 배치
+        let buttonRow = UIStackView(arrangedSubviews: [nil, MDSIcon.chevronRightOutlined].map { icon in
+            let button = MDSTextButton(variant: variant, size: size, title: "Text button", icon: icon)
+            button.addTarget(self, action: #selector(textButtonTapped(_:)), for: .touchUpInside)
+            button.isEnabled = isEnabled
+            return button
+        })
+        buttonRow.axis = .horizontal
+        buttonRow.spacing = 20
+        buttonRow.alignment = .center
+        buttonRow.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(buttonRow)
 
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            button.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            button.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16),
+            buttonRow.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            buttonRow.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            buttonRow.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16),
+            buttonRow.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor, constant: -16),
         ])
 
         let rowStack = UIStackView()

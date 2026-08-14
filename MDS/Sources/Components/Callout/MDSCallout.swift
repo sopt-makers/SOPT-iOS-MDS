@@ -104,14 +104,7 @@ extension MDSCallout {
         containerStackView.backgroundColor = colorToken.background
         containerStackView.layer.borderColor = colorToken.stroke.cgColor
         
-        if let icon {
-            iconImageView.isHidden = false
-            iconImageView.tintColor = colorToken.foreground
-            iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
-        } else {
-            iconImageView.isHidden = true
-            iconImageView.image = nil
-        }
+        iconImageView.setIcon(icon, tintColor: colorToken.foreground)
         
         textButton?.removeFromSuperview()
         textButton = nil

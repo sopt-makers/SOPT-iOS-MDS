@@ -96,8 +96,8 @@ private extension ReactionButtonViewController {
             makeButton(
                 size: size,
                 isEnabled: isEnabled,
-                icon: MDSIcon.plusOutlined.image,
-                trailingIcon: MDSIcon.chevronRightOutlined.image,
+                icon: .plusOutlined,
+                trailingIcon: .chevronRightOutlined,
                 title: "button",
                 count: 12,
                 isSelected: isSelected
@@ -105,7 +105,7 @@ private extension ReactionButtonViewController {
             makeButton(
                 size: size,
                 isEnabled: isEnabled,
-                icon: MDSIcon.plusOutlined.image,
+                icon: .plusOutlined,
                 trailingIcon: nil,
                 title: "button",
                 count: nil,
@@ -115,7 +115,7 @@ private extension ReactionButtonViewController {
                 size: size,
                 isEnabled: isEnabled,
                 icon: nil,
-                trailingIcon: MDSIcon.chevronRightOutlined.image,
+                trailingIcon: .chevronRightOutlined,
                 title: "button",
                 isSelected: isSelected
             ),
@@ -127,8 +127,8 @@ private extension ReactionButtonViewController {
     func makeButton(
         size: MDSReactionButton.Size,
         isEnabled: Bool,
-        icon: UIImage?,
-        trailingIcon: UIImage?,
+        icon: MDSIcon?,
+        trailingIcon: MDSIcon?,
         title: String,
         count: Int? = nil,
         isSelected: Bool

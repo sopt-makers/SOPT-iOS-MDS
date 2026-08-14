@@ -27,8 +27,10 @@ public final class MDSReactionButton: UIControl {
     
     private let size: Size
     private let title: String
-    private let icon: UIImage?
-    private let trailingIcon: UIImage?
+    private let icon: MDSIcon?
+    private let iconTint: MDSIcon.Tint
+    private let trailingIcon: MDSIcon?
+    private let trailingIconTint: MDSIcon.Tint
     
     // MARK: - Subviews
     
@@ -71,15 +73,19 @@ public final class MDSReactionButton: UIControl {
     
     public init(
         size: Size = .medium,
-        icon: UIImage? = nil,
-        trailingIcon: UIImage? = nil,
+        icon: MDSIcon? = nil,
+        iconTint: MDSIcon.Tint = .automatic,
+        trailingIcon: MDSIcon? = nil,
+        trailingIconTint: MDSIcon.Tint = .automatic,
         title: String,
         count: Int? = nil,
         isSelected: Bool = false
     ) {
         self.size = size
-        self.icon = icon?.withRenderingMode(.alwaysTemplate)
-        self.trailingIcon = trailingIcon?.withRenderingMode(.alwaysTemplate)
+        self.icon = icon
+        self.iconTint = iconTint
+        self.trailingIcon = trailingIcon
+        self.trailingIconTint = trailingIconTint
         self.title = title
         self.count = count
         
@@ -121,14 +127,23 @@ public final class MDSReactionButton: UIControl {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -insets.bottom),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
-            
+            contentStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -insets.trailing),
+
             leadingImageView.widthAnchor.constraint(equalToConstant: iconSize),
             leadingImageView.heightAnchor.constraint(equalToConstant: iconSize),
             trailingImageView.widthAnchor.constraint(equalToConstant: iconSize),
             trailingImageView.heightAnchor.constraint(equalToConstant: iconSize),
         ])
+
+        [
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -insets.trailing),
+        ].forEach {
+            $0.priority = .defaultHigh
+            $0.isActive = true
+        }
     }
     
     // MARK: - Appearance
@@ -140,26 +155,11 @@ public final class MDSReactionButton: UIControl {
         
         contentStackView.spacing = sizeToken.itemGap
         
-        leadingImageView.image = icon
-        leadingImageView.tintColor = colorToken.foreground
-        
-        trailingImageView.image = trailingIcon
-        trailingImageView.tintColor = colorToken.foreground
-        
+        leadingImageView.setIcon(icon, tint: iconTint, tintColor: colorToken.foreground)
+        trailingImageView.setIcon(trailingIcon, tint: trailingIconTint, tintColor: colorToken.foreground)
+
         titleLabel.attributedText = NSAttributedString(string: title, attributes: textAttributes)
-        
-        if let icon {
-            leadingImageView.isHidden = false
-        } else {
-            leadingImageView.isHidden = true
-        }
-        
-        if let trailingIcon {
-            trailingImageView.isHidden = false
-        } else {
-            trailingImageView.isHidden = true
-        }
-        
+
         if let count {
             countLabel.isHidden = false
             countLabel.attributedText = NSAttributedString(string: "\(count)", attributes: textAttributes)

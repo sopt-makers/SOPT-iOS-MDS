@@ -41,10 +41,10 @@ public final class MDSTag: UIView {
         shape: Shape,
         variant: Variant,
         style: Style,
-        icon: UIImage? = nil
+        icon: MDSIcon? = nil
     ) {
         super.init(frame: .zero)
-        setupViews()
+        setupViews(iconSize: SizeToken(size: size).iconSize)
         apply(text: text, size: size, shape: shape, variant: variant, style: style, icon: icon)
     }
 
@@ -55,7 +55,7 @@ public final class MDSTag: UIView {
 
     // MARK: - Setup
 
-    private func setupViews() {
+    private func setupViews(iconSize: CGFloat) {
         addSubview(stackView)
         stackView.addArrangedSubview(iconImageView)
         stackView.addArrangedSubview(label)
@@ -64,7 +64,10 @@ public final class MDSTag: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
     }
 
@@ -76,7 +79,7 @@ public final class MDSTag: UIView {
         shape: Shape,
         variant: Variant,
         style: Style,
-        icon: UIImage?
+        icon: MDSIcon?
     ) {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
@@ -98,23 +101,7 @@ public final class MDSTag: UIView {
         label.text = text
         label.setTypography(sizeToken.font, textColor: colorToken.foreground)
 
-        applyIcon(icon, size: sizeToken.iconSize, tintColor: colorToken.foreground)
-    }
-
-    private func applyIcon(_ icon: UIImage?, size: CGFloat, tintColor: UIColor) {
-        guard let icon else {
-            iconImageView.isHidden = true
-            return
-        }
-
-        iconImageView.isHidden = false
-        iconImageView.image = icon.withRenderingMode(.alwaysTemplate)
-        iconImageView.tintColor = tintColor
-
-        NSLayoutConstraint.activate([
-            iconImageView.widthAnchor.constraint(equalToConstant: size),
-            iconImageView.heightAnchor.constraint(equalToConstant: size)
-        ])
+        iconImageView.setIcon(icon, tintColor: colorToken.foreground)
     }
 }
 
