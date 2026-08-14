@@ -22,9 +22,10 @@ public final class MDSTextButton: UIControl {
     private let variant: Variant
     private let size: Size
     private let title: String
-    
+    private let icon: MDSIcon?
+
     // MARK: - Subviews
-    
+
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -34,32 +35,33 @@ public final class MDSTextButton: UIControl {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private let textLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 1
         view.textAlignment = .center
         return view
     }()
-    
-    private let chevronImageView: UIImageView = {
+
+    private let iconImageView: UIImageView = {
         let view = UIImageView()
-        view.image = MDSIcon.chevronRightOutlined.image.withRenderingMode(.alwaysTemplate)
         view.contentMode = .scaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     // MARK: - Init
-    
+
     public init(
         variant: Variant = .default,
         size: Size = .medium,
-        title: String
+        title: String,
+        icon: MDSIcon? = nil
     ) {
         self.variant = variant
         self.size = size
         self.title = title
+        self.icon = icon
         super.init(frame: .zero)
         setup()
     }
@@ -77,7 +79,7 @@ public final class MDSTextButton: UIControl {
     private func setupHierarchy() {
         addSubview(contentStackView)
         contentStackView.addArrangedSubview(textLabel)
-        contentStackView.addArrangedSubview(chevronImageView)
+        contentStackView.addArrangedSubview(iconImageView)
     }
     
     private func setupLayout() {
@@ -89,8 +91,8 @@ public final class MDSTextButton: UIControl {
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            chevronImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
-            chevronImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize),
+            iconImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize),
         ])
     }
     
@@ -110,7 +112,15 @@ public final class MDSTextButton: UIControl {
             string: title,
             attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
         )
-        chevronImageView.tintColor = colorToken.foreground
+
+        if let icon {
+            iconImageView.isHidden = false
+            iconImageView.image = icon.image.withRenderingMode(.alwaysTemplate)
+            iconImageView.tintColor = colorToken.foreground
+        } else {
+            iconImageView.isHidden = true
+            iconImageView.image = nil
+        }
     }
 }
 
