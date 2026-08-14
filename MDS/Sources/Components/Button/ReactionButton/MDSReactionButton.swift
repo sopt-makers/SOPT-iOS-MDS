@@ -151,7 +151,10 @@ public final class MDSReactionButton: UIControl {
     private func updateAppearance() {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
-        let textAttributes = sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
+        let textAttributes = sizeToken.typography.attributedStringAttributes(
+            foregroundColor: colorToken.foreground,
+            alignment: .center
+        )
         
         contentStackView.spacing = sizeToken.itemGap
         
