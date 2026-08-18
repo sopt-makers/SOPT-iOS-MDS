@@ -118,6 +118,67 @@ public final class MDSTextField: UIView {
         didSet { applyState() }
     }
 
+    // MARK: - Callbacks
+
+    /// 사용자 입력으로 텍스트가 바뀔 때 호출된다. text 프로퍼티로 직접 대입한 경우에는 호출되지 않는다.
+    public var onTextChanged: ((String) -> Void)?
+
+    public var onEditingBegin: (() -> Void)?
+
+    public var onEditingEnd: (() -> Void)?
+
+    public var onReturn: (() -> Void)?
+
+    // MARK: - Keyboard
+
+    public var keyboardType: UIKeyboardType {
+        get { textField.keyboardType }
+        set { textField.keyboardType = newValue }
+    }
+
+    public var returnKeyType: UIReturnKeyType {
+        get { textField.returnKeyType }
+        set { textField.returnKeyType = newValue }
+    }
+
+    public var isSecureTextEntry: Bool {
+        get { textField.isSecureTextEntry }
+        set { textField.isSecureTextEntry = newValue }
+    }
+
+    public var textContentType: UITextContentType? {
+        get { textField.textContentType }
+        set { textField.textContentType = newValue }
+    }
+
+    public var autocapitalizationType: UITextAutocapitalizationType {
+        get { textField.autocapitalizationType }
+        set { textField.autocapitalizationType = newValue }
+    }
+
+    public var autocorrectionType: UITextAutocorrectionType {
+        get { textField.autocorrectionType }
+        set { textField.autocorrectionType = newValue }
+    }
+
+    /// UIResponder.inputAccessoryView와 이름이 겹치지 않도록 별도 이름으로 내부 필드에 전달한다.
+    public var keyboardAccessoryView: UIView? {
+        get { textField.inputAccessoryView }
+        set { textField.inputAccessoryView = newValue }
+    }
+
+    // MARK: - First Responder
+
+    public override var canBecomeFirstResponder: Bool { textField.canBecomeFirstResponder }
+
+    public override var isFirstResponder: Bool { textField.isFirstResponder }
+
+    @discardableResult
+    public override func becomeFirstResponder() -> Bool { textField.becomeFirstResponder() }
+
+    @discardableResult
+    public override func resignFirstResponder() -> Bool { textField.resignFirstResponder() }
+
     // MARK: - Private Properties
 
     private let variant: Variant
@@ -271,6 +332,7 @@ public final class MDSTextField: UIView {
 
     private func setupUI() {
         textField.delegate = self
+        textField.addTarget(self, action: #selector(handleEditingChanged), for: .editingChanged)
 
         let paddingSize = CGSize(width: Layout.horizontalPadding, height: Layout.textFieldHeight)
         textField.leftView = UIView(frame: CGRect(origin: .zero, size: paddingSize))
@@ -421,6 +483,14 @@ public final class MDSTextField: UIView {
     private func updateBottomRow() {
         bottomRowView.isHidden = helperLabel.isHidden && errorRowView.isHidden && counterLabel.isHidden
     }
+
+    // MARK: - Actions
+
+    // 붙여넣기/자동완성/받아쓰기까지 포함해 사용자 입력이 확정된 뒤 호출된다.
+    @objc private func handleEditingChanged() {
+        updateCounterLabelContent()
+        onTextChanged?(textField.text ?? "")
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -435,23 +505,25 @@ extension MDSTextField: UITextFieldDelegate {
         guard let maxLength else { return true }
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        guard newText.count <= maxLength else { return false }
-        counterLabel.text = "\(newText.count)/\(maxLength)"
-        counterLabel.setTypography(Typography.body3)
-        return true
+
+        // 카운터 갱신은 입력이 확정된 뒤 editingChanged에서 처리한다.
+        return newText.count <= maxLength
     }
 
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         updateFieldStyle()
+        onEditingBegin?()
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         updateFieldStyle()
         updateCounterLabelContent()
+        onEditingEnd?()
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        onReturn?()
         return true
     }
 }
