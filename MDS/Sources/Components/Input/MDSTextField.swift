@@ -133,38 +133,66 @@ public final class MDSTextField: UIView {
 
     public var keyboardType: UIKeyboardType {
         get { textField.keyboardType }
-        set { textField.keyboardType = newValue }
+        set {
+            textField.keyboardType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var returnKeyType: UIReturnKeyType {
         get { textField.returnKeyType }
-        set { textField.returnKeyType = newValue }
+        set {
+            textField.returnKeyType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var isSecureTextEntry: Bool {
         get { textField.isSecureTextEntry }
-        set { textField.isSecureTextEntry = newValue }
+        set {
+            textField.isSecureTextEntry = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var textContentType: UITextContentType? {
         get { textField.textContentType }
-        set { textField.textContentType = newValue }
+        set {
+            textField.textContentType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var autocapitalizationType: UITextAutocapitalizationType {
         get { textField.autocapitalizationType }
-        set { textField.autocapitalizationType = newValue }
+        set {
+            textField.autocapitalizationType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var autocorrectionType: UITextAutocorrectionType {
         get { textField.autocorrectionType }
-        set { textField.autocorrectionType = newValue }
+        set {
+            textField.autocorrectionType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     /// UIResponder.inputAccessoryView와 이름이 겹치지 않도록 별도 이름으로 내부 필드에 전달한다.
     public var keyboardAccessoryView: UIView? {
         get { textField.inputAccessoryView }
-        set { textField.inputAccessoryView = newValue }
+        set {
+            textField.inputAccessoryView = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    /// UIKit은 first responder가 되는 시점에 입력 뷰를 구성하고 이후 다시 묻지 않는다.
+    /// 편집 중에 키보드 설정을 바꾸면 화면에 반영되지 않으므로 즉시 다시 구성하도록 요청한다.
+    private func reloadInputViewsIfEditing() {
+        guard textField.isFirstResponder else { return }
+        textField.reloadInputViews()
     }
 
     // MARK: - First Responder

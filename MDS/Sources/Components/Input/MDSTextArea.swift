@@ -143,33 +143,58 @@ public final class MDSTextArea: UIView {
 
     public var keyboardType: UIKeyboardType {
         get { textView.keyboardType }
-        set { textView.keyboardType = newValue }
+        set {
+            textView.keyboardType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var returnKeyType: UIReturnKeyType {
         get { textView.returnKeyType }
-        set { textView.returnKeyType = newValue }
+        set {
+            textView.returnKeyType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var textContentType: UITextContentType? {
         get { textView.textContentType }
-        set { textView.textContentType = newValue }
+        set {
+            textView.textContentType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var autocapitalizationType: UITextAutocapitalizationType {
         get { textView.autocapitalizationType }
-        set { textView.autocapitalizationType = newValue }
+        set {
+            textView.autocapitalizationType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     public var autocorrectionType: UITextAutocorrectionType {
         get { textView.autocorrectionType }
-        set { textView.autocorrectionType = newValue }
+        set {
+            textView.autocorrectionType = newValue
+            reloadInputViewsIfEditing()
+        }
     }
 
     /// UIResponder.inputAccessoryView와 이름이 겹치지 않도록 별도 이름으로 내부 뷰에 전달한다.
     public var keyboardAccessoryView: UIView? {
         get { textView.inputAccessoryView }
-        set { textView.inputAccessoryView = newValue }
+        set {
+            textView.inputAccessoryView = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    /// UIKit은 first responder가 되는 시점에 입력 뷰를 구성하고 이후 다시 묻지 않는다.
+    /// 편집 중에 키보드 설정을 바꾸면 화면에 반영되지 않으므로 즉시 다시 구성하도록 요청한다.
+    private func reloadInputViewsIfEditing() {
+        guard textView.isFirstResponder else { return }
+        textView.reloadInputViews()
     }
 
     // MARK: - First Responder
