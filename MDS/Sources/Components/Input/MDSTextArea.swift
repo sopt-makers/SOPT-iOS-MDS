@@ -130,6 +130,85 @@ public final class MDSTextArea: UIView {
         didSet { applyState() }
     }
 
+    // MARK: - Callbacks
+
+    /// 사용자 입력으로 텍스트가 바뀔 때 호출된다. text 프로퍼티로 직접 대입한 경우에는 호출되지 않는다.
+    public var onTextChanged: ((String) -> Void)?
+
+    public var onEditingBegin: (() -> Void)?
+
+    public var onEditingEnd: (() -> Void)?
+
+    // MARK: - Keyboard
+
+    public var keyboardType: UIKeyboardType {
+        get { textView.keyboardType }
+        set {
+            textView.keyboardType = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    public var returnKeyType: UIReturnKeyType {
+        get { textView.returnKeyType }
+        set {
+            textView.returnKeyType = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    public var textContentType: UITextContentType? {
+        get { textView.textContentType }
+        set {
+            textView.textContentType = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    public var autocapitalizationType: UITextAutocapitalizationType {
+        get { textView.autocapitalizationType }
+        set {
+            textView.autocapitalizationType = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    public var autocorrectionType: UITextAutocorrectionType {
+        get { textView.autocorrectionType }
+        set {
+            textView.autocorrectionType = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    /// UIResponder.inputAccessoryView와 이름이 겹치지 않도록 별도 이름으로 내부 뷰에 전달한다.
+    public var keyboardAccessoryView: UIView? {
+        get { textView.inputAccessoryView }
+        set {
+            textView.inputAccessoryView = newValue
+            reloadInputViewsIfEditing()
+        }
+    }
+
+    /// UIKit은 first responder가 되는 시점에 입력 뷰를 구성하고 이후 다시 묻지 않는다.
+    /// 편집 중에 키보드 설정을 바꾸면 화면에 반영되지 않으므로 즉시 다시 구성하도록 요청한다.
+    private func reloadInputViewsIfEditing() {
+        guard textView.isFirstResponder else { return }
+        textView.reloadInputViews()
+    }
+
+    // MARK: - First Responder
+
+    public override var canBecomeFirstResponder: Bool { textView.canBecomeFirstResponder }
+
+    public override var isFirstResponder: Bool { textView.isFirstResponder }
+
+    @discardableResult
+    public override func becomeFirstResponder() -> Bool { textView.becomeFirstResponder() }
+
+    @discardableResult
+    public override func resignFirstResponder() -> Bool { textView.resignFirstResponder() }
+
     // MARK: - Private Properties
 
     /// 입력 영역 기본(최소) 높이.
@@ -534,19 +613,20 @@ extension MDSTextArea: UITextViewDelegate {
         guard let maxLength else { return true }
         let currentText = textView.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        guard newText.count <= maxLength else { return false }
-        counterLabel.text = "\(newText.count)/\(maxLength)"
-        counterLabel.setTypography(Typography.body3)
-        return true
+        
+        // 카운터 갱신은 입력이 확정된 뒤 textViewDidChange에서 처리한다.
+        return newText.count <= maxLength
     }
 
     public func textViewDidBeginEditing(_ textView: UITextView) {
         updateFieldStyle()
+        onEditingBegin?()
     }
 
     public func textViewDidEndEditing(_ textView: UITextView) {
         updateFieldStyle()
         updateCounterLabel()
+        onEditingEnd?()
     }
 
     public func textViewDidChange(_ textView: UITextView) {
@@ -556,6 +636,8 @@ extension MDSTextArea: UITextViewDelegate {
             textView.setTypography(Typography.body1)
         }
         placeholderLabel.isHidden = !textView.text.isEmpty
+        updateCounterLabel()
         updateTextViewHeight()
+        onTextChanged?(textView.text)
     }
 }
