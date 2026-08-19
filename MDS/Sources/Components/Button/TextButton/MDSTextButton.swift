@@ -18,10 +18,13 @@ public final class MDSTextButton: UIControl {
     public override var isHighlighted: Bool {
         didSet { updateAppearance() }
     }
-    
+
+    public var title: String {
+        didSet { updateAppearance() }
+    }
+
     private let variant: Variant
     private let size: Size
-    private let title: String
     private let icon: MDSIcon?
 
     // MARK: - Subviews
