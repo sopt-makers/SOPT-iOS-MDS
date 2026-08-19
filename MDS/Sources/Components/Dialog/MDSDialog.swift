@@ -17,7 +17,15 @@ public final class MDSDialog: UIView {
     public var onPrimaryTap: (() -> Void)?
     // secondary (취소) button
     public var onSecondaryTap: (() -> Void)?
-    
+    // checkbox selection changed
+    public var onCheckBoxChanged: ((Bool) -> Void)?
+
+    /// 체크박스 선택 상태입니다. 체크박스가 없으면 항상 false를 반환합니다.
+    public var isCheckBoxSelected: Bool {
+        get { checkBox?.isSelected ?? false }
+        set { checkBox?.isSelected = newValue }
+    }
+
     private let variant: Variant
     
     private let stackView: UIStackView = {
@@ -144,8 +152,10 @@ public final class MDSDialog: UIView {
             dangerButton.isHidden = false
             secondaryButton.isHidden = false
         }
+
+        checkBox?.addTarget(self, action: #selector(checkBoxChanged), for: .valueChanged)
     }
-    
+
     private func setLayout() {
         addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
@@ -180,5 +190,9 @@ public final class MDSDialog: UIView {
     
     @objc private func secondaryTapped() {
         onSecondaryTap?()
+    }
+
+    @objc private func checkBoxChanged() {
+        onCheckBoxChanged?(isCheckBoxSelected)
     }
 }
