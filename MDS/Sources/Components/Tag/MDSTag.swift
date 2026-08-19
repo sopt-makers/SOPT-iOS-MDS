@@ -9,6 +9,15 @@ import UIKit
 
 public final class MDSTag: UIView {
 
+    // MARK: - Properties
+
+    public var text: String {
+        didSet { updateLabel() }
+    }
+
+    private let font: MDSFont
+    private let foreground: UIColor
+
     // MARK: - Private Views
 
     private let stackView: UIStackView = {
@@ -43,9 +52,12 @@ public final class MDSTag: UIView {
         style: Style,
         icon: MDSIcon? = nil
     ) {
+        self.text = text
+        self.font = SizeToken(size: size).font
+        self.foreground = ColorToken(variant: variant, style: style).foreground
         super.init(frame: .zero)
         setupViews(iconSize: SizeToken(size: size).iconSize)
-        apply(text: text, size: size, shape: shape, variant: variant, style: style, icon: icon)
+        apply(size: size, shape: shape, variant: variant, style: style, icon: icon)
     }
 
     @available(*, unavailable)
@@ -74,7 +86,6 @@ public final class MDSTag: UIView {
     // MARK: - Apply
 
     private func apply(
-        text: String,
         size: Size,
         shape: Shape,
         variant: Variant,
@@ -98,10 +109,14 @@ public final class MDSTag: UIView {
         layer.masksToBounds = true
 
         backgroundColor = colorToken.background
-        label.text = text
-        label.setTypography(sizeToken.font, textColor: colorToken.foreground)
+        updateLabel()
 
         iconImageView.setIcon(icon, tintColor: colorToken.foreground)
+    }
+
+    private func updateLabel() {
+        label.text = text
+        label.setTypography(font, textColor: foreground)
     }
 }
 
