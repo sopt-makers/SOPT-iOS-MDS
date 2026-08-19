@@ -435,7 +435,9 @@ StyleDictionary.registerFormat({
           const rawValue = token.original?.$value ?? token.original?.value ?? token.$value ?? token.value;
           const baseRef = resolveBaseColorReference(rawValue);
           if (!baseRef) throw new Error(`Cannot resolve base color reference for token "${token.path.join('.')}" (value: ${JSON.stringify(rawValue)})`);
-          output += `            public static let ${name} = ${baseRef}\n`;
+          const opacity = token.original?.$extensions?.opacity;
+          const valueExpr = opacity !== undefined ? `${baseRef}.withAlphaComponent(${opacity})` : baseRef;
+          output += `            public static let ${name} = ${valueExpr}\n`;
         }
 
         // state enum
