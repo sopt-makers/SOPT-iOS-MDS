@@ -218,6 +218,7 @@ private extension DialogViewController {
         )
         dialog.onPrimaryTap = { print("primary tapped") }
         dialog.onSecondaryTap = { print("secondary tapped") }
+        dialog.onCheckBoxChanged = { isSelected in print("checkbox changed: \(isSelected)") }
         dialogs.append(dialog)
 
         let card = UIView()
