@@ -82,7 +82,7 @@ public enum SemanticColor {
         }
 
         public enum Dim {
-            public static let `default` = BaseColor.gray950
+            public static let `default` = BaseColor.gray950.withAlphaComponent(0.8)
         }
 
         public enum Layer {
