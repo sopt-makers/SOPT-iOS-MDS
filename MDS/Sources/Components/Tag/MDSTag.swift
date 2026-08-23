@@ -14,6 +14,26 @@ public final class MDSTag: UIView {
     public var text: String {
         didSet { updateLabel() }
     }
+    
+    public var size: Size {
+        didSet { updateAppearance() }
+    }
+    
+    public var variant: Variant {
+        didSet { updateAppearance() }
+    }
+    
+    public var shape: Shape {
+        didSet { updateAppearance() }
+    }
+    
+    public var style: Style {
+        didSet { updateAppearance() }
+    }
+    
+    public var icon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
 
     private let font: MDSFont
     private let foreground: UIColor
@@ -45,19 +65,25 @@ public final class MDSTag: UIView {
     // MARK: - Init
 
     public init(
-        text: String,
-        size: Size,
-        shape: Shape,
-        variant: Variant,
-        style: Style,
+        text: String = "",
+        size: Size = .medium,
+        shape: Shape = .pill,
+        variant: Variant = .default,
+        style: Style = .solid,
         icon: MDSIcon? = nil
     ) {
         self.text = text
         self.font = SizeToken(size: size).font
         self.foreground = ColorToken(variant: variant, style: style).foreground
+        self.variant = variant
+        self.size = size
+        self.style = style
+        self.shape = shape
+        self.icon = icon
         super.init(frame: .zero)
+        
         setupViews(iconSize: SizeToken(size: size).iconSize)
-        apply(size: size, shape: shape, variant: variant, style: style, icon: icon)
+        updateAppearance()
     }
 
     @available(*, unavailable)
@@ -85,13 +111,7 @@ public final class MDSTag: UIView {
 
     // MARK: - Apply
 
-    private func apply(
-        size: Size,
-        shape: Shape,
-        variant: Variant,
-        style: Style,
-        icon: MDSIcon?
-    ) {
+    private func updateAppearance() {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
 
