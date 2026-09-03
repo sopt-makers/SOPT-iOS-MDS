@@ -56,6 +56,17 @@ button.backgroundColor = SemanticColor.Bg.Secondary.Default.hover
 button.backgroundColor = SemanticColor.Bg.Danger.Default.pressed
 ```
 
+### Components
+
+버튼, 인풋, 다이얼로그 등 UIKit 컴포넌트를 제공합니다. 아이콘은 `MDSIcon` enum으로 타입 세이프하게 전달합니다.
+
+```swift
+let button = MDSActionButton(variant: .primary, size: .large, title: "확인", suffixIcon: .arrowRightOutlined)
+let field = MDSTextField(placeholder: "이메일을 입력하세요", label: "이메일", isRequired: true)
+```
+
+전체 컴포넌트 목록과 API는 [컴포넌트 가이드](docs/components.md), 아이콘 목록과 사용법은 [아이콘 가이드](docs/icons.md)를 참고하세요.
+
 ## 토큰 구조
 
 토큰은 Base와 Semantic 두 레이어로 구성됩니다.
@@ -137,6 +148,12 @@ PR 리뷰 & 머지 → 태그 → SPM 배포
 > 토큰 변경이 감지될 때만 `token-sync/날짜` 에페머럴 브랜치를 생성해
 > 장기 브랜치의 rebase 비용을 제거합니다.
 
-## 토큰 상세 문서
+파이프라인 각 단계(빌드 대상 파일, 토큰 diff 생성, 자동 커밋/PR 규칙)에 대한 자세한 내용은 [자동화 가이드](docs/automation.md)를 참고하세요.
 
-토큰 구조, 네이밍 컨벤션, Base/Semantic 설계 이유에 대한 자세한 내용은 [토큰 가이드](docs/tokens.md)를 참고하세요.
+## 상세 문서
+
+- [토큰 가이드](docs/tokens.md) — 토큰 구조, 네이밍 컨벤션, Base/Semantic 설계 이유
+- [컴포넌트 가이드](docs/components.md) — 컴포넌트별 public API와 사용 예시
+- [아이콘 가이드](docs/icons.md) — 아이콘 네이밍 컨벤션, `MDSIcon` 사용법, 아이콘 추가 절차
+- [자동화 가이드](docs/automation.md) — 디자인 토큰 파이프라인(Style Dictionary + GitHub Actions) 상세
+- [Makers Design System 웹](https://makers-design-system-2-0-web.vercel.app/) (외부) — SOPT Makers 디자인 시스템 웹 사이트
