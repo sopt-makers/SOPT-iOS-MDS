@@ -1,0 +1,54 @@
+name-template: '$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
+
+categories:
+  - title: '🎁 새로운 기능'
+    labels:
+      - 'feat'
+      - 'add'
+      - 'enhancement'
+  - title: '🐞 버그 수정'
+    labels:
+      - 'fix'
+      - 'bug'
+      - 'hotfix'
+  - title: '♻️ 리팩토링'
+    labels:
+      - 'refactor'
+  - title: '📋 문서'
+    labels:
+      - 'documentation'
+  - title: '⚙️ 설정'
+    labels:
+      - 'setting'
+      - 'chore'
+
+# major는 라벨로 판단하지 않습니다. default→main 승격 시 release-major.yml이 별도로 처리합니다.
+version-resolver:
+  minor:
+    labels:
+      - 'feat'
+      - 'add'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'fix'
+      - 'bug'
+      - 'refactor'
+      - 'chore'
+      - 'documentation'
+      - 'setting'
+      - 'hotfix'
+  default: patch
+
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+
+template: |
+  ## 🚀 변경 사항
+
+  $CHANGES
+
+  ---
+  🙌 Contributors: $CONTRIBUTORS
+
+no-changes-template: '이번 배포에는 변경사항이 없어요 🙂'
