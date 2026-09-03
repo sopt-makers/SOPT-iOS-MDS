@@ -189,6 +189,36 @@ Spacing은 별도의 Semantic 토큰 없이 Base 토큰을 직접 참조합니�
 
 ---
 
+## Radius
+
+### Base token
+
+모서리 곡률 값을 수치 기반으로 체계화합니다. Spacing과 마찬가지로 별도의 Semantic 토큰 없이 Base 토큰을 직접 참조합니다.
+
+```text
+radius.base.r{level}
+```
+
+| Base token | Raw value |
+|------------|-----------|
+| radius.base.r0 | 0px |
+| radius.base.r2 | 2px |
+| radius.base.r4 | 4px |
+| radius.base.r6 | 6px |
+| radius.base.r8 | 8px |
+| radius.base.r10 | 10px |
+| radius.base.r12 | 12px |
+| radius.base.r14 | 14px |
+| radius.base.r16 | 16px |
+| radius.base.r20 | 20px |
+| radius.base.r24 | 24px |
+| radius.base.r32 | 32px |
+| radius.base.full | 9999px |
+
+`full`은 pill 형태(원형, 캡슐형 버튼/태그 등)처럼 요소 높이의 절반 이상을 요구하는 경우에 사용합니다.
+
+---
+
 ## 네이밍 컨벤션 정리
 
 | 구분 | 패턴 | 예시 |
@@ -197,4 +227,5 @@ Spacing은 별도의 Semantic 토큰 없이 Base 토큰을 직접 참조합니�
 | Semantic Color | `color.{target}.{role}.{emphasis}.{state}` | `color.bg.brand.default` |
 | Base Typography | `typography.base.{category}.{level}` | `typography.base.size.t16` |
 | Semantic Typography | `typography.{role}{level}` | `typography.heading1` |
+| Base Radius | `radius.base.r{level}` | `radius.base.r10` |
 | Base Spacing | `spacing.base.size.s{level}` | `spacing.base.size.s8` |
