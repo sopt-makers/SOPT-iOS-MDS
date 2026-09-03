@@ -1,0 +1,47 @@
+name: Release (major)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # default→main으로 승격된 push는 라벨과 무관하게 항상 major release다.
+      # 최신 태그(default에서 patch/minor로 올라간 진짜 최신 버전)의 major만 올리고 minor/patch는 0으로 리셋한다.
+      - name: Compute next major version
+        id: version
+        run: |
+          LATEST_TAG=$(git tag --list --sort=-v:refname | head -n 1)
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No existing tag found" >&2
+            exit 1
+          fi
+          MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1)
+          NEXT_MAJOR=$((MAJOR + 1))
+          echo "tag=${NEXT_MAJOR}.0.0" >> "$GITHUB_OUTPUT"
+
+      - name: Create Git Tag
+        run: |
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin ${{ steps.version.outputs.tag }}
+
+      - name: Draft & publish release (major)
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+          publish: true
+          tag: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
