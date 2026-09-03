@@ -41,6 +41,8 @@ label.setTypography(Typography.heading1)
 label.setTypography(Typography.body2)
 ```
 
+`UITextField`, `UITextView`에도 동일한 시그니처의 `setTypography`가 있습니다. 타입별 반영 방식 차이는 [어댑터 가이드](docs/adapters.md)를 참고하세요.
+
 ### SemanticColor
 
 ```swift
@@ -155,5 +157,6 @@ PR 리뷰 & 머지 → 태그 → SPM 배포
 - [토큰 가이드](docs/tokens.md) — 토큰 구조, 네이밍 컨벤션, Base/Semantic 설계 이유
 - [컴포넌트 가이드](docs/components.md) — 컴포넌트별 public API와 사용 예시
 - [아이콘 가이드](docs/icons.md) — 아이콘 네이밍 컨벤션, `MDSIcon` 사용법, 아이콘 추가 절차
+- [어댑터 가이드](docs/adapters.md) — `MDSFont`, `UILabel`/`UITextField`/`UITextView`의 `setTypography`, `UIImageView.setIcon`
 - [자동화 가이드](docs/automation.md) — 디자인 토큰 파이프라인(Style Dictionary + GitHub Actions) 상세
 - [Makers Design System 웹](https://makers-design-system-2-0-web.vercel.app/) (외부) — SOPT Makers 디자인 시스템 웹 사이트
