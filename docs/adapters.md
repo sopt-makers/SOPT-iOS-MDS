@@ -1,6 +1,6 @@
 # 어댑터 가이드
 
-`MDS/Sources/Adapters`에는 `MDSFont`(타이포그래피 토큰)와 `MDSIcon`(아이콘 토큰)을 표준 UIKit 뷰에 적용하는 extension이 모여 있습니다. 컴포넌트 내부에서도 동일한 API를 사용합니다.
+`MDS/Sources/Adapters`에는 `MDSFont`(타이포그래피 토큰)와 `MDSIcon`(아이콘 토큰)을 표준 UIKit 뷰에 적용하는 extension이 모여 있습니다. `setTypography`는 `public`이라 컨슈머 앱에서도 그대로 사용할 수 있지만, `setIcon`은 `internal`이라 MDS 컴포넌트 구현 내부에서만 쓰입니다 — 자세한 내용은 [setIcon](#seticon) 참고.
 
 ## MDSFont
 
@@ -26,7 +26,7 @@ public struct MDSFont: @unchecked Sendable {
 `UILabel`, `UITextField`, `UITextView` 세 타입에 각각 구현되어 있으며, 시그니처는 동일합니다.
 
 ```swift
-func setTypography(
+public func setTypography(
     _ style: MDSFont,
     textColor: UIColor? = nil,
     alignment: NSTextAlignment? = nil
@@ -51,8 +51,11 @@ textView.setTypography(Typography.body1, alignment: .left)
 
 ## setIcon
 
-`UIImageView`에 `MDSIcon`을 적용하는 어댑터입니다. 상세 내용과 `Tint` 옵션은 [아이콘 가이드](icons.md#사용법)를 참고하세요.
+`UIImageView`에 `MDSIcon`을 적용하는 어댑터입니다. **`internal`로 선언되어 있어 MDS 모듈 밖에서는 호출할 수 없고**, `MDSActionButton` 등 컴포넌트 구현 내부에서만 사용됩니다.
 
 ```swift
-imageView.setIcon(.bellFilled, tint: .automatic, tintColor: SemanticColor.Fg.Neutral.default)
+// MDS 컴포넌트 내부에서만 호출 가능 (컨슈머 앱에서는 컴파일되지 않음)
+func setIcon(_ icon: MDSIcon?, tint: MDSIcon.Tint = .automatic, tintColor: UIColor)
 ```
+
+컨슈머 앱에서 동일한 효과를 내려면 [아이콘 가이드](icons.md#사용법)에 나온 대로 `MDSIcon.image`에 `withRenderingMode`와 `tintColor`를 직접 적용하세요.

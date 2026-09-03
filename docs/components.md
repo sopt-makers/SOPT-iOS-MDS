@@ -32,7 +32,7 @@ let button = MDSActionButton(
 
 | 파라미터 | 타입 | 기본값 | 설명 |
 |---|---|---|---|
-| `variant` | `Variant` (`.primary` / `.secondary` / `.danger`) | `.primary` | 색상 스타일. `danger`는 `xsmall` size를 지원하지 않습니다(자동으로 `.small`로 보정). |
+| `variant` | `Variant` (`.primary` / `.secondary` / `.danger`) | `.primary` | 색상 스타일. `danger` + `xsmall` 조합은 지원하지 않습니다 — 이 조합으로 생성하면 디버그 빌드에서 `assertionFailure`가 발생하고, size가 `.small`로 자동 보정됩니다(릴리즈 빌드는 assertion 없이 보정만 적용). |
 | `size` | `Size` (`.xsmall` / `.small` / `.medium` / `.large`) | `.large` | 높이·타이포그래피·아이콘 크기를 함께 결정 |
 | `title` | `String?` | `nil` | 버튼 텍스트. 이후 대입으로 변경 가능 |
 | `prefixIcon` / `suffixIcon` | `MDSIcon?` | `nil` | 좌/우 아이콘 |

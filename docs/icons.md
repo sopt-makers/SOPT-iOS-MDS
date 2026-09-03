@@ -4,7 +4,7 @@ MDS는 `Icon.xcassets`에 등록된 SVG 벡터 아이콘을 `MDSIcon` enum으로
 
 ## 구조
 
-```
+```text
 icon.{name}.{style}
 ```
 
@@ -28,25 +28,20 @@ icon.{name}.{style}
 
 ## 사용법
 
-### 1. `MDSIcon`으로 직접 이미지 얻기
+`MDSIcon`으로 이미지를 직접 얻어 사용합니다.
 
 ```swift
 imageView.image = MDSIcon.checkCircleFilled.image
 ```
 
-### 2. `UIImageView.setIcon(_:tint:tintColor:)` (권장)
-
-컴포넌트 내부에서도 사용하는 방식으로, tint 처리와 nil 처리(아이콘이 없으면 뷰를 숨김)를 함께 담당합니다.
+tint 적용이 필요하면 `withRenderingMode(.alwaysTemplate)`으로 template 렌더링한 뒤 `tintColor`를 지정합니다.
 
 ```swift
-imageView.setIcon(.bellFilled, tint: .automatic, tintColor: SemanticColor.Fg.Neutral.default)
+imageView.image = MDSIcon.bellFilled.image.withRenderingMode(.alwaysTemplate)
+imageView.tintColor = SemanticColor.Fg.Neutral.default
 ```
 
-| 파라미터 | 설명 |
-|---|---|
-| `icon: MDSIcon?` | `nil`이면 `image = nil`, `isHidden = true` 처리 |
-| `tint` | `.automatic`(기본) 또는 `.original` |
-| `tintColor` | `tint == .automatic`일 때만 사용 |
+> `UIImageView.setIcon(_:tint:tintColor:)`는 MDS 컴포넌트 내부 구현에서 위 패턴을 감싼 `internal` 어댑터로, MDS 모듈 밖(컨슈머 앱)에서는 호출할 수 없습니다. 자세한 내용은 [어댑터 가이드](adapters.md#seticon)를 참고하세요.
 
 ### Tint 종류
 

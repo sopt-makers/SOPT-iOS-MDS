@@ -4,8 +4,8 @@
 
 ## 전체 흐름
 
-```
-tokens/**.json 수정 → token-sync 브랜치에 push
+```text
+tokens/** 수정 → token-sync 브랜치에 push
     ↓
 GitHub Actions (style-dictionary.yml) 트리거
     ├── 1. npm run build           → Style Dictionary가 JSON을 Swift로 변환
