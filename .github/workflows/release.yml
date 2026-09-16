@@ -1,0 +1,28 @@
+name: Release (patch/minor)
+
+on:
+  push:
+    branches:
+      - default
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # PR 라벨(feat/add/enhancement → minor, fix/bug/refactor/chore/documentation/setting/hotfix → patch)로
+      # 최신 태그 이후 병합된 PR들을 보고 다음 버전을 계산해 태그+릴리즈를 발행한다.
+      - name: Draft & publish release (patch/minor)
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
