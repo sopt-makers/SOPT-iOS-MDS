@@ -23,7 +23,7 @@ public struct MDSFont: @unchecked Sendable {
 
 ## setTypography
 
-`UILabel`, `UITextField`, `UITextView` 세 타입에 각각 구현되어 있으며, 시그니처는 동일합니다.
+`UILabel`, `UITextField`, `UITextView` 세 타입에 각각 구현되어 있으며, 공통 시그니처는 다음과 같습니다.
 
 ```swift
 public func setTypography(
@@ -33,7 +33,7 @@ public func setTypography(
 )
 ```
 
-`textColor`/`alignment`를 생략하면 현재 값을 그대로 유지합니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
+`textColor`/`alignment`를 생략하면 현재 값을 그대로 유지합니다. `UILabel`에는 `paragraphStyle: ((NSMutableParagraphStyle) -> Void)? = nil` 클로저 파라미터가 추가로 있어, `lineBreakMode` 등 paragraph style 속성을 직접 지정할 수 있습니다. `attributedText`의 paragraph style이 `label.lineBreakMode`보다 우선하므로, 한 줄 라벨의 말줄임(`.byTruncatingTail`) 등은 `label.lineBreakMode`가 아니라 이 클로저로 지정해야 적용됩니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
 
 | 타입 | 반영 대상 | 재호출이 필요한 시점 |
 |---|---|---|
@@ -47,6 +47,9 @@ public func setTypography(
 label.setTypography(Typography.heading1)
 textField.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
 textView.setTypography(Typography.body1, alignment: .left)
+
+// UILabel 전용: paragraph style 속성을 클로저로 지정
+label.setTypography(Typography.heading2) { $0.lineBreakMode = .byTruncatingTail }
 ```
 
 ## setIcon
