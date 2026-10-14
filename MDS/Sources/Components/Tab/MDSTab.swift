@@ -27,6 +27,9 @@ public final class MDSTab: UIControl {
         didSet { updateAppearance() }
     }
 
+    // Tab에는 바깥 프레임이 없어서 터치 영역이 내용 크기뿐이다. Tabs가 탭 사이 간격의 절반만큼 넓혀 준다.
+    var hitTestOutset: UIEdgeInsets = .zero
+
     private let variant: Variant
     private let size: Size
 
@@ -130,6 +133,18 @@ public final class MDSTab: UIControl {
                 contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -SizeToken.fillHorizontalPadding),
             ])
         }
+    }
+
+    // MARK: - Hit Test
+
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let outset = UIEdgeInsets(
+            top: -hitTestOutset.top,
+            left: -hitTestOutset.left,
+            bottom: -hitTestOutset.bottom,
+            right: -hitTestOutset.right
+        )
+        return bounds.inset(by: outset).contains(point)
     }
 
     // MARK: - Appearance
