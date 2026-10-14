@@ -27,11 +27,12 @@ public final class MDSSnackBar: UIView {
         view.axis = .horizontal
         view.alignment = .center
         view.isLayoutMarginsRelativeArrangement = true
+        view.insetsLayoutMarginsFromSafeArea = false
         view.layoutMargins = UIEdgeInsets(
-            top: BaseSpacing.Base.s14,
-            left: BaseSpacing.Base.s16,
-            bottom: BaseSpacing.Base.s14,
-            right: BaseSpacing.Base.s16
+            top: 14,
+            left: 16,
+            bottom: 14,
+            right: 16
         )
         view.backgroundColor = SemanticColor.Bg.Neutral.inverse
         view.layer.cornerRadius = BaseRadius.Base.r14
@@ -61,7 +62,11 @@ public final class MDSSnackBar: UIView {
         return label
     }()
 
-    private let button = MDSTextButton(variant: .emphasis, size: .medium)
+    private let button: MDSTextButton = {
+        let button = MDSTextButton(variant: .emphasis, size: .medium)
+        button.titleColor = SemanticColor.Fg.Secondary.default
+        return button
+    }()
 
     public init(
         style: Style = .default,
@@ -126,25 +131,64 @@ extension MDSSnackBar {
 // MARK: - Presentation
 
 extension MDSSnackBar {
-    // TODO: - 정책 확정 후 반영
-    /// `view`의 safe area 상단에 스낵바를 띄우고 `duration`초 뒤 자동으로 내립니다.
-    /// ponytail: 큐 없음. 이미 떠 있는 스낵바는 즉시 교체됩니다. 순차 노출이 필요해지면 큐 추가.
-    public func show(in view: UIView, duration: TimeInterval = 5) {
-        view.subviews.filter { $0 is MDSSnackBar }.forEach { $0.removeFromSuperview() }
+    private struct Request {
+        let snackBar: MDSSnackBar
+        weak var view: UIView?
+        let duration: TimeInterval
+    }
 
+    private static var queue: [Request] = []
+    private static weak var current: MDSSnackBar?
+
+    /// `view` 상단에서 스낵바가 내려오고 `duration`초 뒤 다시 올라가며 사라집니다.
+    /// 이미 노출 중인 스낵바가 있으면 큐에서 대기하다가 앞의 스낵바가 사라지면 노출됩니다.
+    public func show(in view: UIView, duration: TimeInterval = 4) {
+        Self.queue.append(Request(snackBar: self, view: view, duration: duration))
+        Self.showNextIfNeeded()
+    }
+
+    public func dismiss() {
+        guard Self.current === self else {
+            Self.queue.removeAll { $0.snackBar === self }
+            return
+        }
+
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
+            self.transform = self.hiddenTransform
+        }, completion: { _ in
+            self.removeFromSuperview()
+            Self.current = nil
+            Self.showNextIfNeeded()
+        })
+    }
+
+    private static func showNextIfNeeded() {
+        guard current == nil else { return }
+
+        while !queue.isEmpty {
+            let request = queue.removeFirst()
+            guard let view = request.view else { continue }
+            current = request.snackBar
+            request.snackBar.present(in: view, duration: request.duration)
+            return
+        }
+    }
+
+    private func present(in view: UIView, duration: TimeInterval) {
         translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(self)
 
+        let safeArea = view.safeAreaLayoutGuide
+
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: BaseSpacing.Base.s16),
-            leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 16),
+            leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20),
+            trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20),
         ])
 
-        alpha = 0
-        transform = CGAffineTransform(translationX: 0, y: -16)
-        UIView.animate(withDuration: 0.25) {
-            self.alpha = 1
+        view.layoutIfNeeded()
+        transform = hiddenTransform
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.transform = .identity
         }
 
@@ -153,13 +197,8 @@ extension MDSSnackBar {
         }
     }
 
-    public func dismiss() {
-        guard superview != nil else { return }
-        UIView.animate(withDuration: 0.25, animations: {
-            self.alpha = 0
-            self.transform = CGAffineTransform(translationX: 0, y: -16)
-        }, completion: { _ in
-            self.removeFromSuperview()
-        })
+    /// 화면 상단 밖으로 완전히 밀어 올린 위치
+    private var hiddenTransform: CGAffineTransform {
+        CGAffineTransform(translationX: 0, y: -frame.maxY)
     }
 }
