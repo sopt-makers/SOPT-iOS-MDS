@@ -33,7 +33,7 @@ final class SnackBarViewController: UIViewController {
         ("Error", .error, "업로드에 실패했어요.", nil),
         ("Action Button", .default, "저는 토스트예요.", "보러가기"),
         ("Icon + Action Button", .success, "프로젝트가 등록되었어요.", "보러가기"),
-        ("Two Lines", .success, "두 줄이 필요하면 두 줄 쓰세요. (세 줄은 안돼)\n근데 중요한 건 간결하게 쓰는 것!", nil),
+        ("Two Lines", .success, "두 줄이 필요하면 두 줄 쓰세요. (세 줄은 안돼)\n두 줄도 괜찮아요!!", nil),
     ]
 
     override func viewDidLoad() {
@@ -80,6 +80,6 @@ final class SnackBarViewController: UIViewController {
             text: item.text,
             buttonTitle: item.buttonTitle,
             onButtonTap: { print("snackbar button tapped") }
-        ).show(in: view)
+        ).show(in: view.window ?? view)
     }
 }
