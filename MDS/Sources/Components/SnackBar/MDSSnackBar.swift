@@ -22,6 +22,9 @@ public final class MDSSnackBar: UIView {
 
     public var onButtonTap: (() -> Void)?
 
+    private var dismissWorkItem: DispatchWorkItem?
+    private var isDismissing = false
+
     private let containerStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -100,6 +103,10 @@ extension MDSSnackBar {
 
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 
+        // 아이콘이 숨겨지면 UIStackView가 너비 0 제약을 추가하므로 충돌하지 않도록 우선순위를 낮춥니다.
+        let iconWidthConstraint = iconImageView.widthAnchor.constraint(equalToConstant: 20)
+        iconWidthConstraint.priority = .required - 1
+
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: topAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -107,7 +114,7 @@ extension MDSSnackBar {
             containerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
 
-            iconImageView.widthAnchor.constraint(equalToConstant: 20),
+            iconWidthConstraint,
             iconImageView.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
@@ -152,11 +159,16 @@ extension MDSSnackBar {
             Self.queue.removeAll { $0.snackBar === self }
             return
         }
+        guard !isDismissing else { return }
+        isDismissing = true
+        dismissWorkItem?.cancel()
+        dismissWorkItem = nil
 
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             self.transform = self.hiddenTransform
         }, completion: { _ in
             self.removeFromSuperview()
+            self.isDismissing = false
             Self.current = nil
             Self.showNextIfNeeded()
         })
@@ -192,9 +204,11 @@ extension MDSSnackBar {
             self.transform = .identity
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
+        let workItem = DispatchWorkItem { [weak self] in
             self?.dismiss()
         }
+        dismissWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: workItem)
     }
 
     /// 화면 상단 밖으로 완전히 밀어 올린 위치
