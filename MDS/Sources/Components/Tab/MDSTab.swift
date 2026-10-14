@@ -49,7 +49,13 @@ public final class MDSTab: UIControl {
         return label
     }()
 
-    private var tagView: MDSTag?
+    private let tagView = MDSTag(
+        text: "",
+        size: .small,
+        shape: .pill,
+        variant: .primary,
+        style: .subtle
+    )
 
     private let underline: UIView = {
         let view = UIView()
@@ -94,6 +100,7 @@ public final class MDSTab: UIControl {
         addSubview(contentStackView)
         addSubview(underline)
         contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(tagView)
     }
 
     private func setupLayout() {
@@ -137,23 +144,17 @@ public final class MDSTab: UIControl {
         underline.isHidden = !colorToken.showsUnderline
     }
 
-    // Tag의 shape/variant/size는 고정이고 style만 바뀌므로, 값이 바뀔 때마다 새로 만들어 교체한다.
+    // Tag의 shape/variant/size는 고정이고 text/style/icon만 바뀐다.
     private func updateTag() {
-        tagView?.removeFromSuperview()
-        tagView = nil
+        guard let tabTag, !tabTag.text.isEmpty || tabTag.icon != nil else {
+            tagView.isHidden = true
+            return
+        }
 
-        guard let tabTag, !tabTag.text.isEmpty || tabTag.icon != nil else { return }
-
-        let tagView = MDSTag(
-            text: tabTag.text,
-            size: .small,
-            shape: .pill,
-            variant: .primary,
-            style: tabTag.style,
-            icon: tabTag.icon
-        )
-        contentStackView.addArrangedSubview(tagView)
-        self.tagView = tagView
+        tagView.text = tabTag.text
+        tagView.style = tabTag.style
+        tagView.icon = tabTag.icon
+        tagView.isHidden = false
     }
 }
 
