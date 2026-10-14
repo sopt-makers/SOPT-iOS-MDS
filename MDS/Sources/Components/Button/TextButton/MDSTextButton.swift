@@ -23,6 +23,10 @@ public final class MDSTextButton: UIControl {
         didSet { updateAppearance() }
     }
 
+    public var titleColor: UIColor? {
+        didSet { updateAppearance() }
+    }
+
     private let variant: Variant
     private let size: Size
     private let icon: MDSIcon?
@@ -58,7 +62,7 @@ public final class MDSTextButton: UIControl {
     public init(
         variant: Variant = .default,
         size: Size = .medium,
-        title: String,
+        title: String = "",
         icon: MDSIcon? = nil
     ) {
         self.variant = variant
@@ -119,7 +123,8 @@ public final class MDSTextButton: UIControl {
         let colorToken = ColorToken(
             variant: variant,
             isEnabled: isEnabled,
-            isHighlighted: isHighlighted
+            isHighlighted: isHighlighted,
+            customForeground: titleColor
         )
         
         textLabel.attributedText = NSAttributedString(
@@ -162,7 +167,7 @@ private extension MDSTextButton {
     struct ColorToken {
         let foreground: UIColor
         
-        init(variant: MDSTextButton.Variant, isEnabled: Bool, isHighlighted: Bool) {
+        init(variant: MDSTextButton.Variant, isEnabled: Bool, isHighlighted: Bool, customForeground: UIColor?) {
             guard isEnabled else {
                 foreground = SemanticColor.Fg.Neutral.Default.disabled
                 return
@@ -170,6 +175,11 @@ private extension MDSTextButton {
             
             if isHighlighted {
                 foreground = SemanticColor.Fg.Neutral.default
+                return
+            }
+
+            if let customForeground {
+                foreground = customForeground
                 return
             }
             
