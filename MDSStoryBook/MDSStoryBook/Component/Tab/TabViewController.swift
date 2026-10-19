@@ -116,7 +116,6 @@ final class TabViewController: UIViewController {
 
         let row = UIStackView(arrangedSubviews: tabs)
         row.axis = .horizontal
-        row.spacing = variant == .hug ? 20 : 0
 
         switch variant {
         case .hug:
