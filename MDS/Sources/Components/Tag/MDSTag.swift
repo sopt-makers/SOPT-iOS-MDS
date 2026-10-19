@@ -72,7 +72,7 @@ public final class MDSTag: UIView {
         self.shape = shape
         super.init(frame: .zero)
         
-        setupViews(iconSize: SizeToken(size: size).iconSize)
+        setupViews(sizeToken: SizeToken(size: size))
         updateAppearance()
     }
 
@@ -83,19 +83,21 @@ public final class MDSTag: UIView {
 
     // MARK: - Setup
 
-    private func setupViews(iconSize: CGFloat) {
+    private func setupViews(sizeToken: SizeToken) {
         addSubview(stackView)
         stackView.addArrangedSubview(iconImageView)
         stackView.addArrangedSubview(label)
 
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: sizeToken.height),
+
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
-            iconImageView.heightAnchor.constraint(equalToConstant: iconSize)
+            iconImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize)
         ])
     }
 
@@ -104,8 +106,6 @@ public final class MDSTag: UIView {
     private func updateAppearance() {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
-
-        heightAnchor.constraint(equalToConstant: sizeToken.height).isActive = true
 
         stackView.layoutMargins = UIEdgeInsets(
             top: sizeToken.verticalPadding,
