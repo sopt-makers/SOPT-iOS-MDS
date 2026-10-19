@@ -308,7 +308,7 @@ let tabs = MDSTabs(
 tabs.onSelectionChanged = { index in
     // 선택된 index에 맞는 화면으로 전환
 }
-tabs.setSelectedIndex(2)   // 코드로 변경. onSelectionChanged는 호출되지 않습니다.
+tabs.setSelectedIndex(1)   // 코드로 변경. onSelectionChanged는 호출되지 않습니다.
 ```
 
 | 파라미터 | 타입 | 설명 |
@@ -317,12 +317,14 @@ tabs.setSelectedIndex(2)   // 코드로 변경. onSelectionChanged는 호출되�
 | `variant` | `.scrollable` / `.fixed` | `.fixed`는 폭을 균등하게 나눠 가지며(Fill 탭), `.scrollable`은 폭을 넘치면 가로로 스크롤됩니다(Hug 탭) |
 | `size` | `.small` / `.medium` / `.large` | `MDSTab.Size`와 같은 타입입니다. 높이는 Large 50 / Medium 44 / Small 38 |
 | `divider` | `Bool` | 기본 `true`. 아래 구분선 표시 여부 |
-| `selectedIndex` | `Int` | 초기 선택 index. 범위를 벗어나면 보정됩니다 |
+| `selectedIndex` | `Int` | 초기 선택 index. 범위를 벗어나거나 비활성 항목이면 첫 번째 활성 항목으로 보정됩니다 |
 
 - `onSelectionChanged: ((Int) -> Void)?` — 사용자가 탭을 눌러 선택이 바뀔 때만 호출됩니다. 이미 선택된 탭을 다시 누르거나 `setSelectedIndex(_:animated:)`로 바꾼 경우에는 호출되지 않습니다 (화면 → 탭 → 화면으로 이어지는 루프를 막기 위함).
 - `.scrollable`에서는 선택한 탭이 화면 밖에 있으면 보이도록 자동으로 스크롤됩니다.
 - `MDSTabs`는 폭을 직접 정하지 않으므로 좌우(leading/trailing) 제약이 필요합니다. 높이는 `size`로 정해집니다.
-- 디자인 가이드: 탭은 최소 2개로 구성하고 권장 최대 5개입니다. 화면에 모두 보이면 `.fixed`, 많아지면 `.scrollable`을 사용합니다.
+- 비활성(`isEnabled: false`) 항목은 선택할 수 없습니다. 초기 선택은 활성 항목으로 정해지고, `setSelectedIndex(_:animated:)`에 범위를 벗어나거나 비활성인 index를 넘기면 무시됩니다. 선택 가능한 탭이 하나도 없으면 `selectedIndex`는 `nil`입니다(`selectedIndex: Int?`).
+- 탭은 최소 2개가 필요합니다. 2개 미만이면 디버그 빌드에서 `assert`로 알립니다(릴리즈 빌드는 동작은 하지만 지원하지 않는 구성입니다).
+- 디자인 가이드: 권장 최대 5개입니다. 화면에 모두 보이면 `.fixed`, 많아지면 `.scrollable`을 사용합니다.
 
 ---
 

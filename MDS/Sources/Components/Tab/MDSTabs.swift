@@ -12,7 +12,8 @@ public final class MDSTabs: UIView {
     /// 사용자가 탭을 눌러 선택이 바뀔 때만 호출된다. `setSelectedIndex`로 바꾼 경우에는 호출되지 않는다.
     public var onSelectionChanged: ((Int) -> Void)?
 
-    public private(set) var selectedIndex: Int
+    /// 선택된 탭의 index. 선택 가능한(활성) 탭이 하나도 없으면 `nil`입니다.
+    public private(set) var selectedIndex: Int?
 
     private let variant: Variant
     private let tabs: [MDSTab]
@@ -53,6 +54,8 @@ public final class MDSTabs: UIView {
         divider: Bool = true,
         selectedIndex: Int = 0
     ) {
+        assert(items.count >= 2, "MDSTabs: 탭은 최소 2개가 필요합니다. (현재 \(items.count)개)")
+
         self.variant = variant
         self.tabs = items.map {
             let tab = MDSTab(
@@ -64,7 +67,7 @@ public final class MDSTabs: UIView {
             tab.isEnabled = $0.isEnabled
             return tab
         }
-        self.selectedIndex = items.isEmpty ? 0 : min(max(selectedIndex, 0), items.count - 1)
+        self.selectedIndex = Self.initialSelectedIndex(requested: selectedIndex, items: items)
         super.init(frame: .zero)
         setup(divider: divider)
     }
@@ -77,9 +80,18 @@ public final class MDSTabs: UIView {
     // MARK: - Interface
 
     /// 코드로 선택을 바꾼다. 화면 전환과 탭을 맞출 때 쓰며 `onSelectionChanged`는 호출하지 않는다.
+    /// 범위를 벗어나거나 비활성인 탭은 선택할 수 없어서 무시한다.
     public func setSelectedIndex(_ index: Int, animated: Bool = true) {
-        guard tabs.indices.contains(index) else { return }
+        guard tabs.indices.contains(index), tabs[index].isEnabled else { return }
         select(index, animated: animated)
+    }
+
+    // 요청한 index가 선택 가능하면 그대로, 아니면 첫 번째 활성 탭을, 활성 탭이 없으면 nil을 쓴다.
+    private static func initialSelectedIndex(requested: Int, items: [Item]) -> Int? {
+        if items.indices.contains(requested), items[requested].isEnabled {
+            return requested
+        }
+        return items.firstIndex(where: \.isEnabled)
     }
 
     // MARK: - Setup
@@ -168,7 +180,7 @@ public final class MDSTabs: UIView {
 
     // 선택한 탭이 화면 밖이면 이웃 탭이 조금 보이도록 스크롤한다.
     private func scrollToSelected(animated: Bool) {
-        guard variant == .scrollable, tabs.indices.contains(selectedIndex) else { return }
+        guard variant == .scrollable, let selectedIndex, tabs.indices.contains(selectedIndex) else { return }
         let tab = tabs[selectedIndex]
         let rect = tab.convert(tab.bounds, to: scrollView).insetBy(dx: -LayoutToken.scrollRevealPadding, dy: 0)
         scrollView.scrollRectToVisible(rect, animated: animated)
