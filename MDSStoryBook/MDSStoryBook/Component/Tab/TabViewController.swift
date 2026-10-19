@@ -107,15 +107,20 @@ final class TabViewController: UIViewController {
             )
         }
 
-        tabs.forEach { tab in
-            tab.isEnabled = isEnabled
-            tab.addAction(UIAction { _ in
-                tabs.forEach { $0.isSelected = ($0 === tab) }
-            }, for: .touchUpInside)
-        }
-
         let row = UIStackView(arrangedSubviews: tabs)
         row.axis = .horizontal
+
+        // tab이 자기 액션을 보유하므로 tab/tabs를 강하게 캡처하면 순환 참조가 된다.
+        // 배열 대신 row를 약하게 잡고, 같은 행의 탭은 row에서 찾는다.
+        tabs.forEach { tab in
+            tab.isEnabled = isEnabled
+            tab.addAction(UIAction { [weak row, weak tab] _ in
+                guard let row, let tab else { return }
+                row.arrangedSubviews
+                    .compactMap { $0 as? MDSTab }
+                    .forEach { $0.isSelected = ($0 === tab) }
+            }, for: .touchUpInside)
+        }
 
         switch variant {
         case .hug:
