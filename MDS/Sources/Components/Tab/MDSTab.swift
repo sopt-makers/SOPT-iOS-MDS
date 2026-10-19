@@ -32,6 +32,14 @@ public final class MDSTab: UIControl {
 
     // MARK: - Subviews
 
+    // MDSTab 자체가 투명한 터치 영역이고, 라벨·태그·밑줄은 이 뷰 안에서 바깥 여백만큼 안쪽에 그려진다.
+    private let tabContentsView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -97,8 +105,9 @@ public final class MDSTab: UIControl {
     }
 
     private func setupHierarchy() {
-        addSubview(contentStackView)
-        addSubview(underline)
+        addSubview(tabContentsView)
+        tabContentsView.addSubview(contentStackView)
+        tabContentsView.addSubview(underline)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(tagView)
     }
@@ -108,26 +117,34 @@ public final class MDSTab: UIControl {
         titleLabel.setContentHuggingPriority(variant == .hug ? .required : UILayoutPriority(249), for: .horizontal)
         titleLabel.setContentCompressionResistancePriority(variant == .hug ? .required : .defaultLow, for: .horizontal)
 
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: SizeToken.verticalPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SizeToken.verticalPadding),
+        let horizontalInset = variant == .hug ? SizeToken.hugHorizontalInset : SizeToken.fillHorizontalInset
 
+        NSLayoutConstraint.activate([
+            tabContentsView.topAnchor.constraint(equalTo: topAnchor, constant: SizeToken.contentsVerticalInset),
+            tabContentsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SizeToken.contentsVerticalInset),
+            tabContentsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalInset),
+            tabContentsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -horizontalInset),
+
+            contentStackView.topAnchor.constraint(equalTo: tabContentsView.topAnchor, constant: SizeToken.verticalPadding),
+            contentStackView.bottomAnchor.constraint(equalTo: tabContentsView.bottomAnchor, constant: -SizeToken.verticalPadding),
+
+            // Figma처럼 밑줄(2pt)을 Tab Contents 아래 가장자리에 걸친다. 바깥 여백(1pt) 안에 들어가 잘리지 않는다.
             underline.heightAnchor.constraint(equalToConstant: SizeToken.underlineThickness),
-            underline.leadingAnchor.constraint(equalTo: leadingAnchor),
-            underline.trailingAnchor.constraint(equalTo: trailingAnchor),
-            underline.bottomAnchor.constraint(equalTo: bottomAnchor),
+            underline.leadingAnchor.constraint(equalTo: tabContentsView.leadingAnchor),
+            underline.trailingAnchor.constraint(equalTo: tabContentsView.trailingAnchor),
+            underline.centerYAnchor.constraint(equalTo: tabContentsView.bottomAnchor),
         ])
 
         switch variant {
         case .hug:
             NSLayoutConstraint.activate([
-                contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                contentStackView.leadingAnchor.constraint(equalTo: tabContentsView.leadingAnchor),
+                contentStackView.trailingAnchor.constraint(equalTo: tabContentsView.trailingAnchor),
             ])
         case .fill:
             NSLayoutConstraint.activate([
-                contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: SizeToken.fillHorizontalPadding),
-                contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -SizeToken.fillHorizontalPadding),
+                contentStackView.leadingAnchor.constraint(equalTo: tabContentsView.leadingAnchor, constant: SizeToken.fillContentsPadding),
+                contentStackView.trailingAnchor.constraint(equalTo: tabContentsView.trailingAnchor, constant: -SizeToken.fillContentsPadding),
             ])
         }
     }
@@ -163,8 +180,14 @@ public final class MDSTab: UIControl {
 private extension MDSTab {
 
     struct SizeToken {
+        // 바깥 터치 영역 여백 (MDSTab → Tab Contents)
+        static let contentsVerticalInset: CGFloat = 1
+        static let hugHorizontalInset = BaseSpacing.Base.s10
+        static let fillHorizontalInset = BaseSpacing.Base.s8
+
+        // Tab Contents 안쪽 패딩
         static let verticalPadding = BaseSpacing.Base.s6
-        static let fillHorizontalPadding = BaseSpacing.Base.s16
+        static let fillContentsPadding = BaseSpacing.Base.s16
         static let underlineThickness: CGFloat = 2
 
         let font: MDSFont
