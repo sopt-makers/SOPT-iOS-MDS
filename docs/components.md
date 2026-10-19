@@ -11,6 +11,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Callout](#callout)
 - [Chip](#chip)
 - [Dialog](#dialog)
+- [Tab](#tab)
 - [Tag](#tag)
 
 ---
@@ -266,6 +267,62 @@ dialog.onCheckBoxChanged = { isSelected in /* ... */ }
 | `.danger(primary…, secondary…)` | danger 스타일 primary + secondary |
 
 `checkBoxTitle`을 넘기면 내부에 `MDSCheckbox`가 생성되며, `isCheckBoxSelected`로 외부에서 선택 상태를 읽고 쓸 수 있습니다.
+
+---
+
+## Tab
+
+`MDSTab`은 탭 하나이고, `MDSTabs`는 탭을 모아 단일 선택으로 동작시키는 컨테이너입니다. 화면 전환은 사용하는 쪽에서 `MDSTabs.onSelectionChanged`로 처리합니다.
+
+### MDSTab
+
+```swift
+let tab = MDSTab(title: "Tab", variant: .hug, size: .large, tag: .init(text: "TAG"), isSelected: true)
+tab.tabTag = nil   // 태그 제거
+```
+
+| 파라미터 | 타입 | 설명 |
+|---|---|---|
+| `title` | `String` | 필수. 이후 대입으로 변경 가능 |
+| `variant` | `.hug` / `.fill` | `.hug`는 내용 크기, `.fill`은 부모가 준 폭을 채움 (라벨이 남는 폭을 채우고 태그는 오른쪽) |
+| `size` | `.small` / `.medium` / `.large` | 타이포그래피 `heading4` / `heading3` / `heading2` |
+| `tag` | `MDSTab.Tag?` | `text` / `icon` / `style`(기본 `.subtle`)만 받습니다. 프로퍼티 이름은 `tabTag` |
+
+- Tag의 `shape`(`pill`), `variant`(`primary`), `size`(`small`)는 Figma 규칙대로 고정이라 외부에서 바꿀 수 없습니다.
+- 상태는 `isSelected` / `isEnabled`로 표현하며, `isEnabled = false`가 `isSelected`보다 우선합니다. 선택된 탭에만 밑줄이 그려집니다.
+- `MDSTab`은 스스로 선택을 토글하지 않고 `.touchUpInside`만 보냅니다. 단일 선택은 `MDSTabs`가 관리합니다.
+- `MDSTab` 자체가 투명한 터치 영역이고, 라벨·태그·밑줄은 그 안쪽에 그려집니다. 바깥 여백은 `.hug`는 좌우 10, `.fill`은 좌우 8, 상하 1이며 이 영역 전체가 터치됩니다. 높이는 Large 50 / Medium 44 / Small 38입니다.
+
+### MDSTabs
+
+```swift
+let tabs = MDSTabs(
+    items: [
+        .init(title: "Tab"),
+        .init(title: "Tab", tag: .init(text: "TAG")),
+        .init(title: "Tab", isEnabled: false),
+    ],
+    variant: .fixed,
+    size: .large
+)
+tabs.onSelectionChanged = { index in
+    // 선택된 index에 맞는 화면으로 전환
+}
+tabs.setSelectedIndex(2)   // 코드로 변경. onSelectionChanged는 호출되지 않습니다.
+```
+
+| 파라미터 | 타입 | 설명 |
+|---|---|---|
+| `items` | `[MDSTabs.Item]` | `Item(title:tag:isEnabled:)` — 탭별 제목, 태그, 비활성 여부 |
+| `variant` | `.scrollable` / `.fixed` | `.fixed`는 폭을 균등하게 나눠 가지며(Fill 탭), `.scrollable`은 폭을 넘치면 가로로 스크롤됩니다(Hug 탭) |
+| `size` | `.small` / `.medium` / `.large` | `MDSTab.Size`와 같은 타입입니다. 높이는 Large 50 / Medium 44 / Small 38 |
+| `divider` | `Bool` | 기본 `true`. 아래 구분선 표시 여부 |
+| `selectedIndex` | `Int` | 초기 선택 index. 범위를 벗어나면 보정됩니다 |
+
+- `onSelectionChanged: ((Int) -> Void)?` — 사용자가 탭을 눌러 선택이 바뀔 때만 호출됩니다. 이미 선택된 탭을 다시 누르거나 `setSelectedIndex(_:animated:)`로 바꾼 경우에는 호출되지 않습니다 (화면 → 탭 → 화면으로 이어지는 루프를 막기 위함).
+- `.scrollable`에서는 선택한 탭이 화면 밖에 있으면 보이도록 자동으로 스크롤됩니다.
+- `MDSTabs`는 폭을 직접 정하지 않으므로 좌우(leading/trailing) 제약이 필요합니다. 높이는 `size`로 정해집니다.
+- 디자인 가이드: 탭은 최소 2개로 구성하고 권장 최대 5개입니다. 화면에 모두 보이면 `.fixed`, 많아지면 `.scrollable`을 사용합니다.
 
 ---
 
