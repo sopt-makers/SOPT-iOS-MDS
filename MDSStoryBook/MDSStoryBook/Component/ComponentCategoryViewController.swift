@@ -11,6 +11,7 @@ final class ComponentCategoryViewController: UIViewController {
         case chip = "Chip"
         case tag = "Tag"
         case tab = "Tab"
+        case tabs = "Tabs"
         case callout = "Callout"
         case button = "Button"
         case control = "Control"
@@ -76,6 +77,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
             navigationController?.pushViewController(TagViewController(), animated: true)
         case .tab:
             navigationController?.pushViewController(TabViewController(), animated: true)
+        case .tabs:
+            navigationController?.pushViewController(TabsViewController(), animated: true)
         case .callout:
             navigationController?.pushViewController(CalloutViewController(), animated: true)
         case .button:
