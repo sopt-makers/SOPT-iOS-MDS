@@ -62,7 +62,7 @@ public final class MDSTextButton: UIControl {
     public init(
         variant: Variant = .default,
         size: Size = .medium,
-        title: String = "",
+        title: String,
         icon: MDSIcon? = nil
     ) {
         self.variant = variant

@@ -66,7 +66,7 @@ public final class MDSSnackBar: UIView {
     }()
 
     private let button: MDSTextButton = {
-        let button = MDSTextButton(variant: .emphasis, size: .medium)
+        let button = MDSTextButton(variant: .emphasis, size: .medium, title: "")
         button.titleColor = SemanticColor.Fg.Secondary.default
         return button
     }()
@@ -132,6 +132,7 @@ extension MDSSnackBar {
 
     @objc private func buttonTapped() {
         onButtonTap?()
+        dismiss()
     }
 }
 
