@@ -14,9 +14,21 @@ public final class MDSTag: UIView {
     public var text: String {
         didSet { updateLabel() }
     }
+    
+    public var variant: Variant {
+        didSet { updateAppearance() }
+    }
 
-    private let font: MDSFont
-    private let foreground: UIColor
+    public var style: Style {
+        didSet { updateAppearance() }
+    }
+    
+    public var icon: MDSIcon? {
+        didSet { updateAppearance() }
+    }
+
+    private let size: Size
+    private let shape: Shape
 
     // MARK: - Private Views
 
@@ -45,19 +57,23 @@ public final class MDSTag: UIView {
     // MARK: - Init
 
     public init(
-        text: String,
-        size: Size,
-        shape: Shape,
-        variant: Variant,
-        style: Style,
+        text: String = "",
+        size: Size = .medium,
+        shape: Shape = .pill,
+        variant: Variant = .default,
+        style: Style = .solid,
         icon: MDSIcon? = nil
     ) {
         self.text = text
-        self.font = SizeToken(size: size).font
-        self.foreground = ColorToken(variant: variant, style: style).foreground
+        self.variant = variant
+        self.style = style
+        self.icon = icon
+        self.size = size
+        self.shape = shape
         super.init(frame: .zero)
-        setupViews(iconSize: SizeToken(size: size).iconSize)
-        apply(size: size, shape: shape, variant: variant, style: style, icon: icon)
+        
+        setupViews(sizeToken: SizeToken(size: size))
+        updateAppearance()
     }
 
     @available(*, unavailable)
@@ -67,35 +83,29 @@ public final class MDSTag: UIView {
 
     // MARK: - Setup
 
-    private func setupViews(iconSize: CGFloat) {
+    private func setupViews(sizeToken: SizeToken) {
         addSubview(stackView)
         stackView.addArrangedSubview(iconImageView)
         stackView.addArrangedSubview(label)
 
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: sizeToken.height),
+
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            iconImageView.widthAnchor.constraint(equalToConstant: iconSize),
-            iconImageView.heightAnchor.constraint(equalToConstant: iconSize)
+            iconImageView.widthAnchor.constraint(equalToConstant: sizeToken.iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: sizeToken.iconSize)
         ])
     }
 
     // MARK: - Apply
 
-    private func apply(
-        size: Size,
-        shape: Shape,
-        variant: Variant,
-        style: Style,
-        icon: MDSIcon?
-    ) {
+    private func updateAppearance() {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(variant: variant, style: style)
-
-        heightAnchor.constraint(equalToConstant: sizeToken.height).isActive = true
 
         stackView.layoutMargins = UIEdgeInsets(
             top: sizeToken.verticalPadding,
@@ -109,14 +119,17 @@ public final class MDSTag: UIView {
         layer.masksToBounds = true
 
         backgroundColor = colorToken.background
-        updateLabel()
+        updateLabel(font: sizeToken.font, foreground: colorToken.foreground)
 
         iconImageView.setIcon(icon, tintColor: colorToken.foreground)
     }
 
-    private func updateLabel() {
+    private func updateLabel(font: MDSFont? = nil, foreground: UIColor? = nil) {
         label.text = text
-        label.setTypography(font, textColor: foreground)
+        label.setTypography(
+            font ?? SizeToken(size: size).font,
+            textColor: foreground ?? ColorToken(variant: variant, style: style).foreground
+        )
     }
 }
 
