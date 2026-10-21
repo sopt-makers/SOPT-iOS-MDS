@@ -11,6 +11,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Callout](#callout)
 - [Chip](#chip)
 - [Dialog](#dialog)
+- [SnackBar](#snackbar)
 - [Tab](#tab)
 - [Tag](#tag)
 
@@ -267,6 +268,33 @@ dialog.onCheckBoxChanged = { isSelected in /* ... */ }
 | `.danger(primary…, secondary…)` | danger 스타일 primary + secondary |
 
 `checkBoxTitle`을 넘기면 내부에 `MDSCheckbox`가 생성되며, `isCheckBoxSelected`로 외부에서 선택 상태를 읽고 쓸 수 있습니다.
+
+---
+
+## SnackBar
+
+화면 상단에서 내려와 잠시 노출된 뒤 사라지는 알림 메시지입니다. `buttonTitle`을 넘기면 우측에 `MDSTextButton`이 붙습니다.
+
+```swift
+MDSSnackBar(
+    style: .success,
+    text: "프로젝트가 등록되었어요.",
+    buttonTitle: "보러가기",
+    onButtonTap: { /* ... */ }
+).show(in: view.window ?? view)
+```
+
+| 파라미터 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `style` | `Style` (`.default` / `.success` / `.alert` / `.error`) | `.default` | 좌측 아이콘과 색상. `.default`는 아이콘 없음 |
+| `text` | `String` | 필수 | 최대 2줄 |
+| `buttonTitle` | `String?` | `nil` | `nil`이면 버튼 생략 |
+| `onButtonTap` | `(() -> Void)?` | `nil` | 버튼 탭 콜백. 호출 후 스낵바가 자동으로 dismiss됩니다 |
+
+- `style` / `text` / `buttonTitle`은 생성 후 대입으로 변경 가능합니다.
+- `show(in:duration:)` — `view`의 safe area 상단(좌우 20, 위 16 여백)에 노출되고 `duration`초(기본 4) 뒤 자동으로 사라집니다. 화면 전환과 상관없이 위에 보이게 하려면 `view.window`를 넘기세요.
+- 이미 노출 중인 스낵바가 있으면 큐에 쌓였다가 앞의 스낵바가 사라진 뒤 순서대로 노출됩니다.
+- `dismiss()` — 즉시 사라지게 합니다. 아직 큐에서 대기 중인 스낵바에 호출하면 큐에서 제거됩니다.
 
 ---
 
