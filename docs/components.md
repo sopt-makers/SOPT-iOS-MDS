@@ -12,6 +12,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Chip](#chip)
 - [Dialog](#dialog)
 - [SnackBar](#snackbar)
+- [Menu](#menu)
 - [Tab](#tab)
 - [Tag](#tag)
 
@@ -295,6 +296,36 @@ MDSSnackBar(
 - `show(in:duration:)` — `view`의 safe area 상단(좌우 20, 위 16 여백)에 노출되고 `duration`초(기본 4) 뒤 자동으로 사라집니다. 화면 전환과 상관없이 위에 보이게 하려면 `view.window`를 넘기세요.
 - 이미 노출 중인 스낵바가 있으면 큐에 쌓였다가 앞의 스낵바가 사라진 뒤 순서대로 노출됩니다.
 - `dismiss()` — 즉시 사라지게 합니다. 아직 큐에서 대기 중인 스낵바에 호출하면 큐에서 제거됩니다.
+
+---
+
+## Menu
+
+항목을 탭하면 바로 동작하는 메뉴 목록입니다. 메뉴 자체에는 선택된 상태가 없고, 선택 표시가 필요하면 Checkbox 타입을 사용합니다.
+
+### MDSIconMenu
+
+아이콘과 텍스트로 이뤄진 메뉴 목록입니다.
+
+```swift
+let menu = MDSIconMenu(
+    items: [
+        .init(title: "알림", icon: .bellOutlined),
+        .init(title: "공유", icon: .sendOutlined),
+        .init(title: "텍스트만"),
+    ],
+    onSelect: { index in /* ... */ }
+)
+```
+
+| 파라미터 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `items` | `[MDSIconMenu.Item]` | 필수 | `title`과 `icon`(`MDSIcon?`)을 가집니다. `icon`이 `nil`이면 텍스트만 표시합니다 |
+| `onSelect` | `((Int) -> Void)?` | `nil` | 항목을 탭(touchUpInside)했을 때 해당 index로 호출됩니다. 생성 후 대입으로도 바꿀 수 있습니다 |
+
+- 모바일에는 hover가 없어서 항목을 누르고 있는 동안을 Hover 상태로 표현합니다. 손가락이 항목 밖으로 벗어나거나 손을 떼면 Default로 돌아갑니다.
+- 폭은 내용에 맞춰지며 항목 하나의 최소 폭은 80입니다. 위치와 폭은 사용하는 쪽에서 제약으로 정합니다.
+- 팝오버로 띄우는 동작은 포함하지 않는 리스트 뷰입니다.
 
 ---
 
