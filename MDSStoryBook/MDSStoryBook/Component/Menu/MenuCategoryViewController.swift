@@ -8,6 +8,7 @@ import UIKit
 final class MenuCategoryViewController: UIViewController {
     private enum Category: String, CaseIterable {
         case iconMenu = "Icon Menu"
+        case userListMenu = "UserList Menu"
     }
 
     private let categories = Category.allCases
@@ -61,6 +62,8 @@ extension MenuCategoryViewController: UITableViewDataSource, UITableViewDelegate
         switch categories[indexPath.row] {
         case .iconMenu:
             navigationController?.pushViewController(IconMenuViewController(), animated: true)
+        case .userListMenu:
+            navigationController?.pushViewController(UserListMenuViewController(), animated: true)
         }
     }
 }
