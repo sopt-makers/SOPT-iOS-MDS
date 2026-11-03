@@ -85,6 +85,13 @@ final class MDSUserListMenuItem: UIControl {
 
         avatar.isUserInteractionEnabled = false
 
+        // 텍스트가 길어도 아바타는 줄어들거나 늘어나지 않고, 텍스트가 먼저 줄어들도록 우선순위를 둔다.
+        avatar.setContentHuggingPriority(.required, for: .horizontal)
+        avatar.setContentCompressionResistancePriority(.required, for: .horizontal)
+        textStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
         addSubview(contentStackView)
         contentStackView.addArrangedSubview(avatar)
         contentStackView.addArrangedSubview(textStackView)
