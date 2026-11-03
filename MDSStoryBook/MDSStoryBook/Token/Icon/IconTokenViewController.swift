@@ -8,7 +8,7 @@
 import UIKit
 
 final class IconTokenViewController: UIViewController {
-    private let items = IconTokenDataSource.items()
+    private let sections = IconTokenDataSource.sections()
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -42,13 +42,21 @@ final class IconTokenViewController: UIViewController {
 }
 
 extension IconTokenViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        sections.count
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        sections[section].title
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
+        sections[section].items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: IconTokenCell.reuseIdentifier, for: indexPath) as! IconTokenCell
-        cell.configure(with: items[indexPath.row])
+        cell.configure(with: sections[indexPath.section].items[indexPath.row])
         return cell
     }
 }
