@@ -18,6 +18,7 @@ final class ComponentCategoryViewController: UIViewController {
         case input = "Input"
         case dialog = "Dialog"
         case snackBar = "SnackBar"
+        case navigationBar = "NavigationBar"
     }
 
 
@@ -92,6 +93,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
             navigationController?.pushViewController(DialogViewController(), animated: true)
         case .snackBar:
             navigationController?.pushViewController(SnackBarViewController(), animated: true)
+        case .navigationBar:
+            navigationController?.pushViewController(NavigationBarViewController(), animated: true)
         }
     }
 }
