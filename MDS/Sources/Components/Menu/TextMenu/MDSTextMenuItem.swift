@@ -94,6 +94,10 @@ final class MDSTextMenuItem: UIControl {
 
         // 체크 여부로 메뉴 폭이 바뀌지 않도록 체크 아이콘 자리는 항상 확보하고, 체크가 아닐 때는 투명하게만 둔다.
         textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        // 텍스트가 길면 체크 아이콘을 밀지 않고 텍스트가 먼저 줄어들도록 압축 우선순위를 낮춘다.
+        textStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         checkImageView.setContentHuggingPriority(.required, for: .horizontal)
         checkImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
