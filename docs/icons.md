@@ -11,7 +11,7 @@ icon.{name}.{style}
 - `name`: 아이콘 의미 (예: `alarm`, `arrowDown`, `checkCircle`)
 - `style`: `filled` / `outlined` 중 하나. 브랜드 로고(`apple`, `github`, `googleColor` 등)처럼 스타일이 하나뿐인 아이콘도 있습니다.
 
-현재 총 160개 아이콘, `filled`/`outlined` 조합으로 254개의 asset이 `MDS/Sources/Foundation/Resources/Icons/Icon.xcassets`에 존재합니다. 전체 목록과 실제 값은 [`MDSIcon.swift`](../MDS/Sources/Tokens/MDSIcon.swift)가 SSOT이며, 앱 안에서는 MDSStoryBook 카탈로그(Icon 탭)에서 시각적으로 확인할 수 있습니다.
+현재 총 160개 아이콘, `filled`/`outlined` 조합으로 254개의 asset이 `MDS/Sources/Foundation/Resources/Icons/Icon.xcassets`에 Figma 섹션과 같은 카테고리 폴더로 나뉘어 존재합니다. 전체 목록과 실제 값은 [`MDSIcon.swift`](../MDS/Sources/Tokens/MDSIcon.swift)가 SSOT이며, 앱 안에서는 MDSStoryBook 카탈로그(Icon 탭)에서 시각적으로 확인할 수 있습니다.
 
 아이콘은 Figma 아이콘 페이지의 섹션과 동일하게 10개 카테고리로 나뉩니다.
 
@@ -71,6 +71,6 @@ public extension MDSIcon {
 
 아이콘은 Figma → 토큰 파이프라인이 아닌 **직접 asset 추가** 방식입니다.
 
-1. `Icon.xcassets`에 `icon.{name}.{style}.imageset`을 추가하고 SVG를 넣습니다.
+1. `Icon.xcassets`의 해당 카테고리 폴더(`Media/` 등)에 `icon.{name}.{style}.imageset`을 추가하고 SVG를 넣습니다. 카테고리 폴더는 Provides Namespace가 꺼져 있어 asset 이름에 폴더명이 붙지 않습니다.
 2. `MDS/Sources/Tokens/MDSIcon.swift`의 `MDSIcon` enum에 `case`를 추가합니다 (`rawValue`는 asset 이름과 동일해야 합니다).
 3. 같은 파일 하단의 해당 카테고리 enum(`MDSIcon.Media` 등)에 `static let`과 `all` 항목을 추가합니다. MDSStoryBook 카탈로그는 카테고리별 `all`을 사용하므로 여기에 추가해야 표시됩니다.
