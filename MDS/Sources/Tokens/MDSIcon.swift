@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum MDSIcon: String, CaseIterable {
+public enum MDSIcon: String, CaseIterable, Sendable {
     case calendarDateFilled = "icon.CalendarDate.filled"
     case calendarDateOutlined = "icon.CalendarDate.outlined"
     case facebookFilled = "icon.Facebook.filled"
@@ -278,5 +278,585 @@ public extension MDSIcon {
         case automatic
         /// asset 원본 색상을 유지합니다. 브랜드/멀티컬러 아이콘에 사용합니다.
         case original
+    }
+}
+
+// MARK: - Category
+
+/// Figma 아이콘 페이지의 섹션 구분입니다.
+///
+/// 카테고리 멤버는 기존 case와 같은 `MDSIcon` 값이므로 두 방식 모두 사용할 수 있습니다.
+/// ```swift
+/// MDSIcon.imageFilled.image        // 기존 방식
+/// MDSIcon.Media.imageFilled.image  // 카테고리 방식 (같은 값)
+/// chip.prefixIcon = .Media.imageFilled  // MDSIcon 타입 자리에서는 축약 가능
+/// ```
+public extension MDSIcon {
+    enum Communication {
+        public static let messageChatFilled: MDSIcon = .messageChatFilled
+        public static let messageChatOutlined: MDSIcon = .messageChatOutlined
+        public static let messageCheckFilled: MDSIcon = .messageCheckFilled
+        public static let messageCheckOutlined: MDSIcon = .messageCheckOutlined
+        public static let messageDotsFilled: MDSIcon = .messageDotsFilled
+        public static let messageDotsOutlined: MDSIcon = .messageDotsOutlined
+        public static let messagePlusFilled: MDSIcon = .messagePlusFilled
+        public static let messagePlusOutlined: MDSIcon = .messagePlusOutlined
+        public static let messageQuestionFilled: MDSIcon = .messageQuestionFilled
+        public static let messageQuestionOutlined: MDSIcon = .messageQuestionOutlined
+        public static let messageTextFilled: MDSIcon = .messageTextFilled
+        public static let messageTextOutlined: MDSIcon = .messageTextOutlined
+        public static let messageXFilled: MDSIcon = .messageXFilled
+        public static let messageXOutlined: MDSIcon = .messageXOutlined
+        public static let phoneFilled: MDSIcon = .phoneFilled
+        public static let phoneOutlined: MDSIcon = .phoneOutlined
+        public static let pinFilled: MDSIcon = .pinFilled
+        public static let pinOutlined: MDSIcon = .pinOutlined
+        public static let sendFilled: MDSIcon = .sendFilled
+        public static let sendOutlined: MDSIcon = .sendOutlined
+        public static let trophyOutlined: MDSIcon = .trophyOutlined
+        public static let archiveFilled: MDSIcon = .archiveFilled
+        public static let archiveOutlined: MDSIcon = .archiveOutlined
+        public static let birthFilled: MDSIcon = .birthFilled
+        public static let birthOutlined: MDSIcon = .birthOutlined
+        public static let bookmarkFilled: MDSIcon = .bookmarkFilled
+        public static let bookmarkOutlined: MDSIcon = .bookmarkOutlined
+        public static let editFilled: MDSIcon = .editFilled
+        public static let editOutlined: MDSIcon = .editOutlined
+        public static let eyeFilled: MDSIcon = .eyeFilled
+        public static let eyeOutlined: MDSIcon = .eyeOutlined
+        public static let eyeOffFilled: MDSIcon = .eyeOffFilled
+        public static let eyeOffOutlined: MDSIcon = .eyeOffOutlined
+        public static let locationFilled: MDSIcon = .locationFilled
+        public static let locationOutlined: MDSIcon = .locationOutlined
+        public static let mailFilled: MDSIcon = .mailFilled
+        public static let mailOutlined: MDSIcon = .mailOutlined
+        public static let mentoFilled: MDSIcon = .mentoFilled
+        public static let mentoOutlined: MDSIcon = .mentoOutlined
+        public static let messageFilled: MDSIcon = .messageFilled
+        public static let messageOutlined: MDSIcon = .messageOutlined
+        public static let messageAlertFilled: MDSIcon = .messageAlertFilled
+        public static let messageAlertOutlined: MDSIcon = .messageAlertOutlined
+        public static let clapDefaultOutlined: MDSIcon = .clapDefaultOutlined
+        public static let clapRoundOutlined: MDSIcon = .clapRoundOutlined
+
+        public static let all: [MDSIcon] = [
+            .messageChatFilled,
+            .messageChatOutlined,
+            .messageCheckFilled,
+            .messageCheckOutlined,
+            .messageDotsFilled,
+            .messageDotsOutlined,
+            .messagePlusFilled,
+            .messagePlusOutlined,
+            .messageQuestionFilled,
+            .messageQuestionOutlined,
+            .messageTextFilled,
+            .messageTextOutlined,
+            .messageXFilled,
+            .messageXOutlined,
+            .phoneFilled,
+            .phoneOutlined,
+            .pinFilled,
+            .pinOutlined,
+            .sendFilled,
+            .sendOutlined,
+            .trophyOutlined,
+            .archiveFilled,
+            .archiveOutlined,
+            .birthFilled,
+            .birthOutlined,
+            .bookmarkFilled,
+            .bookmarkOutlined,
+            .editFilled,
+            .editOutlined,
+            .eyeFilled,
+            .eyeOutlined,
+            .eyeOffFilled,
+            .eyeOffOutlined,
+            .locationFilled,
+            .locationOutlined,
+            .mailFilled,
+            .mailOutlined,
+            .mentoFilled,
+            .mentoOutlined,
+            .messageFilled,
+            .messageOutlined,
+            .messageAlertFilled,
+            .messageAlertOutlined,
+            .clapDefaultOutlined,
+            .clapRoundOutlined,
+        ]
+    }
+
+    enum Editor {
+        public static let alignCenterOutlined: MDSIcon = .alignCenterOutlined
+        public static let alignJustifyOutlined: MDSIcon = .alignJustifyOutlined
+        public static let alignLeftOutlined: MDSIcon = .alignLeftOutlined
+        public static let alignRightOutlined: MDSIcon = .alignRightOutlined
+        public static let attachmentOutlined: MDSIcon = .attachmentOutlined
+        public static let boldOutlined: MDSIcon = .boldOutlined
+        public static let codeOutlined: MDSIcon = .codeOutlined
+        public static let deleteFilled: MDSIcon = .deleteFilled
+        public static let deleteOutlined: MDSIcon = .deleteOutlined
+        public static let dotpointsOutlined: MDSIcon = .dotpointsOutlined
+        public static let italicOutlined: MDSIcon = .italicOutlined
+        public static let leftIndentOutlined: MDSIcon = .leftIndentOutlined
+        public static let letterSpacingOutlined: MDSIcon = .letterSpacingOutlined
+        public static let lineHeightOutlined: MDSIcon = .lineHeightOutlined
+        public static let paragraphSpacingOutlined: MDSIcon = .paragraphSpacingOutlined
+        public static let paragraphWrapOutlined: MDSIcon = .paragraphWrapOutlined
+        public static let rightIndentOutlined: MDSIcon = .rightIndentOutlined
+        public static let typeOutlined: MDSIcon = .typeOutlined
+        public static let typeStrikethroughOutlined: MDSIcon = .typeStrikethroughOutlined
+        public static let underlineOutlined: MDSIcon = .underlineOutlined
+        public static let writeFilled: MDSIcon = .writeFilled
+        public static let writeOutlined: MDSIcon = .writeOutlined
+        public static let drawOutlined: MDSIcon = .drawOutlined
+        public static let zoomInFilled: MDSIcon = .zoomInFilled
+        public static let zoomInOutlined: MDSIcon = .zoomInOutlined
+        public static let zoomOutFilled: MDSIcon = .zoomOutFilled
+        public static let zoomOutOutlined: MDSIcon = .zoomOutOutlined
+
+        public static let all: [MDSIcon] = [
+            .alignCenterOutlined,
+            .alignJustifyOutlined,
+            .alignLeftOutlined,
+            .alignRightOutlined,
+            .attachmentOutlined,
+            .boldOutlined,
+            .codeOutlined,
+            .deleteFilled,
+            .deleteOutlined,
+            .dotpointsOutlined,
+            .italicOutlined,
+            .leftIndentOutlined,
+            .letterSpacingOutlined,
+            .lineHeightOutlined,
+            .paragraphSpacingOutlined,
+            .paragraphWrapOutlined,
+            .rightIndentOutlined,
+            .typeOutlined,
+            .typeStrikethroughOutlined,
+            .underlineOutlined,
+            .writeFilled,
+            .writeOutlined,
+            .drawOutlined,
+            .zoomInFilled,
+            .zoomInOutlined,
+            .zoomOutFilled,
+            .zoomOutOutlined,
+        ]
+    }
+
+    enum Feedback {
+        public static let alertCircleFilled: MDSIcon = .alertCircleFilled
+        public static let alertCircleOutlined: MDSIcon = .alertCircleOutlined
+        public static let alertTriangleFilled: MDSIcon = .alertTriangleFilled
+        public static let alertTriangleOutlined: MDSIcon = .alertTriangleOutlined
+        public static let bellFilled: MDSIcon = .bellFilled
+        public static let bellOutlined: MDSIcon = .bellOutlined
+        public static let bellOffFilled: MDSIcon = .bellOffFilled
+        public static let bellOffOutlined: MDSIcon = .bellOffOutlined
+        public static let bellActiveFilled: MDSIcon = .bellActiveFilled
+        public static let bellActiveOutlined: MDSIcon = .bellActiveOutlined
+        public static let helpCircleFilled: MDSIcon = .helpCircleFilled
+        public static let helpCircleOutlined: MDSIcon = .helpCircleOutlined
+        public static let infoCircleFilled: MDSIcon = .infoCircleFilled
+        public static let infoCircleOutlined: MDSIcon = .infoCircleOutlined
+        public static let thumbsDownFilled: MDSIcon = .thumbsDownFilled
+        public static let thumbsDownOutlined: MDSIcon = .thumbsDownOutlined
+        public static let thumbsUpFilled: MDSIcon = .thumbsUpFilled
+        public static let thumbsUpOutlined: MDSIcon = .thumbsUpOutlined
+
+        public static let all: [MDSIcon] = [
+            .alertCircleFilled,
+            .alertCircleOutlined,
+            .alertTriangleFilled,
+            .alertTriangleOutlined,
+            .bellFilled,
+            .bellOutlined,
+            .bellOffFilled,
+            .bellOffOutlined,
+            .bellActiveFilled,
+            .bellActiveOutlined,
+            .helpCircleFilled,
+            .helpCircleOutlined,
+            .infoCircleFilled,
+            .infoCircleOutlined,
+            .thumbsDownFilled,
+            .thumbsDownOutlined,
+            .thumbsUpFilled,
+            .thumbsUpOutlined,
+        ]
+    }
+
+    enum Files {
+        public static let fileFilled: MDSIcon = .fileFilled
+        public static let fileOutlined: MDSIcon = .fileOutlined
+        public static let fileCheckFilled: MDSIcon = .fileCheckFilled
+        public static let fileCheckOutlined: MDSIcon = .fileCheckOutlined
+        public static let fileDownloadFilled: MDSIcon = .fileDownloadFilled
+        public static let fileDownloadOutlined: MDSIcon = .fileDownloadOutlined
+        public static let fileMinusFilled: MDSIcon = .fileMinusFilled
+        public static let fileMinusOutlined: MDSIcon = .fileMinusOutlined
+        public static let filePlusFilled: MDSIcon = .filePlusFilled
+        public static let filePlusOutlined: MDSIcon = .filePlusOutlined
+        public static let fileSearchFilled: MDSIcon = .fileSearchFilled
+        public static let fileSearchOutlined: MDSIcon = .fileSearchOutlined
+        public static let fileTextFilled: MDSIcon = .fileTextFilled
+        public static let fileTextOutlined: MDSIcon = .fileTextOutlined
+        public static let fileXFilled: MDSIcon = .fileXFilled
+        public static let fileXOutlined: MDSIcon = .fileXOutlined
+        public static let folderFilled: MDSIcon = .folderFilled
+        public static let folderOutlined: MDSIcon = .folderOutlined
+        public static let folderCheckFilled: MDSIcon = .folderCheckFilled
+        public static let folderCheckOutlined: MDSIcon = .folderCheckOutlined
+        public static let folderDownloadFilled: MDSIcon = .folderDownloadFilled
+        public static let folderDownloadOutlined: MDSIcon = .folderDownloadOutlined
+
+        public static let all: [MDSIcon] = [
+            .fileFilled,
+            .fileOutlined,
+            .fileCheckFilled,
+            .fileCheckOutlined,
+            .fileDownloadFilled,
+            .fileDownloadOutlined,
+            .fileMinusFilled,
+            .fileMinusOutlined,
+            .filePlusFilled,
+            .filePlusOutlined,
+            .fileSearchFilled,
+            .fileSearchOutlined,
+            .fileTextFilled,
+            .fileTextOutlined,
+            .fileXFilled,
+            .fileXOutlined,
+            .folderFilled,
+            .folderOutlined,
+            .folderCheckFilled,
+            .folderCheckOutlined,
+            .folderDownloadFilled,
+            .folderDownloadOutlined,
+        ]
+    }
+
+    enum General {
+        public static let copyFilled: MDSIcon = .copyFilled
+        public static let copyOutlined: MDSIcon = .copyOutlined
+        public static let dotsHorizontalOutlined: MDSIcon = .dotsHorizontalOutlined
+        public static let dotsVerticalOutlined: MDSIcon = .dotsVerticalOutlined
+        public static let downloadOutlined: MDSIcon = .downloadOutlined
+        public static let downloadCloudOutlined: MDSIcon = .downloadCloudOutlined
+        public static let homeFilled: MDSIcon = .homeFilled
+        public static let homeOutlined: MDSIcon = .homeOutlined
+        public static let linkOutlined: MDSIcon = .linkOutlined
+        public static let lockFilled: MDSIcon = .lockFilled
+        public static let lockOutlined: MDSIcon = .lockOutlined
+        public static let logInOutlined: MDSIcon = .logInOutlined
+        public static let logOutOutlined: MDSIcon = .logOutOutlined
+        public static let menuOutlined: MDSIcon = .menuOutlined
+        public static let searchFilled: MDSIcon = .searchFilled
+        public static let searchOutlined: MDSIcon = .searchOutlined
+        public static let settingsFilled: MDSIcon = .settingsFilled
+        public static let settingsOutlined: MDSIcon = .settingsOutlined
+        public static let shareOutlined: MDSIcon = .shareOutlined
+        public static let slidersOutlined: MDSIcon = .slidersOutlined
+        public static let trashFilled: MDSIcon = .trashFilled
+        public static let trashOutlined: MDSIcon = .trashOutlined
+        public static let unlockFilled: MDSIcon = .unlockFilled
+        public static let unlockOutlined: MDSIcon = .unlockOutlined
+        public static let uploadCloudOutlined: MDSIcon = .uploadCloudOutlined
+
+        public static let all: [MDSIcon] = [
+            .copyFilled,
+            .copyOutlined,
+            .dotsHorizontalOutlined,
+            .dotsVerticalOutlined,
+            .downloadOutlined,
+            .downloadCloudOutlined,
+            .homeFilled,
+            .homeOutlined,
+            .linkOutlined,
+            .lockFilled,
+            .lockOutlined,
+            .logInOutlined,
+            .logOutOutlined,
+            .menuOutlined,
+            .searchFilled,
+            .searchOutlined,
+            .settingsFilled,
+            .settingsOutlined,
+            .shareOutlined,
+            .slidersOutlined,
+            .trashFilled,
+            .trashOutlined,
+            .unlockFilled,
+            .unlockOutlined,
+            .uploadCloudOutlined,
+        ]
+    }
+
+    enum Interaction {
+        public static let arrowDownOutlined: MDSIcon = .arrowDownOutlined
+        public static let arrowDownLeftOutlined: MDSIcon = .arrowDownLeftOutlined
+        public static let arrowDownRightOutlined: MDSIcon = .arrowDownRightOutlined
+        public static let arrowLeftOutlined: MDSIcon = .arrowLeftOutlined
+        public static let arrowRightOutlined: MDSIcon = .arrowRightOutlined
+        public static let arrowUpOutlined: MDSIcon = .arrowUpOutlined
+        public static let arrowUpLeftOutlined: MDSIcon = .arrowUpLeftOutlined
+        public static let arrowUpRightOutlined: MDSIcon = .arrowUpRightOutlined
+        public static let checkOutlined: MDSIcon = .checkOutlined
+        public static let checkCircleFilled: MDSIcon = .checkCircleFilled
+        public static let checkCircleOutlined: MDSIcon = .checkCircleOutlined
+        public static let checkSquareFilled: MDSIcon = .checkSquareFilled
+        public static let checkSquareOutlined: MDSIcon = .checkSquareOutlined
+        public static let chevronDownOutlined: MDSIcon = .chevronDownOutlined
+        public static let chevronLeftOutlined: MDSIcon = .chevronLeftOutlined
+        public static let chevronRightOutlined: MDSIcon = .chevronRightOutlined
+        public static let chevronUpOutlined: MDSIcon = .chevronUpOutlined
+        public static let flipBackwardOutlined: MDSIcon = .flipBackwardOutlined
+        public static let flipForwardOutlined: MDSIcon = .flipForwardOutlined
+        public static let heartFilled: MDSIcon = .heartFilled
+        public static let heartOutlined: MDSIcon = .heartOutlined
+        public static let plusOutlined: MDSIcon = .plusOutlined
+        public static let plusCircleFilled: MDSIcon = .plusCircleFilled
+        public static let plusCircleOutlined: MDSIcon = .plusCircleOutlined
+        public static let plusSquareFilled: MDSIcon = .plusSquareFilled
+        public static let plusSquareOutlined: MDSIcon = .plusSquareOutlined
+        public static let refreshOutlined: MDSIcon = .refreshOutlined
+        public static let replyOutlined: MDSIcon = .replyOutlined
+        public static let switchHorizontalOutlined: MDSIcon = .switchHorizontalOutlined
+        public static let switchVerticalOutlined: MDSIcon = .switchVerticalOutlined
+        public static let xCircleFilled: MDSIcon = .xCircleFilled
+        public static let xCircleOutlined: MDSIcon = .xCircleOutlined
+        public static let xCloseOutlined: MDSIcon = .xCloseOutlined
+
+        public static let all: [MDSIcon] = [
+            .arrowDownOutlined,
+            .arrowDownLeftOutlined,
+            .arrowDownRightOutlined,
+            .arrowLeftOutlined,
+            .arrowRightOutlined,
+            .arrowUpOutlined,
+            .arrowUpLeftOutlined,
+            .arrowUpRightOutlined,
+            .checkOutlined,
+            .checkCircleFilled,
+            .checkCircleOutlined,
+            .checkSquareFilled,
+            .checkSquareOutlined,
+            .chevronDownOutlined,
+            .chevronLeftOutlined,
+            .chevronRightOutlined,
+            .chevronUpOutlined,
+            .flipBackwardOutlined,
+            .flipForwardOutlined,
+            .heartFilled,
+            .heartOutlined,
+            .plusOutlined,
+            .plusCircleFilled,
+            .plusCircleOutlined,
+            .plusSquareFilled,
+            .plusSquareOutlined,
+            .refreshOutlined,
+            .replyOutlined,
+            .switchHorizontalOutlined,
+            .switchVerticalOutlined,
+            .xCircleFilled,
+            .xCircleOutlined,
+            .xCloseOutlined,
+        ]
+    }
+
+    enum Media {
+        public static let cameraFilled: MDSIcon = .cameraFilled
+        public static let cameraOutlined: MDSIcon = .cameraOutlined
+        public static let cameraOffFilled: MDSIcon = .cameraOffFilled
+        public static let cameraOffOutlined: MDSIcon = .cameraOffOutlined
+        public static let cameraPlusFilled: MDSIcon = .cameraPlusFilled
+        public static let cameraPlusOutlined: MDSIcon = .cameraPlusOutlined
+        public static let imageFilled: MDSIcon = .imageFilled
+        public static let imageOutlined: MDSIcon = .imageOutlined
+        public static let imageCheckFilled: MDSIcon = .imageCheckFilled
+        public static let imageCheckOutlined: MDSIcon = .imageCheckOutlined
+        public static let imageDownFilled: MDSIcon = .imageDownFilled
+        public static let imageDownOutlined: MDSIcon = .imageDownOutlined
+        public static let imageLeftFilled: MDSIcon = .imageLeftFilled
+        public static let imageLeftOutlined: MDSIcon = .imageLeftOutlined
+        public static let imagePlusFilled: MDSIcon = .imagePlusFilled
+        public static let imagePlusOutlined: MDSIcon = .imagePlusOutlined
+        public static let imageRightFilled: MDSIcon = .imageRightFilled
+        public static let imageRightOutlined: MDSIcon = .imageRightOutlined
+        public static let imageUpFilled: MDSIcon = .imageUpFilled
+        public static let imageUpOutlined: MDSIcon = .imageUpOutlined
+        public static let powerOutlined: MDSIcon = .powerOutlined
+        public static let repeatOutlined: MDSIcon = .repeatOutlined
+        public static let videoFilled: MDSIcon = .videoFilled
+        public static let videoOutlined: MDSIcon = .videoOutlined
+        public static let videoOffFilled: MDSIcon = .videoOffFilled
+        public static let videoOffOutlined: MDSIcon = .videoOffOutlined
+
+        public static let all: [MDSIcon] = [
+            .cameraFilled,
+            .cameraOutlined,
+            .cameraOffFilled,
+            .cameraOffOutlined,
+            .cameraPlusFilled,
+            .cameraPlusOutlined,
+            .imageFilled,
+            .imageOutlined,
+            .imageCheckFilled,
+            .imageCheckOutlined,
+            .imageDownFilled,
+            .imageDownOutlined,
+            .imageLeftFilled,
+            .imageLeftOutlined,
+            .imagePlusFilled,
+            .imagePlusOutlined,
+            .imageRightFilled,
+            .imageRightOutlined,
+            .imageUpFilled,
+            .imageUpOutlined,
+            .powerOutlined,
+            .repeatOutlined,
+            .videoFilled,
+            .videoOutlined,
+            .videoOffFilled,
+            .videoOffOutlined,
+        ]
+    }
+
+    enum Time {
+        public static let alarmFilled: MDSIcon = .alarmFilled
+        public static let alarmOutlined: MDSIcon = .alarmOutlined
+        public static let alarmCheckFilled: MDSIcon = .alarmCheckFilled
+        public static let alarmCheckOutlined: MDSIcon = .alarmCheckOutlined
+        public static let alarmMinusFilled: MDSIcon = .alarmMinusFilled
+        public static let alarmMinusOutlined: MDSIcon = .alarmMinusOutlined
+        public static let alarmOffFilled: MDSIcon = .alarmOffFilled
+        public static let alarmOffOutlined: MDSIcon = .alarmOffOutlined
+        public static let alarmPlusFilled: MDSIcon = .alarmPlusFilled
+        public static let alarmPlusOutlined: MDSIcon = .alarmPlusOutlined
+        public static let calendarFilled: MDSIcon = .calendarFilled
+        public static let calendarOutlined: MDSIcon = .calendarOutlined
+        public static let calendarCheckFilled: MDSIcon = .calendarCheckFilled
+        public static let calendarCheckOutlined: MDSIcon = .calendarCheckOutlined
+        public static let calendarPlusFilled: MDSIcon = .calendarPlusFilled
+        public static let calendarPlusOutlined: MDSIcon = .calendarPlusOutlined
+        public static let calendarDateFilled: MDSIcon = .calendarDateFilled
+        public static let calendarDateOutlined: MDSIcon = .calendarDateOutlined
+        public static let clockFilled: MDSIcon = .clockFilled
+        public static let clockOutlined: MDSIcon = .clockOutlined
+        public static let clockCheckFilled: MDSIcon = .clockCheckFilled
+        public static let clockCheckOutlined: MDSIcon = .clockCheckOutlined
+        public static let clockPlusFilled: MDSIcon = .clockPlusFilled
+        public static let clockPlusOutlined: MDSIcon = .clockPlusOutlined
+        public static let clockSnoozeFilled: MDSIcon = .clockSnoozeFilled
+        public static let clockSnoozeOutlined: MDSIcon = .clockSnoozeOutlined
+
+        public static let all: [MDSIcon] = [
+            .alarmFilled,
+            .alarmOutlined,
+            .alarmCheckFilled,
+            .alarmCheckOutlined,
+            .alarmMinusFilled,
+            .alarmMinusOutlined,
+            .alarmOffFilled,
+            .alarmOffOutlined,
+            .alarmPlusFilled,
+            .alarmPlusOutlined,
+            .calendarFilled,
+            .calendarOutlined,
+            .calendarCheckFilled,
+            .calendarCheckOutlined,
+            .calendarPlusFilled,
+            .calendarPlusOutlined,
+            .calendarDateFilled,
+            .calendarDateOutlined,
+            .clockFilled,
+            .clockOutlined,
+            .clockCheckFilled,
+            .clockCheckOutlined,
+            .clockPlusFilled,
+            .clockPlusOutlined,
+            .clockSnoozeFilled,
+            .clockSnoozeOutlined,
+        ]
+    }
+
+    enum Users {
+        public static let userFilled: MDSIcon = .userFilled
+        public static let userOutlined: MDSIcon = .userOutlined
+        public static let userCheckFilled: MDSIcon = .userCheckFilled
+        public static let userCheckOutlined: MDSIcon = .userCheckOutlined
+        public static let userEditFilled: MDSIcon = .userEditFilled
+        public static let userEditOutlined: MDSIcon = .userEditOutlined
+        public static let userMinusFilled: MDSIcon = .userMinusFilled
+        public static let userMinusOutlined: MDSIcon = .userMinusOutlined
+        public static let userPlusFilled: MDSIcon = .userPlusFilled
+        public static let userPlusOutlined: MDSIcon = .userPlusOutlined
+        public static let userXFilled: MDSIcon = .userXFilled
+        public static let userXOutlined: MDSIcon = .userXOutlined
+        public static let usersFilled: MDSIcon = .usersFilled
+        public static let usersOutlined: MDSIcon = .usersOutlined
+        public static let usersCheckFilled: MDSIcon = .usersCheckFilled
+        public static let usersCheckOutlined: MDSIcon = .usersCheckOutlined
+        public static let usersMinusFilled: MDSIcon = .usersMinusFilled
+        public static let usersMinusOutlined: MDSIcon = .usersMinusOutlined
+        public static let usersPlusFilled: MDSIcon = .usersPlusFilled
+        public static let usersPlusOutlined: MDSIcon = .usersPlusOutlined
+        public static let usersXFilled: MDSIcon = .usersXFilled
+        public static let usersXOutlined: MDSIcon = .usersXOutlined
+
+        public static let all: [MDSIcon] = [
+            .userFilled,
+            .userOutlined,
+            .userCheckFilled,
+            .userCheckOutlined,
+            .userEditFilled,
+            .userEditOutlined,
+            .userMinusFilled,
+            .userMinusOutlined,
+            .userPlusFilled,
+            .userPlusOutlined,
+            .userXFilled,
+            .userXOutlined,
+            .usersFilled,
+            .usersOutlined,
+            .usersCheckFilled,
+            .usersCheckOutlined,
+            .usersMinusFilled,
+            .usersMinusOutlined,
+            .usersPlusFilled,
+            .usersPlusOutlined,
+            .usersXFilled,
+            .usersXOutlined,
+        ]
+    }
+
+    enum Logo {
+        public static let appleFilled: MDSIcon = .appleFilled
+        public static let behanceFilled: MDSIcon = .behanceFilled
+        public static let facebookFilled: MDSIcon = .facebookFilled
+        public static let githubFilled: MDSIcon = .githubFilled
+        public static let googleColorFilled: MDSIcon = .googleColorFilled
+        public static let googleMonoFilled: MDSIcon = .googleMonoFilled
+        public static let instagramFilled: MDSIcon = .instagramFilled
+        public static let kakaoFilled: MDSIcon = .kakaoFilled
+        public static let linkedinFilled: MDSIcon = .linkedinFilled
+        public static let playstoreFilled: MDSIcon = .playstoreFilled
+
+        public static let all: [MDSIcon] = [
+            .appleFilled,
+            .behanceFilled,
+            .facebookFilled,
+            .githubFilled,
+            .googleColorFilled,
+            .googleMonoFilled,
+            .instagramFilled,
+            .kakaoFilled,
+            .linkedinFilled,
+            .playstoreFilled,
+        ]
     }
 }
