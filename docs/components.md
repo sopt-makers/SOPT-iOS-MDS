@@ -11,6 +11,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Callout](#callout)
 - [Chip](#chip)
 - [Dialog](#dialog)
+- [NavigationBar](#navigationbar)
 - [SnackBar](#snackbar)
 - [Tab](#tab)
 - [Tag](#tag)
@@ -268,6 +269,40 @@ dialog.onCheckBoxChanged = { isSelected in /* ... */ }
 | `.danger(primary…, secondary…)` | danger 스타일 primary + secondary |
 
 `checkBoxTitle`을 넘기면 내부에 `MDSCheckbox`가 생성되며, `isCheckBoxSelected`로 외부에서 선택 상태를 읽고 쓸 수 있습니다.
+
+---
+
+## NavigationBar
+
+화면 최상단에서 현재 위치를 알려주고, 뒤로가기와 주요 액션을 제공합니다. 파라미터는 Figma `TopNavigation (Mobile)`의 Component properties와 1:1로 대응합니다.
+
+```swift
+let navigationBar = MDSNavigationBar(
+    leftIcon: true,
+    title: .title("Title"),
+    rightIcons: [.heartOutlined, .heartOutlined, .heartOutlined],
+    rightButton: .textButton("text button")
+)
+navigationBar.onLeftIconTap = { /* 뒤로가기 */ }
+navigationBar.onRightIconTap = { index in /* rightIcons[index] */ }
+navigationBar.onRightButtonTap = { /* ... */ }
+```
+
+| 파라미터 | Figma | 타입 | 기본값 | 설명 |
+|---|---|---|---|---|
+| `leftIcon` | `LeftIcon` | `Bool` | `true` | 좌측 뒤로가기(chevron) 아이콘. 최상위 화면은 `false`, 하위 화면(depth 2 이상)은 `true` |
+| `title` | `Title` + `TitleSlot` | `TitleSlot?` (`.title(String)` / `.logo` / `.custom(UIView)`) | `nil` | `nil`이면 `Title=false` |
+| `rightIcons` | `RightIcon01~03` | `[MDSIcon]` | `[]` | 앞에서부터 01, 02, 03 순서. 최대 3개까지 노출되고 초과분은 무시됩니다 |
+| `rightButton` | `RightButton` + Button Variant | `RightButton?` (`.textButton(String)` / `.actionButton(String)`) | `nil` | `nil`이면 `RightButton=false` |
+
+- 모든 파라미터는 생성 후 대입으로 변경 가능합니다.
+- 높이는 44로 고정이며, 좌우(leading/trailing) 제약이 필요합니다.
+- `.title`은 1줄이며 길면 말줄임(…) 처리됩니다. 우측 아이콘/버튼이 먼저 공간을 차지하고 타이틀이 남는 영역을 채웁니다.
+- `.logo`는 SOPT 로고를 원본 비율(65×22.38)로 노출합니다.
+- `.custom(UIView)` — Slot(높이 40)에 원하는 뷰를 넣습니다. 좌측·세로 중앙 정렬되며 Slot 너비를 넘지 않습니다. 높이는 40 이하로 맞춰주세요. `title`이 바뀌면 이전 커스텀 뷰는 제거됩니다.
+- `.textButton`은 `MDSTextButton(.emphasis, .medium)`, `.actionButton`은 `MDSActionButton(.primary, .small)`로 그려집니다.
+- `onRightIconTap: ((Int) -> Void)?` — 탭한 아이콘의 `rightIcons` index(0부터)를 전달합니다.
+- 디자인 가이드: 강조가 필요한 단일 액션(완료, 등록 등)은 `.actionButton`, 보조 액션은 `.textButton`을 사용합니다. 아이콘과 버튼을 많이 쓰면 타이틀 영역이 좁아지니 타이틀 텍스트가 잘리지 않는지 확인하세요.
 
 ---
 
