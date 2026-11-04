@@ -43,6 +43,8 @@ final class MDSTextMenuItem: UIControl {
         let view = UIStackView()
         view.axis = .vertical
         view.alignment = .leading
+        view.isLayoutMarginsRelativeArrangement = true
+        view.layoutMargins = LayoutToken.textInsets
         return view
     }()
 
@@ -149,5 +151,7 @@ private extension MDSTextMenuItem {
             bottom: BaseSpacing.Base.s8,
             right: BaseSpacing.Base.s8
         )
+        // 제목과 설명을 감싼 영역의 안쪽 padding. 텍스트가 체크 아이콘에 붙지 않게 오른쪽에 10을 둔다.
+        static let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: BaseSpacing.Base.s10)
     }
 }
