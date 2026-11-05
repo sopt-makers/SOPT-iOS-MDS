@@ -14,16 +14,6 @@ final class MDSTextMenuItem: MDSMenuItemControl {
         didSet { updateCheck() }
     }
 
-    var title: String {
-        get { textView.title }
-        set { textView.title = newValue }
-    }
-
-    var itemDescription: String? {
-        get { textView.descriptionText }
-        set { textView.descriptionText = newValue }
-    }
-
     // MARK: - Subviews
 
     private let textView: MDSMenuTextView

@@ -10,16 +10,6 @@ final class MDSIconMenuItem: MDSMenuItemControl {
 
     // MARK: - Properties
 
-    var title: String {
-        get { textView.title }
-        set { textView.title = newValue }
-    }
-
-    var itemDescription: String? {
-        get { textView.descriptionText }
-        set { textView.descriptionText = newValue }
-    }
-
     var icon: MDSIcon? {
         didSet { updateIcon() }
     }

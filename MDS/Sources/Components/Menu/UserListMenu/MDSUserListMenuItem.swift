@@ -8,22 +8,6 @@ import UIKit
 /// `MDSUserListMenu`의 한 줄. 아바타, 제목, 설명(옵션)을 보여준다.
 final class MDSUserListMenuItem: MDSMenuItemControl {
 
-    // MARK: - Properties
-
-    var title: String {
-        get { textView.title }
-        set { textView.title = newValue }
-    }
-
-    var itemDescription: String? {
-        get { textView.descriptionText }
-        set { textView.descriptionText = newValue }
-    }
-
-    var image: UIImage? {
-        didSet { avatar.image = image }
-    }
-
     // MARK: - Subviews
 
     private let avatar: MDSAvatar
@@ -33,7 +17,6 @@ final class MDSUserListMenuItem: MDSMenuItemControl {
 
     init(title: String, description: String?, image: UIImage?) {
         self.textView = MDSMenuTextView(title: title, description: description)
-        self.image = image
         self.avatar = MDSAvatar(size: LayoutToken.avatarSize, variant: .subtle, image: image)
         super.init(spacing: LayoutToken.contentSpacing, insets: LayoutToken.contentInsets)
         setupContent()
