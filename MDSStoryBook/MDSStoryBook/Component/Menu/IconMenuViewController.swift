@@ -44,5 +44,21 @@ final class IconMenuViewController: MenuCatalogViewController {
             caption: "항목마다 icon 유무와 종류를 다르게 줄 수 있어요.",
             rows: [wrapLeading(MDSIconMenu(items: mixedItems))]
         )
+        addSection(
+            title: "title + description",
+            caption: "description이 있으면 제목 아래에 한 줄로 보여요. 아이콘은 제목과 설명 두 줄의 세로 가운데에 놓여요.",
+            rows: [wrapLeading(MDSIconMenu(items: (1...3).map {
+                MDSIconMenu.Item(title: "Menu \($0)", description: "description...", icon: .heartFilled)
+            }))]
+        )
+        addSection(
+            title: "description 혼합",
+            caption: "항목마다 description 유무를 다르게 줄 수 있어요. 설명이 없는 항목은 제목만 보여요.",
+            rows: [wrapLeading(MDSIconMenu(items: [
+                .init(title: "알림", description: "새 소식을 받아요", icon: .bellOutlined),
+                .init(title: "공유", icon: .sendOutlined),
+                .init(title: "설명만 있는 항목", description: "아이콘 없음"),
+            ]))]
+        )
     }
 }

@@ -54,5 +54,21 @@ final class CheckboxMenuViewController: MenuCatalogViewController {
             caption: "코드로 체크를 바꿀 수 있고 onSelect는 호출되지 않아요.",
             rows: [wrapLeading(programmatic), button]
         )
+        addSection(
+            title: "title + description",
+            caption: "description이 있으면 제목 아래에 한 줄로 보여요. 체크박스는 제목과 설명 두 줄의 세로 가운데에 놓여요.",
+            rows: [wrapLeading(MDSCheckboxMenu(items: (1...3).map {
+                MDSCheckboxMenu.Item(title: "Label \($0)", description: "description...", isChecked: $0 == 1)
+            }))]
+        )
+        addSection(
+            title: "description 혼합",
+            caption: "항목마다 description 유무를 다르게 줄 수 있어요. 설명이 없는 항목은 제목만 보여요.",
+            rows: [wrapLeading(MDSCheckboxMenu(items: [
+                .init(title: "Label", description: "description...", isChecked: true),
+                .init(title: "Label"),
+                .init(title: "Label", description: "description..."),
+            ]))]
+        )
     }
 }
