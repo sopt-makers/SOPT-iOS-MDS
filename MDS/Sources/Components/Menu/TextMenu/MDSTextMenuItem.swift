@@ -15,35 +15,18 @@ final class MDSTextMenuItem: MDSMenuItemControl {
     }
 
     var title: String {
-        didSet { updateContent() }
+        get { textView.title }
+        set { textView.title = newValue }
     }
 
     var itemDescription: String? {
-        didSet { updateContent() }
+        get { textView.descriptionText }
+        set { textView.descriptionText = newValue }
     }
 
     // MARK: - Subviews
 
-    private let textStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.alignment = .leading
-        view.isLayoutMarginsRelativeArrangement = true
-        view.layoutMargins = LayoutToken.textInsets
-        return view
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        return label
-    }()
+    private let textView: MDSMenuTextView
 
     private let checkImageView: UIImageView = {
         let view = UIImageView()
@@ -55,8 +38,11 @@ final class MDSTextMenuItem: MDSMenuItemControl {
     // MARK: - Init
 
     init(title: String, description: String?, isChecked: Bool) {
-        self.title = title
-        self.itemDescription = description
+        self.textView = MDSMenuTextView(
+            title: title,
+            description: description,
+            trailingPadding: LayoutToken.textTrailingPadding
+        )
         super.init(spacing: 0, insets: LayoutToken.contentInsets)
         setupContent()
         isSelected = isChecked
@@ -65,17 +51,10 @@ final class MDSTextMenuItem: MDSMenuItemControl {
     // MARK: - Setup
 
     private func setupContent() {
-        contentStackView.addArrangedSubview(textStackView)
+        contentStackView.addArrangedSubview(textView)
         contentStackView.addArrangedSubview(checkImageView)
-        textStackView.addArrangedSubview(titleLabel)
-        textStackView.addArrangedSubview(descriptionLabel)
 
         // 선택 여부로 메뉴 폭이 바뀌지 않도록 체크 아이콘 자리는 항상 확보하고, 선택이 아닐 때는 투명하게만 둔다.
-        textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        // 텍스트가 길면 체크 아이콘을 밀지 않고 텍스트가 먼저 줄어들도록 압축 우선순위를 낮춘다.
-        textStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         checkImageView.setContentHuggingPriority(.required, for: .horizontal)
         checkImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
@@ -85,23 +64,10 @@ final class MDSTextMenuItem: MDSMenuItemControl {
         ])
 
         checkImageView.setIcon(.checkOutlined, tintColor: SemanticColor.Fg.Secondary.default)
-        updateContent()
         updateCheck()
     }
 
     // MARK: - Content
-
-    private func updateContent() {
-        titleLabel.text = title
-        titleLabel.setTypography(Typography.label2, textColor: SemanticColor.Fg.Neutral.bold)
-
-        let hasDescription = !(itemDescription ?? "").isEmpty
-        descriptionLabel.isHidden = !hasDescription
-        if hasDescription {
-            descriptionLabel.text = itemDescription
-            descriptionLabel.setTypography(Typography.label3, textColor: SemanticColor.Fg.Neutral.subtle)
-        }
-    }
 
     private func updateCheck() {
         checkImageView.alpha = isSelected ? 1 : 0
@@ -120,7 +86,7 @@ private extension MDSTextMenuItem {
             bottom: BaseSpacing.Base.s8,
             right: BaseSpacing.Base.s8
         )
-        // 제목과 설명을 감싼 영역의 안쪽 padding. 텍스트가 체크 아이콘에 붙지 않게 오른쪽에 10을 둔다.
-        static let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: BaseSpacing.Base.s10)
+        // 제목과 설명을 감싼 영역의 오른쪽 안쪽 padding. 텍스트가 체크 아이콘에 붙지 않게 한다.
+        static let textTrailingPadding = BaseSpacing.Base.s10
     }
 }

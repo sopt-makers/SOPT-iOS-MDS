@@ -5,17 +5,23 @@
 
 import UIKit
 
-/// `MDSIconMenu`의 한 줄. 아이콘과 제목을 보여준다.
+/// `MDSIconMenu`의 한 줄. 아이콘과 제목(설명은 옵션)을 보여준다.
 final class MDSIconMenuItem: MDSMenuItemControl {
 
     // MARK: - Properties
 
     var title: String {
-        didSet { updateContent() }
+        get { textView.title }
+        set { textView.title = newValue }
+    }
+
+    var itemDescription: String? {
+        get { textView.descriptionText }
+        set { textView.descriptionText = newValue }
     }
 
     var icon: MDSIcon? {
-        didSet { updateContent() }
+        didSet { updateIcon() }
     }
 
     // MARK: - Subviews
@@ -27,16 +33,12 @@ final class MDSIconMenuItem: MDSMenuItemControl {
         return view
     }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        return label
-    }()
+    private let textView: MDSMenuTextView
 
     // MARK: - Init
 
-    init(title: String, icon: MDSIcon?) {
-        self.title = title
+    init(title: String, description: String? = nil, icon: MDSIcon?) {
+        self.textView = MDSMenuTextView(title: title, description: description)
         self.icon = icon
         super.init(spacing: LayoutToken.contentSpacing, insets: LayoutToken.contentInsets)
         setupContent()
@@ -46,7 +48,7 @@ final class MDSIconMenuItem: MDSMenuItemControl {
 
     private func setupContent() {
         contentStackView.addArrangedSubview(iconImageView)
-        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(textView)
 
         // 아이콘이 숨겨지면 UIStackView가 너비 0 제약을 추가하므로 충돌하지 않도록 우선순위를 낮춘다.
         let iconWidthConstraint = iconImageView.widthAnchor.constraint(equalToConstant: LayoutToken.iconSize)
@@ -57,14 +59,12 @@ final class MDSIconMenuItem: MDSMenuItemControl {
             iconImageView.heightAnchor.constraint(equalToConstant: LayoutToken.iconSize),
         ])
 
-        updateContent()
+        updateIcon()
     }
 
     // MARK: - Content
 
-    private func updateContent() {
-        titleLabel.text = title
-        titleLabel.setTypography(Typography.label2, textColor: SemanticColor.Fg.Neutral.bold)
+    private func updateIcon() {
         iconImageView.setIcon(icon, tintColor: SemanticColor.Fg.Neutral.bold)
     }
 }
