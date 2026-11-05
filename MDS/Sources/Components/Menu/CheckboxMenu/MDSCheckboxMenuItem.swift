@@ -88,7 +88,7 @@ private extension MDSCheckboxMenuItem {
 
     enum LayoutToken {
         static let minHeight: CGFloat = 40
-        static let leadingInset = BaseSpacing.Base.s8
+        static let leadingInset = BaseSpacing.Base.s10
         static let trailingInset = BaseSpacing.Base.s12
         static let verticalInset = BaseSpacing.Base.s8
     }
