@@ -50,7 +50,7 @@ public final class MDSTextMenu: UIView {
     /// 코드로 체크를 바꾼다. `onSelect`는 호출하지 않으며 범위를 벗어난 index는 무시한다.
     public func setChecked(_ isChecked: Bool, at index: Int) {
         guard menuItems.indices.contains(index) else { return }
-        menuItems[index].isChecked = isChecked
+        menuItems[index].isSelected = isChecked
         if isChecked {
             checkedIndices.insert(index)
         } else {
