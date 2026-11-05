@@ -80,10 +80,3 @@ class MDSMenuItemControl: UIControl {
         backgroundColor = isHighlighted ? SemanticColor.Bg.Neutral.Ghost.hover : .clear
     }
 }
-
-// MARK: - Layout Token
-
-enum MenuLayoutToken {
-    static let itemRadius = BaseRadius.Base.r8
-    static let itemMinWidth: CGFloat = 80
-}
