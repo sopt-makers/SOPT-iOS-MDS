@@ -156,6 +156,10 @@ public final class MDSNavigationBar: UIView {
         rightStackView.setContentHuggingPriority(.required, for: .horizontal)
         rightStackView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
+        // 공간이 부족하면 우측 콘텐츠와 겹치지 않도록 로고가 비율을 유지한 채 줄어듭니다.
+        let logoWidthConstraint = logoImageView.widthAnchor.constraint(equalToConstant: 65)
+        logoWidthConstraint.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 44),
 
@@ -171,8 +175,9 @@ public final class MDSNavigationBar: UIView {
             titleLabel.centerYAnchor.constraint(equalTo: titleContainerView.centerYAnchor),
 
             logoImageView.leadingAnchor.constraint(equalTo: titleContainerView.leadingAnchor, constant: BaseSpacing.Base.s4),
+            logoImageView.trailingAnchor.constraint(lessThanOrEqualTo: titleContainerView.trailingAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: titleContainerView.centerYAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 65),
+            logoWidthConstraint,
             logoImageView.heightAnchor.constraint(equalToConstant: 22.38),
         ])
     }
