@@ -111,6 +111,12 @@ final class NavigationBarViewController: UIViewController {
                 self?.updateRightButton()
             },
         ]))
+
+        let usageButton = MDSActionButton(variant: .secondary, size: .medium, title: "실제 사용 예시 보기")
+        usageButton.addAction(UIAction { [weak self] _ in
+            self?.navigationController?.pushViewController(NavigationBarUsageHomeViewController(), animated: true)
+        }, for: .touchUpInside)
+        contentStack.addArrangedSubview(usageButton)
     }
 
     // MARK: - Update
