@@ -22,7 +22,7 @@ public final class MDSIconMenu: UIView {
 
     public init(items: [Item], onSelect: ((Int) -> Void)? = nil) {
         self.listView = MDSMenuListView(
-            items: items.map { MDSIconMenuItem(title: $0.title, icon: $0.icon) },
+            items: items.map { MDSIconMenuItem(title: $0.title, description: $0.description, icon: $0.icon) },
             itemSpacing: LayoutToken.itemSpacing
         )
         super.init(frame: .zero)

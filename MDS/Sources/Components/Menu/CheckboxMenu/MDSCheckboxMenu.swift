@@ -27,7 +27,9 @@ public final class MDSCheckboxMenu: UIView {
 
     public init(items: [Item], onSelect: ((Int) -> Void)? = nil) {
         self.listView = MDSMenuListView(
-            items: items.map { MDSCheckboxMenuItem(title: $0.title, isChecked: $0.isChecked) },
+            items: items.map {
+                MDSCheckboxMenuItem(title: $0.title, description: $0.description, isChecked: $0.isChecked)
+            },
             itemSpacing: LayoutToken.itemSpacing,
             minWidth: LayoutToken.minWidth,
             selection: .multiple
