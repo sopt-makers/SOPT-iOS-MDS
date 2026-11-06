@@ -7,6 +7,10 @@ on:
       - 'tokens/**'
   workflow_dispatch:
 
+concurrency:
+  group: style-dictionary-token-sync
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: macos-latest
@@ -19,6 +23,12 @@ jobs:
         with:
           ref: token-sync
           fetch-depth: 0
+
+      - name: Sync token-sync with default
+        run: |
+          git fetch origin default
+          git merge origin/default --no-edit
+          git push origin token-sync
 
       - uses: actions/setup-node@v4
         with:
