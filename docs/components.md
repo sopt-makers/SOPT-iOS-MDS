@@ -334,27 +334,13 @@ final class DetailViewController: UIViewController {
 }
 ```
 
-기존 `UINavigationController`에 push하는 경우, `MDSNavigationBar`를 쓰는 각 VC에서 시스템 바를 화면이 보일 때 숨기고 사라질 때 되돌립니다.
-
-```swift
-override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(true, animated: animated)
-}
-
-override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-    navigationController?.setNavigationBarHidden(false, animated: animated)
-}
-```
-
-시스템 바를 숨기면 스와이프 뒤로가기도 막힙니다. 앱 전체에서 시스템 바를 숨기고 스와이프도 유지하려면 앱에 내비게이션 컨트롤러 클래스를 만들어 한 번만 설정하세요. 아래 `AppNavigationController`는 MDS에 포함되어 있지 않습니다.
+`UINavigationController`에 push하는 경우 시스템 바를 숨겨야 합니다. 시스템 바를 숨기면 스와이프 뒤로가기도 막히므로 앱에 내비게이션 컨트롤러 클래스를 만들어 복구합니다. 아래 `AppNavigationController`는 MDS에 포함되어 있지 않습니다.
 
 ```swift
 final class AppNavigationController: UINavigationController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBarHidden(true, animated: false)
+        setNavigationBarHidden(true, animated: false) // 혼합 스택에서는 이 줄을 뺍니다.
         interactivePopGestureRecognizer?.delegate = self
     }
 
@@ -364,7 +350,25 @@ final class AppNavigationController: UINavigationController, UIGestureRecognizer
 }
 ```
 
-시스템 바를 쓰는 화면이 같은 스택에 섞여 있다면 `setNavigationBarHidden(true, animated: false)` 줄을 빼세요. 그대로 쓰면 그 화면들의 시스템 바도 사라집니다. 숨김은 위의 VC별 코드로 처리합니다.
+시스템 바 숨김은 스택 구성에 맞춰 아래 두 방식 중 하나만 사용하세요.
+
+**스택의 모든 화면이 `MDSNavigationBar`를 쓰는 경우**: 위 클래스를 그대로 사용합니다. 전역으로 숨겨지므로 VC별 숨김 코드는 넣지 마세요. `setNavigationBarHidden(false, ...)`를 호출하면 시스템 바가 다시 표시되어, 전역 숨김에 의존하는 다음 화면에 바가 나타납니다.
+
+**시스템 바를 쓰는 화면이 같은 스택에 섞여 있는 경우**: 위 클래스에서 `setNavigationBarHidden(true, animated: false)` 줄을 빼세요. 그대로 쓰면 그 화면들의 시스템 바도 사라집니다. 대신 각 화면의 `viewWillAppear`에서 그 화면에 맞게 바 상태를 설정합니다.
+
+```swift
+// MDSNavigationBar를 쓰는 화면
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: animated)
+}
+
+// 시스템 바를 쓰는 화면
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: animated)
+}
+```
 
 ---
 
