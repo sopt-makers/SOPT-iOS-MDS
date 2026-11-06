@@ -19,6 +19,7 @@ public final class MDSAvatar: UIView {
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -92,6 +93,14 @@ public final class MDSAvatar: UIView {
     }
 
     private func setupLayout() {
+        // 이미지 크기와 상관없이 `size`로 크기를 고정한다. 넘치는 이미지는 잘린다.
+        // 프레임 기반 레이아웃(autoresizing)과 충돌하지 않도록 autoresizing mask 제약은 끈다.
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(equalToConstant: size),
+            heightAnchor.constraint(equalToConstant: size)
+        ])
+
         addSubview(profileImageView)
         NSLayoutConstraint.activate([
             profileImageView.topAnchor.constraint(equalTo: topAnchor),

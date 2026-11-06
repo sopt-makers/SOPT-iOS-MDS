@@ -185,7 +185,7 @@ private extension MDSCheckbox {
                 textColor = SemanticColor.Fg.Neutral.bold
             case (true, false):
                 backgroundColor = .clear
-                borderColor = SemanticColor.Stroke.Neutral.subtle
+                borderColor = SemanticColor.Stroke.Neutral.default
                 iconColor = .clear
                 textColor = SemanticColor.Fg.Neutral.bold
             case (false, true):
