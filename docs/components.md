@@ -11,6 +11,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Callout](#callout)
 - [Chip](#chip)
 - [Dialog](#dialog)
+- [NavigationBar](#navigationbar)
 - [SnackBar](#snackbar)
 - [Menu](#menu)
 - [Tab](#tab)
@@ -269,6 +270,105 @@ dialog.onCheckBoxChanged = { isSelected in /* ... */ }
 | `.danger(primary…, secondary…)` | danger 스타일 primary + secondary |
 
 `checkBoxTitle`을 넘기면 내부에 `MDSCheckbox`가 생성되며, `isCheckBoxSelected`로 외부에서 선택 상태를 읽고 쓸 수 있습니다.
+
+---
+
+## NavigationBar
+
+화면 최상단에서 현재 위치를 알려주고, 뒤로가기와 주요 액션을 제공합니다. 파라미터는 Figma `TopNavigation (Mobile)`의 Component properties와 1:1로 대응합니다.
+
+```swift
+let navigationBar = MDSNavigationBar(
+    leftIcon: true,
+    title: .title("Title"),
+    rightIcons: [.heartOutlined, .heartOutlined, .heartOutlined],
+    rightButton: .textButton("text button")
+)
+navigationBar.onLeftIconTap = { /* 뒤로가기 */ }
+navigationBar.onRightIconTap = { index in /* rightIcons[index] */ }
+navigationBar.onRightButtonTap = { /* ... */ }
+```
+
+| 파라미터 | Figma | 타입 | 기본값 | 설명 |
+|---|---|---|---|---|
+| `leftIcon` | `LeftIcon` | `Bool` | `true` | 좌측 뒤로가기(chevron) 아이콘. 최상위 화면은 `false`, 하위 화면(depth 2 이상)은 `true` |
+| `title` | `Title` + `TitleSlot` | `TitleSlot?` (`.title(String)` / `.logo` / `.custom(UIView)`) | `nil` | `nil`이면 `Title=false` |
+| `rightIcons` | `RightIcon01~03` | `[MDSIcon]` | `[]` | 앞에서부터 01, 02, 03 순서. 최대 3개까지 노출되고 초과분은 무시됩니다 |
+| `rightButton` | `RightButton` + Button Variant | `RightButton?` (`.textButton(String)` / `.actionButton(String)`) | `nil` | `nil`이면 `RightButton=false` |
+
+- 모든 파라미터는 생성 후 대입으로 변경 가능합니다.
+- 높이는 44로 고정이며, 좌우(leading/trailing) 제약이 필요합니다.
+- `.title`은 1줄이며 길면 말줄임(…) 처리됩니다. 우측 아이콘/버튼이 먼저 공간을 차지하고 타이틀이 남는 영역을 채웁니다.
+- `.logo`는 SOPT 로고를 원본 비율(65×22.38)로 노출합니다.
+- `.custom(UIView)` — Slot(높이 40)에 원하는 뷰를 넣습니다. 좌측·세로 중앙 정렬되며 Slot 너비를 넘지 않습니다. 높이는 40 이하로 맞춰주세요. `title`이 바뀌면 이전 커스텀 뷰는 제거됩니다.
+- `.textButton`은 `MDSTextButton(.emphasis, .medium)`, `.actionButton`은 `MDSActionButton(.primary, .small)`로 그려집니다.
+- `onRightIconTap: ((Int) -> Void)?` — 탭한 아이콘의 `rightIcons` index(0부터)를 전달합니다.
+- 디자인 가이드: 강조가 필요한 단일 액션(완료, 등록 등)은 `.actionButton`, 보조 액션은 `.textButton`을 사용합니다. 아이콘과 버튼을 많이 쓰면 타이틀 영역이 좁아지니 타이틀 텍스트가 잘리지 않는지 확인하세요.
+
+### 화면에 적용하기
+
+> **사용처에서 직접 설정해야 합니다.** MDS는 바 UI와 탭 콜백만 제공합니다. `import MDS`만으로는 화면 부착, 뒤로가기, 시스템 바 숨김, 스와이프 뒤로가기가 처리되지 않으며, 아래 코드는 모두 앱에 작성하는 예시입니다.
+
+`MDSNavigationBar`는 `UIView`이므로 시스템 바 대신 화면에 subview로 붙입니다. 뒤로가기는 자동으로 연결되지 않으니 `onLeftIconTap`에 직접 지정하세요.
+
+```swift
+final class DetailViewController: UIViewController {
+    private let navigationBar = MDSNavigationBar(title: .title("상세"))
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = SemanticColor.Bg.Layer.basement // 상태바 영역 색을 바와 맞춥니다.
+
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navigationBar)
+        NSLayoutConstraint.activate([
+            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        navigationBar.onLeftIconTap = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+}
+```
+
+`UINavigationController`에 push하는 경우 시스템 바를 숨겨야 합니다. 시스템 바를 숨기면 스와이프 뒤로가기도 막히므로 앱에 내비게이션 컨트롤러 클래스를 만들어 복구합니다. 아래 `AppNavigationController`는 MDS에 포함되어 있지 않습니다.
+
+```swift
+final class AppNavigationController: UINavigationController, UIGestureRecognizerDelegate {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setNavigationBarHidden(true, animated: false) // 혼합 스택에서는 이 줄을 뺍니다.
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        viewControllers.count > 1
+    }
+}
+```
+
+시스템 바 숨김은 스택 구성에 맞춰 아래 두 방식 중 하나만 사용하세요.
+
+**스택의 모든 화면이 `MDSNavigationBar`를 쓰는 경우**: 위 클래스를 그대로 사용합니다. 전역으로 숨겨지므로 VC별 숨김 코드는 넣지 마세요. `setNavigationBarHidden(false, ...)`를 호출하면 시스템 바가 다시 표시되어, 전역 숨김에 의존하는 다음 화면에 바가 나타납니다.
+
+**시스템 바를 쓰는 화면이 같은 스택에 섞여 있는 경우**: 위 클래스에서 `setNavigationBarHidden(true, animated: false)` 줄을 빼세요. 그대로 쓰면 그 화면들의 시스템 바도 사라집니다. 대신 각 화면의 `viewWillAppear`에서 그 화면에 맞게 바 상태를 설정합니다.
+
+```swift
+// MDSNavigationBar를 쓰는 화면
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: animated)
+}
+
+// 시스템 바를 쓰는 화면
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: animated)
+}
+```
 
 ---
 
