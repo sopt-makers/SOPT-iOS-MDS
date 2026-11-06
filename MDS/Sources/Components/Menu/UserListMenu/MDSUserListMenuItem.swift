@@ -5,125 +5,34 @@
 
 import UIKit
 
-/// `MDSUserListMenu`의 한 줄. 모바일에는 hover가 없어서 누르고 있는 동안(`isHighlighted`)을 Hover로 표현한다.
-final class MDSUserListMenuItem: UIControl {
-
-    // MARK: - Properties
-
-    override var isHighlighted: Bool {
-        didSet { updateAppearance() }
-    }
-
-    var title: String {
-        didSet { updateAppearance() }
-    }
-
-    var itemDescription: String? {
-        didSet { updateAppearance() }
-    }
-
-    var image: UIImage? {
-        didSet { avatar.image = image }
-    }
+/// `MDSUserListMenu`의 한 줄. 아바타, 제목, 설명(옵션)을 보여준다.
+final class MDSUserListMenuItem: MDSMenuItemControl {
 
     // MARK: - Subviews
 
     private let avatar: MDSAvatar
-
-    private let contentStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.alignment = .center
-        view.spacing = LayoutToken.contentSpacing
-        view.isLayoutMarginsRelativeArrangement = true
-        view.layoutMargins = LayoutToken.contentInsets
-        view.isUserInteractionEnabled = false
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private let textStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.alignment = .leading
-        return view
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        return label
-    }()
+    private let textView: MDSMenuTextView
 
     // MARK: - Init
 
     init(title: String, description: String?, image: UIImage?) {
-        self.title = title
-        self.itemDescription = description
-        self.image = image
+        self.textView = MDSMenuTextView(title: title, description: description)
         self.avatar = MDSAvatar(size: LayoutToken.avatarSize, variant: .subtle, image: image)
-        super.init(frame: .zero)
-        setup()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(spacing: LayoutToken.contentSpacing, insets: LayoutToken.contentInsets)
+        setupContent()
     }
 
     // MARK: - Setup
 
-    private func setup() {
-        layer.cornerRadius = BaseRadius.Base.r8
-        clipsToBounds = true
-
+    private func setupContent() {
         avatar.isUserInteractionEnabled = false
 
         // 텍스트가 길어도 아바타는 줄어들거나 늘어나지 않고, 텍스트가 먼저 줄어들도록 우선순위를 둔다.
         avatar.setContentHuggingPriority(.required, for: .horizontal)
         avatar.setContentCompressionResistancePriority(.required, for: .horizontal)
-        textStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        descriptionLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        addSubview(contentStackView)
         contentStackView.addArrangedSubview(avatar)
-        contentStackView.addArrangedSubview(textStackView)
-        textStackView.addArrangedSubview(titleLabel)
-        textStackView.addArrangedSubview(descriptionLabel)
-
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            widthAnchor.constraint(greaterThanOrEqualToConstant: LayoutToken.minWidth),
-        ])
-
-        updateAppearance()
-    }
-
-    // MARK: - Appearance
-
-    private func updateAppearance() {
-        backgroundColor = isHighlighted ? SemanticColor.Bg.Neutral.Ghost.hover : .clear
-
-        titleLabel.text = title
-        titleLabel.setTypography(Typography.label2, textColor: SemanticColor.Fg.Neutral.bold)
-
-        let hasDescription = !(itemDescription ?? "").isEmpty
-        descriptionLabel.isHidden = !hasDescription
-        if hasDescription {
-            descriptionLabel.text = itemDescription
-            descriptionLabel.setTypography(Typography.label3, textColor: SemanticColor.Fg.Neutral.subtle)
-        }
+        contentStackView.addArrangedSubview(textView)
     }
 }
 
@@ -132,7 +41,6 @@ final class MDSUserListMenuItem: UIControl {
 private extension MDSUserListMenuItem {
 
     enum LayoutToken {
-        static let minWidth: CGFloat = 80
         static let avatarSize: CGFloat = 32
         static let contentSpacing = BaseSpacing.Base.s12
         static let contentInsets = UIEdgeInsets(
