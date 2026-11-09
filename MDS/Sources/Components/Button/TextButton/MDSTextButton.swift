@@ -127,13 +127,8 @@ public final class MDSTextButton: UIControl {
             customForeground: titleColor
         )
         
-        textLabel.attributedText = NSAttributedString(
-            string: title,
-            attributes: sizeToken.typography.attributedStringAttributes(
-                foregroundColor: colorToken.foreground,
-                alignment: .center
-            )
-        )
+        textLabel.text = title
+        textLabel.setTypography(sizeToken.typography, textColor: colorToken.foreground)
 
         iconImageView.setIcon(icon, tintColor: colorToken.foreground)
     }

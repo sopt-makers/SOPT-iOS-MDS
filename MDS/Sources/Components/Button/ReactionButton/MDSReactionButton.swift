@@ -151,21 +151,19 @@ public final class MDSReactionButton: UIControl {
     private func updateAppearance() {
         let sizeToken = SizeToken(size: size)
         let colorToken = ColorToken(isSelected: isSelected, isEnabled: isEnabled)
-        let textAttributes = sizeToken.typography.attributedStringAttributes(
-            foregroundColor: colorToken.foreground,
-            alignment: .center
-        )
-        
+
         contentStackView.spacing = sizeToken.itemGap
         
         leadingImageView.setIcon(icon, tint: iconTint, tintColor: colorToken.foreground)
         trailingImageView.setIcon(trailingIcon, tint: trailingIconTint, tintColor: colorToken.foreground)
 
-        titleLabel.attributedText = NSAttributedString(string: title, attributes: textAttributes)
+        titleLabel.text = title
+        titleLabel.setTypography(sizeToken.typography, textColor: colorToken.foreground)
 
         if let count {
             countLabel.isHidden = false
-            countLabel.attributedText = NSAttributedString(string: "\(count)", attributes: textAttributes)
+            countLabel.text = "\(count)"
+            countLabel.setTypography(sizeToken.typography, textColor: colorToken.foreground)
             accessibilityLabel = "\(title) \(count)"
         } else {
             countLabel.isHidden = true
