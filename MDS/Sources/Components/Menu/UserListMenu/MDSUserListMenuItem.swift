@@ -11,12 +11,12 @@ final class MDSUserListMenuItem: MDSMenuItemControl {
     // MARK: - Subviews
 
     private let avatar: MDSAvatar
-    private let textView: MDSMenuTextView
+    private let textStackView: MDSMenuTextStackView
 
     // MARK: - Init
 
     init(title: String, description: String?, image: UIImage?) {
-        self.textView = MDSMenuTextView(title: title, description: description)
+        self.textStackView = MDSMenuTextStackView(title: title, description: description)
         self.avatar = MDSAvatar(size: LayoutToken.avatarSize, variant: .subtle, image: image)
         super.init(spacing: LayoutToken.contentSpacing, insets: LayoutToken.contentInsets)
         setupContent()
@@ -32,7 +32,7 @@ final class MDSUserListMenuItem: MDSMenuItemControl {
         avatar.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         contentStackView.addArrangedSubview(avatar)
-        contentStackView.addArrangedSubview(textView)
+        contentStackView.addArrangedSubview(textStackView)
     }
 }
 

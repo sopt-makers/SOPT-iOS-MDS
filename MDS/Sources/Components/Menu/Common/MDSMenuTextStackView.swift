@@ -1,5 +1,5 @@
 //
-//  MDSMenuTextView.swift
+//  MDSMenuTextStackView.swift
 //  MDS
 //
 
@@ -7,7 +7,7 @@ import UIKit
 
 /// Menu 아이템의 제목과 설명(옵션) 영역. 설명이 `nil`이거나 비어 있으면 제목만 보인다.
 /// 긴 텍스트는 이 영역이 먼저 줄어들어서 옆의 아이콘, 아바타, 체크를 밀어내지 않는다.
-final class MDSMenuTextView: UIStackView {
+final class MDSMenuTextStackView: UIStackView {
 
     // MARK: - Properties
 

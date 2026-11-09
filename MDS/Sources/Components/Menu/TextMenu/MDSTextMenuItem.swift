@@ -16,7 +16,7 @@ final class MDSTextMenuItem: MDSMenuItemControl {
 
     // MARK: - Subviews
 
-    private let textView: MDSMenuTextView
+    private let textStackView: MDSMenuTextStackView
 
     private let checkImageView: UIImageView = {
         let view = UIImageView()
@@ -28,7 +28,7 @@ final class MDSTextMenuItem: MDSMenuItemControl {
     // MARK: - Init
 
     init(title: String, description: String?, isChecked: Bool) {
-        self.textView = MDSMenuTextView(
+        self.textStackView = MDSMenuTextStackView(
             title: title,
             description: description,
             trailingPadding: LayoutToken.textTrailingPadding
@@ -41,7 +41,7 @@ final class MDSTextMenuItem: MDSMenuItemControl {
     // MARK: - Setup
 
     private func setupContent() {
-        contentStackView.addArrangedSubview(textView)
+        contentStackView.addArrangedSubview(textStackView)
         contentStackView.addArrangedSubview(checkImageView)
 
         // 선택 여부로 메뉴 폭이 바뀌지 않도록 체크 아이콘 자리는 항상 확보하고, 선택이 아닐 때는 투명하게만 둔다.

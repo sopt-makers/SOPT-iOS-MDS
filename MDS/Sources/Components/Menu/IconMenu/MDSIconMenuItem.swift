@@ -23,12 +23,12 @@ final class MDSIconMenuItem: MDSMenuItemControl {
         return view
     }()
 
-    private let textView: MDSMenuTextView
+    private let textStackView: MDSMenuTextStackView
 
     // MARK: - Init
 
     init(title: String, description: String? = nil, icon: MDSIcon?) {
-        self.textView = MDSMenuTextView(title: title, description: description)
+        self.textStackView = MDSMenuTextStackView(title: title, description: description)
         self.icon = icon
         super.init(spacing: LayoutToken.contentSpacing, insets: LayoutToken.contentInsets)
         setupContent()
@@ -38,7 +38,7 @@ final class MDSIconMenuItem: MDSMenuItemControl {
 
     private func setupContent() {
         contentStackView.addArrangedSubview(iconImageView)
-        contentStackView.addArrangedSubview(textView)
+        contentStackView.addArrangedSubview(textStackView)
 
         // 아이콘이 숨겨지면 UIStackView가 너비 0 제약을 추가하므로 충돌하지 않도록 우선순위를 낮춘다.
         let iconWidthConstraint = iconImageView.widthAnchor.constraint(equalToConstant: LayoutToken.iconSize)

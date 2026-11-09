@@ -6,7 +6,7 @@
 import UIKit
 
 /// `MDSCheckboxMenu`의 한 줄. 행 전체가 터치 영역이고, 안의 `MDSCheckbox`는 박스 모양만 그린다.
-/// 선택(`isSelected`)되면 체크박스가 켜진다. 제목과 설명(옵션)은 `MDSMenuTextView`가 보여준다.
+/// 선택(`isSelected`)되면 체크박스가 켜진다. 제목과 설명(옵션)은 `MDSMenuTextStackView`가 보여준다.
 final class MDSCheckboxMenuItem: MDSMenuItemControl {
 
     // MARK: - Properties
@@ -18,19 +18,19 @@ final class MDSCheckboxMenuItem: MDSMenuItemControl {
     // MARK: - Subviews
 
     private let checkbox: MDSCheckbox = {
-        // 제목은 MDSMenuTextView가 보여주므로 박스만 그린다.
+        // 제목은 MDSMenuTextStackView가 보여주므로 박스만 그린다.
         let checkbox = MDSCheckbox(size: .large)
         // 터치는 행 전체가 받고, 체크 토글은 컨테이너가 처리한다.
         checkbox.isUserInteractionEnabled = false
         return checkbox
     }()
 
-    private let textView: MDSMenuTextView
+    private let textStackView: MDSMenuTextStackView
 
     // MARK: - Init
 
     init(title: String, description: String? = nil, isChecked: Bool) {
-        self.textView = MDSMenuTextView(title: title, description: description)
+        self.textStackView = MDSMenuTextStackView(title: title, description: description)
         super.init(
             spacing: LayoutToken.contentSpacing,
             insets: LayoutToken.contentInsets,
@@ -38,7 +38,7 @@ final class MDSCheckboxMenuItem: MDSMenuItemControl {
             minHeight: LayoutToken.minHeight
         )
         contentStackView.addArrangedSubview(checkbox)
-        contentStackView.addArrangedSubview(textView)
+        contentStackView.addArrangedSubview(textStackView)
         isSelected = isChecked
     }
 }
