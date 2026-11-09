@@ -14,12 +14,15 @@ public struct MDSFont: @unchecked Sendable {
 
     public func attributedStringAttributes(
         foregroundColor: UIColor,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        paragraphStyle configure: ((NSMutableParagraphStyle) -> Void)? = nil
     ) -> [NSAttributedString.Key: Any]
 }
 ```
 
-`attributedStringAttributes(foregroundColor:alignment:)`는 font/lineHeight/letterSpacing을 `NSAttributedString.Key` 딕셔너리로 변환합니다. `UILabel`처럼 아래 `setTypography`가 있는 타입이 아니라 `UIButton.Configuration.attributedTitle` 등 attributes를 직접 다뤄야 하는 곳에서 사용합니다.
+`attributedStringAttributes(foregroundColor:alignment:paragraphStyle:)`는 font/lineHeight/letterSpacing을 `NSAttributedString.Key` 딕셔너리로 변환합니다. 아래 `setTypography`가 있는 `UILabel`, `UITextField`, `UITextView`가 아니라 `UITextField.attributedPlaceholder`, `UIButton.Configuration.attributedTitle`처럼 attributes를 직접 다뤄야 하는 곳에서 사용합니다. 세 `setTypography`도 내부적으로 이 메서드를 호출하므로 `paragraphStyle` 클로저는 한 곳에서 처리됩니다.
+
+`paragraphStyle` 클로저는 MDS가 만든 `NSMutableParagraphStyle`을 넘겨받아 `lineBreakMode` 등 문단 속성을 추가로 지정할 때 씁니다. 행간(`minimumLineHeight`, `maximumLineHeight`, `lineSpacing`, `lineHeightMultiple`)은 `lineHeight`가 정하는 값이므로 바꾸지 마세요.
 
 ## setTypography
 
@@ -28,11 +31,12 @@ public struct MDSFont: @unchecked Sendable {
 ```swift
 public func setTypography(
     _ style: MDSFont,
-    textColor: UIColor? = nil
+    textColor: UIColor? = nil,
+    paragraphStyle configure: ((NSMutableParagraphStyle) -> Void)? = nil
 )
 ```
 
-`setTypography`가 직접 적용하는 것은 MDS 토큰인 **색상**(`textColor`)과 **타이포그래피**(`MDSFont`의 폰트·자간·행간)입니다. `textColor`를 생략하면 현재 값을, alignment는 현재 `textAlignment`를 그대로 유지하므로 정렬은 `setTypography`를 부르기 전에 `textAlignment`로 설정하세요. 그 외 문단 속성은 `UILabel`에 한해 클로저로 지정합니다. `UILabel`에는 `paragraphStyle: ((NSMutableParagraphStyle) -> Void)? = nil` 클로저 파라미터가 추가로 있어, `lineBreakMode` 등 paragraph style 속성을 직접 지정할 수 있습니다. `attributedText`의 paragraph style이 `label.lineBreakMode`보다 우선하므로, 한 줄 라벨의 말줄임(`.byTruncatingTail`) 등은 `label.lineBreakMode`가 아니라 이 클로저로 지정해야 적용됩니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
+`setTypography`가 직접 적용하는 것은 MDS 토큰인 **색상**(`textColor`)과 **타이포그래피**(`MDSFont`의 폰트·자간·행간)입니다. `textColor`를 생략하면 현재 값을, alignment는 현재 `textAlignment`를 그대로 유지하므로 정렬은 `setTypography`를 부르기 전에 `textAlignment`로 설정하세요. 그 외 문단 속성은 `paragraphStyle` 클로저로 지정합니다. 클로저는 MDS가 만든 paragraph style을 넘겨받아 `lineBreakMode` 등을 추가로 지정할 때 쓰며, 행간(`minimumLineHeight`, `maximumLineHeight`, `lineSpacing`, `lineHeightMultiple`)은 `style.lineHeight`가 정하는 값이므로 바꾸지 마세요. `UILabel`은 `attributedText`의 paragraph style이 `label.lineBreakMode`보다 우선하므로, 한 줄 라벨의 말줄임(`.byTruncatingTail`) 등은 `label.lineBreakMode`가 아니라 이 클로저로 지정해야 적용됩니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
 
 | 타입 | 반영 대상 | 재호출이 필요한 시점 |
 |---|---|---|
@@ -48,7 +52,7 @@ textField.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bo
 textView.textAlignment = .left
 textView.setTypography(Typography.body1)
 
-// UILabel 전용: paragraph style 속성을 클로저로 지정
+// paragraph style 속성을 클로저로 지정 (UILabel, UITextField, UITextView 공통)
 label.setTypography(Typography.heading2) { $0.lineBreakMode = .byTruncatingTail }
 ```
 
