@@ -40,11 +40,9 @@ extension UILabel {
 
         let attributes = style.attributedStringAttributes(
             foregroundColor: resolvedColor,
-            alignment: alignment
+            alignment: alignment,
+            paragraphStyle: configure
         )
-        if let configure, let paragraphStyle = attributes[.paragraphStyle] as? NSMutableParagraphStyle {
-            configure(paragraphStyle)
-        }
 
         attributedText = NSAttributedString(string: text ?? "", attributes: attributes)
     }

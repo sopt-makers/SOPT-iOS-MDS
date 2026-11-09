@@ -12,16 +12,19 @@ public struct MDSFont: @unchecked Sendable {
     public let lineHeight: CGFloat
     public let letterSpacing: CGFloat
 
-    /// font, lineHeight, letterSpacing을 모두 반영한 NSAttributedString.Key 속성을 반환합니다.
-    /// UILabel이 아닌 곳(UIButton.Configuration.attributedTitle 등)에서 typography를 적용할 때 사용합니다.
+    /// font, lineHeight, letterSpacing을 반영한 NSAttributedString.Key 속성을 반환합니다.
+    /// `setTypography`가 없는 곳(UIButton.Configuration.attributedTitle 등)에서 사용합니다.
+    /// `paragraphStyle`로 `lineBreakMode` 등 문단 속성을 추가할 수 있습니다. (행간 속성은 바꾸지 마세요)
     public func attributedStringAttributes(
         foregroundColor: UIColor,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        paragraphStyle configure: ((NSMutableParagraphStyle) -> Void)? = nil
     ) -> [NSAttributedString.Key: Any] {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.minimumLineHeight = lineHeight
         paragraphStyle.maximumLineHeight = lineHeight
         paragraphStyle.alignment = alignment
+        configure?(paragraphStyle)
 
         return [
             .font: font,
