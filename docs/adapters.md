@@ -24,6 +24,25 @@ public struct MDSFont: @unchecked Sendable {
 
 `paragraphStyle` 클로저는 MDS가 만든 `NSMutableParagraphStyle`을 넘겨받아 `lineBreakMode` 등 문단 속성을 추가로 지정할 때 씁니다. 행간(`minimumLineHeight`, `maximumLineHeight`, `lineSpacing`, `lineHeightMultiple`)은 `lineHeight`가 정하는 값이므로 바꾸지 마세요.
 
+```swift
+// placeholder
+textField.attributedPlaceholder = NSAttributedString(
+    string: "검색어를 입력하세요",
+    attributes: Typography.body1.attributedStringAttributes(
+        foregroundColor: SemanticColor.Fg.Neutral.ghost
+    )
+)
+
+// 버튼 타이틀 + 말줄임
+var config = UIButton.Configuration.plain()
+config.attributedTitle = AttributedString(NSAttributedString(
+    string: "확인",
+    attributes: Typography.label2.attributedStringAttributes(foregroundColor: .white) {
+        $0.lineBreakMode = .byTruncatingTail
+    }
+))
+```
+
 ## setTypography
 
 `UILabel`, `UITextField`, `UITextView` 세 타입에 각각 구현되어 있으며, 공통 시그니처는 다음과 같습니다.
@@ -36,7 +55,7 @@ public func setTypography(
 )
 ```
 
-`setTypography`가 직접 적용하는 것은 MDS 토큰인 **색상**(`textColor`)과 **타이포그래피**(`MDSFont`의 폰트·자간·행간)입니다. `textColor`를 생략하면 현재 값을, alignment는 현재 `textAlignment`를 그대로 유지하므로 정렬은 `setTypography`를 부르기 전에 `textAlignment`로 설정하세요. 그 외 문단 속성은 `paragraphStyle` 클로저로 지정합니다. 클로저는 MDS가 만든 paragraph style을 넘겨받아 `lineBreakMode` 등을 추가로 지정할 때 쓰며, 행간(`minimumLineHeight`, `maximumLineHeight`, `lineSpacing`, `lineHeightMultiple`)은 `style.lineHeight`가 정하는 값이므로 바꾸지 마세요. `UILabel`은 `attributedText`의 paragraph style이 `label.lineBreakMode`보다 우선하므로, 한 줄 라벨의 말줄임(`.byTruncatingTail`) 등은 `label.lineBreakMode`가 아니라 이 클로저로 지정해야 적용됩니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
+`setTypography`가 직접 적용하는 것은 MDS 토큰인 **색상**(`textColor`)과 **타이포그래피**(`MDSFont`의 폰트·자간·행간)입니다. `textColor`를 생략하면 현재 값을, alignment는 현재 `textAlignment`를 그대로 유지하므로 정렬은 `setTypography`를 부르기 전에 `textAlignment`로 설정하세요. 그 외 문단 속성은 `paragraphStyle` 클로저로 지정합니다. 클로저는 MDS가 만든 paragraph style을 넘겨받아 `lineBreakMode` 등을 추가로 지정할 때 쓰며, 행간(`minimumLineHeight`, `maximumLineHeight`, `lineSpacing`, `lineHeightMultiple`)은 `style.lineHeight`가 정하는 값이므로 바꾸지 마세요. `UILabel`의 말줄임(`.byTruncatingTail`) 등은 `label.lineBreakMode`로도 지정할 수 있지만 호출 순서의 영향을 받으므로(아래 '말줄임 설정 순서' 참고) 순서와 상관없이 적용되는 이 클로저를 권장합니다. 내부적으로 어디에 값을 반영하는지는 타입마다 다르며, 이 차이가 재호출 시점을 결정합니다.
 
 | 타입 | 반영 대상 | 재호출이 필요한 시점 |
 |---|---|---|
@@ -51,9 +70,46 @@ label.setTypography(Typography.heading1)
 textField.setTypography(Typography.body1, textColor: SemanticColor.Fg.Neutral.bold)
 textView.textAlignment = .left
 textView.setTypography(Typography.body1)
+```
 
-// paragraph style 속성을 클로저로 지정 (UILabel, UITextField, UITextView 공통)
-label.setTypography(Typography.heading2) { $0.lineBreakMode = .byTruncatingTail }
+### `paragraphStyle` 클로저
+
+`lineBreakMode` 등 문단 속성은 클로저로 지정합니다. `UILabel`, `UITextField`, `UITextView`에 공통이며, 생략하면 기존 동작 그대로입니다.
+
+```swift
+// 한 줄 라벨 말줄임 (호출 순서와 재호출에 상관없이 적용)
+label.numberOfLines = 1
+label.setTypography(Typography.label2, textColor: SemanticColor.Fg.Neutral.bold) {
+    $0.lineBreakMode = .byTruncatingTail
+}
+
+// 한글 단어 단위 줄바꿈
+label.numberOfLines = 0
+label.setTypography(Typography.body1) { $0.lineBreakStrategy = .hangulWordPriority }
+
+// UITextView: 문단 간격
+textView.setTypography(Typography.body1) { $0.paragraphSpacing = 8 }
+```
+
+### 말줄임(`lineBreakMode`) 설정 순서
+
+`UILabel`의 `setTypography`는 `attributedText`를 통째로 새로 만들기 때문에 `label.lineBreakMode`는 호출 순서에 영향을 받습니다.
+
+- `setTypography` **전**에 설정한 값은 새 `attributedText`에 덮여서 적용되지 않습니다.
+- `setTypography` **후**에 설정하면 적용되지만, `setTypography`를 다시 호출하면(예: `text` 변경 후) 사라지므로 매번 다시 설정해야 합니다.
+- `paragraphStyle` 클로저는 순서와 재호출에 상관없이 항상 적용되므로 권장합니다.
+
+```swift
+// 적용되지 않음: setTypography가 attributedText를 새로 만들면서 덮어씀
+label.lineBreakMode = .byTruncatingTail
+label.setTypography(Typography.label2)
+
+// 적용됨: 단, setTypography를 다시 부르면 사라지므로 그때마다 다시 설정해야 함
+label.setTypography(Typography.label2)
+label.lineBreakMode = .byTruncatingTail
+
+// 권장: 순서와 재호출에 상관없이 적용됨
+label.setTypography(Typography.label2) { $0.lineBreakMode = .byTruncatingTail }
 ```
 
 ### `alignment:` 파라미터는 deprecated
