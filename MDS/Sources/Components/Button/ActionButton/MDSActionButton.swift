@@ -163,13 +163,8 @@ public final class MDSActionButton: UIControl {
 
         backgroundColor = colorToken.background
 
-        titleLabel.attributedText = NSAttributedString(
-            string: title ?? "",
-            attributes: sizeToken.typography.attributedStringAttributes(
-                foregroundColor: colorToken.foreground,
-                alignment: .center
-            )
-        )
+        titleLabel.text = title ?? ""
+        titleLabel.setTypography(sizeToken.typography, textColor: colorToken.foreground)
 
         prefixImageView.setIcon(prefixIcon, tint: prefixIconTint, tintColor: colorToken.foreground)
         suffixImageView.setIcon(suffixIcon, tint: suffixIconTint, tintColor: colorToken.foreground)

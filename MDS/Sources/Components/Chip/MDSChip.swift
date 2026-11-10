@@ -142,13 +142,8 @@ public final class MDSChip: UIControl {
         layer.borderColor = colorToken.stroke?.cgColor
         backgroundColor = colorToken.background
 
-        titleLabel.attributedText = NSAttributedString(
-            string: chipTitle ?? "",
-            attributes: chipSize.typography.attributedStringAttributes(
-                foregroundColor: colorToken.foreground,
-                alignment: .center
-            )
-        )
+        titleLabel.text = chipTitle ?? ""
+        titleLabel.setTypography(chipSize.typography, textColor: colorToken.foreground)
 
         prefixImageView.setIcon(prefixIcon, tintColor: colorToken.foreground)
         suffixImageView.setIcon(suffixIcon, tintColor: colorToken.foreground)

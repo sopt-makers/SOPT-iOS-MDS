@@ -141,10 +141,8 @@ public final class MDSFloatingButton: UIControl {
         let hasLabel = !(label?.isEmpty ?? true)
         titleLabel.isHidden = (size == .default) || !hasLabel
 
-        titleLabel.attributedText = NSAttributedString(
-            string: label ?? "",
-            attributes: sizeToken.typography.attributedStringAttributes(foregroundColor: colorToken.foreground)
-        )
+        titleLabel.text = label ?? ""
+        titleLabel.setTypography(sizeToken.typography, textColor: colorToken.foreground)
     }
 }
 
