@@ -52,20 +52,23 @@ class MenuCatalogViewController: UIViewController {
 
     // MARK: - Section
 
-    /// 제목, 설명, 예시 뷰들로 이뤄진 섹션을 화면 맨 아래에 추가한다.
-    func addSection(title: String, caption: String, rows: [UIView]) {
+    /// 제목, 설명(옵션), 예시 뷰들로 이뤄진 섹션을 화면 맨 아래에 추가한다.
+    func addSection(title: String, caption: String? = nil, rows: [UIView]) {
         let sectionTitle = UILabel()
         sectionTitle.text = title
         sectionTitle.font = .systemFont(ofSize: 13, weight: .semibold)
         sectionTitle.textColor = .secondaryLabel
 
-        let captionLabel = UILabel()
-        captionLabel.text = caption
-        captionLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        captionLabel.textColor = SemanticColor.Fg.Neutral.subtle
-        captionLabel.numberOfLines = 0
+        let captionLabel = caption.map { caption in
+            let label = UILabel()
+            label.text = caption
+            label.font = .systemFont(ofSize: 12, weight: .medium)
+            label.textColor = SemanticColor.Fg.Neutral.subtle
+            label.numberOfLines = 0
+            return label
+        }
 
-        let card = UIStackView(arrangedSubviews: [captionLabel] + rows)
+        let card = UIStackView(arrangedSubviews: [captionLabel].compactMap { $0 } + rows)
         card.axis = .vertical
         card.spacing = 16
         card.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
