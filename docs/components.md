@@ -14,6 +14,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [NavigationBar](#navigationbar)
 - [SnackBar](#snackbar)
 - [Menu](#menu)
+- [Select](#select)
 - [Tab](#tab)
 - [Tag](#tag)
 
@@ -426,6 +427,64 @@ let menu = MDSIconMenu(
 - 모바일에는 hover가 없어서 항목을 누르고 있는 동안을 Hover 상태로 표현합니다. 손가락이 항목 밖으로 벗어나거나 손을 떼면 Default로 돌아갑니다.
 - 폭은 내용에 맞춰지며 항목 하나의 최소 폭은 80입니다. 위치와 폭은 사용하는 쪽에서 제약으로 정합니다.
 - 팝오버로 띄우는 동작은 포함하지 않는 리스트 뷰입니다.
+
+---
+
+## Select
+
+탭하면 아래에 메뉴가 열리는 선택 필드입니다. 선택 방식(`type`)과 열리는 메뉴의 종류(`menuType`)를 따로 정하며, 메뉴는 [Menu](#menu)의 공개 메뉴를 그대로 사용합니다.
+
+```swift
+// 단일 선택 — 항목을 탭하면 값이 채워지고 메뉴가 바로 닫힙니다.
+let single = MDSSelect(
+    type: .single,
+    menuType: .text([
+        .init(title: "Menu 1", description: "description..."),
+        .init(title: "Menu 2", description: "description..."),
+    ]),
+    placeholder: "Placeholder"
+)
+
+// 다중 선택 — 탭할 때마다 체크가 토글되고 메뉴는 열린 채로 남습니다.
+let multiple = MDSSelect(
+    type: .multiple,
+    menuType: .checkbox([
+        .init(title: "Label 1", isChecked: true),
+        .init(title: "Label 2"),
+    ]),
+    placeholder: "Placeholder",
+    menuMaxHeight: 240
+)
+multiple.onSelectionChanged = { indices in /* ... */ }
+```
+
+| 파라미터 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `type` | `SelectType` (`.single` / `.multiple`) | `.single` | 선택 방식. Figma Select의 Type 속성입니다 |
+| `menuType` | `MenuType` | 필수 | 열리는 메뉴의 종류와 항목. 아래 표 참고 |
+| `placeholder` | `String` | 필수 | 선택된 항목이 없을 때 표시 |
+| `menuWidth` | `CGFloat?` | `nil` | 메뉴 너비. `nil`이면 글자 길이에 맞추고 메뉴별 최소 너비는 지킵니다 |
+| `menuMaxHeight` | `CGFloat?` | `nil` | 메뉴 최대 높이. 넘치면 메뉴 안에서 스크롤됩니다. `nil`이면 화면에 들어가는 만큼 늘어납니다 |
+
+| `menuType` | 항목 타입 | `.single` | `.multiple` |
+|---|---|---|---|
+| `.text(_:)` | `[MDSTextMenu.Item]` | O | O (체크마크) |
+| `.checkbox(_:)` | `[MDSCheckboxMenu.Item]` | O | O (체크박스) |
+| `.icon(_:)` | `[MDSIconMenu.Item]` | O | X |
+| `.userList(_:)` | `[MDSUserListMenu.Item]` | O | X |
+
+- Icon, UserList 메뉴는 선택 상태가 없어서 `.single`만 지원합니다. `.multiple`을 넘기면 디버그 빌드에서 `assert`로 알리고, 릴리즈 빌드에서는 `.single`로 동작합니다.
+- Text, Checkbox 항목의 `isChecked`가 처음 선택 상태가 됩니다. `.single`이면 체크된 항목 중 가장 앞의 하나만 남습니다.
+- `.single`은 메뉴에 선택 표시를 남기지 않습니다. 다시 열어도 체크가 보이지 않습니다.
+- 필드에는 선택된 항목 중 목록에서 가장 앞에 있는 항목의 제목이 표시되고, `.multiple`이면 오른쪽에 선택 개수 태그가 붙습니다.
+- `selectedIndices: Set<Int>` — 선택된 항목의 index. 코드로 바꿀 수 있으며 이때 `onSelectionChanged`는 호출되지 않습니다. 범위를 벗어난 index는 버려집니다.
+- `onSelectionChanged: ((Set<Int>) -> Void)?` — 사용자가 메뉴에서 선택을 바꾼 뒤 호출됩니다.
+- 메뉴는 window 위에 떠서 열리고, 메뉴 바깥을 탭하면 닫힙니다. 열려 있는 동안 필드는 Active 상태(테두리, 위쪽 chevron)가 됩니다.
+- 메뉴는 필드 아래 10 간격으로 열리며, 아래 공간이 모자라고 위가 더 넓으면 필드 위로 열립니다. 화면 끝에서 16 이상 떨어지도록 크기가 제한됩니다.
+- 필드 높이는 46으로 고정이고 최소 너비는 100입니다. 너비는 사용하는 쪽에서 제약으로 정합니다.
+- 디자인 가이드: 모바일에서는 아래 경우 Select 대신 바텀시트 사용을 권장합니다.
+  - 텍스트가 길어 메뉴가 가로로 화면 끝까지 늘어나거나 말줄임이 필요한 경우 (바텀시트로 전체 내용을 보여줍니다)
+  - 항목이 많아 메뉴가 세로로 길어지거나 화면을 많이 가리는 경우
 
 ---
 
