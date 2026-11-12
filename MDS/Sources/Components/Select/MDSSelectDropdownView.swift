@@ -1,5 +1,5 @@
 //
-//  MDSSelectDropdown.swift
+//  MDSSelectDropdownView.swift
 //  MDS
 //
 
@@ -109,7 +109,7 @@ final class MDSSelectDropdownView: UIView {
         overlay.addSubview(self)
         window.addSubview(overlay)
 
-        // ponytail: 띄우는 순간의 위치로 고정한다. 회전 등으로 anchor가 움직이면 메뉴는 따라가지 않는다.
+        // 띄우는 순간의 위치로 고정한다. 회전 등으로 anchor가 움직이면 메뉴는 따라가지 않는다.
         let anchorFrame = anchor.convert(anchor.bounds, to: window)
         let safeArea = window.safeAreaLayoutGuide
         let gap = BaseSpacing.Base.s10
