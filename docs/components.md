@@ -477,7 +477,7 @@ multiple.onSelectionChanged = { indices in /* ... */ }
 - Text, Checkbox 항목의 `isChecked`가 처음 선택 상태가 됩니다. `.single`이면 체크된 항목 중 가장 앞의 하나만 남습니다.
 - `.single`은 메뉴에 선택 표시를 남기지 않습니다. 다시 열어도 체크가 보이지 않습니다.
 - 필드에는 선택된 항목 중 목록에서 가장 앞에 있는 항목의 제목이 표시되고, `.multiple`이면 오른쪽에 선택 개수 태그가 붙습니다.
-- `selectedIndices: Set<Int>` — 선택된 항목의 index. 코드로 바꿀 수 있으며 이때 `onSelectionChanged`는 호출되지 않습니다. 범위를 벗어난 index는 버려집니다.
+- `selectedIndices: Set<Int>` — 선택된 항목의 index. 코드로 바꿀 수 있으며 이때 `onSelectionChanged`는 호출되지 않습니다. 범위를 벗어난 index는 버려집니다. 다중 선택 메뉴가 열려 있으면 메뉴의 체크도 함께 바뀌므로, `onSelectionChanged` 안에서 선택 개수를 제한하는 식으로 써도 됩니다.
 - `onSelectionChanged: ((Set<Int>) -> Void)?` — 사용자가 메뉴에서 선택을 바꾼 뒤 호출됩니다.
 - 메뉴는 window 위에 떠서 열리고, 메뉴 바깥을 탭하면 닫힙니다. 열려 있는 동안 필드는 Active 상태(테두리, 위쪽 chevron)가 됩니다.
 - 메뉴는 필드 아래 10 간격으로 열리며, 아래 공간이 모자라고 위가 더 넓으면 필드 위로 열립니다. 오른쪽 화면 끝을 넘으면 넘는 만큼 왼쪽으로 당겨서 열리고, 화면 끝에서 16 이상 떨어지도록 크기가 제한됩니다.

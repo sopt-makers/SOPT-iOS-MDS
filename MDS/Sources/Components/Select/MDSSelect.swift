@@ -20,6 +20,7 @@ public final class MDSSelect: UIControl {
         didSet {
             let normalized = normalize(selectedIndices)
             if normalized != selectedIndices { selectedIndices = normalized }
+            syncMenuChecks()
             updateAppearance()
         }
     }
@@ -32,6 +33,9 @@ public final class MDSSelect: UIControl {
     private let menuMaxHeight: CGFloat?
 
     private var dropdown: MDSSelectDropdownView?
+
+    /// 열려 있는 다중 선택 메뉴의 체크를 바꾸는 함수. 메뉴가 닫혀 있거나 단일 선택이면 `nil`이다.
+    private var setMenuChecked: ((Bool, Int) -> Void)?
 
     private var isOpen: Bool { dropdown != nil }
 
@@ -184,7 +188,7 @@ public final class MDSSelect: UIControl {
 
     // MARK: - Action
 
-    /// 열 때마다 현재 선택 상태로 메뉴를 새로 만든다. 그래서 메뉴와 `selectedIndices`를 따로 맞출 필요가 없다.
+    /// 열 때마다 현재 선택 상태로 메뉴를 새로 만든다. 열려 있는 동안의 변경은 `syncMenuChecks()`가 맞춘다.
     private func openMenu() {
         // window가 없으면 띄우지 못하므로 열린 상태로 남지 않게 막는다.
         guard !isOpen, window != nil else { return }
@@ -192,6 +196,7 @@ public final class MDSSelect: UIControl {
         let dropdown = MDSSelectDropdownView(menu: makeMenu(), width: menuWidth, maxHeight: menuMaxHeight)
         dropdown.onDismiss = { [weak self] in
             self?.dropdown = nil
+            self?.setMenuChecked = nil
             self?.updateAppearance()
         }
 
@@ -210,7 +215,7 @@ public final class MDSSelect: UIControl {
             dropdown?.dismiss()
             guard isChanged else { return }
         case .multiple:
-            // 메뉴가 체크를 토글한 것과 같게 맞춘다.
+            // 선택 상태의 기준은 `selectedIndices` 하나다. 메뉴가 스스로 토글한 체크는 `didSet`의 동기화로 덮어쓴다.
             selectedIndices.formSymmetricDifference([index])
         }
         onSelectionChanged?(selectedIndices)
@@ -218,7 +223,8 @@ public final class MDSSelect: UIControl {
 
     // MARK: - Menu
 
-    /// 메뉴 종류에 맞는 공개 메뉴를 만든다. Text, Checkbox는 현재 선택 상태로 체크를 다시 정한다.
+    /// 메뉴 종류에 맞는 공개 메뉴를 만든다. Text, Checkbox는 현재 선택 상태로 체크를 다시 정하고,
+    /// 다중 선택이면 열려 있는 동안 체크를 맞출 수 있도록 `setMenuChecked`를 연결한다.
     private func makeMenu() -> UIView {
         let onSelect: (Int) -> Void = { [weak self] index in
             self?.menuItemTapped(index)
@@ -226,14 +232,25 @@ public final class MDSSelect: UIControl {
 
         switch menuType {
         case .text(let items):
-            return MDSTextMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            let menu = MDSTextMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            setMenuChecked = type == .multiple ? { [weak menu] in menu?.setChecked($0, at: $1) } : nil
+            return menu
         case .checkbox(let items):
-            return MDSCheckboxMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            let menu = MDSCheckboxMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            setMenuChecked = type == .multiple ? { [weak menu] in menu?.setChecked($0, at: $1) } : nil
+            return menu
         case .icon(let items):
             return MDSIconMenu(items: items, onSelect: onSelect)
         case .userList(let items):
             return MDSUserListMenu(items: items, onSelect: onSelect)
         }
+    }
+
+    /// 열려 있는 메뉴의 체크를 `selectedIndices`와 같게 맞춘다.
+    /// 탭으로 바뀐 경우와 코드로 바뀐 경우(예: `onSelectionChanged`에서 개수 제한) 모두 여기서 맞춘다.
+    private func syncMenuChecks() {
+        guard let setMenuChecked else { return }
+        titles.indices.forEach { setMenuChecked(selectedIndices.contains($0), $0) }
     }
 
     /// 단일 선택은 메뉴에 선택 표시를 남기지 않고, 다중 선택은 `selectedIndices`만 체크한다.
