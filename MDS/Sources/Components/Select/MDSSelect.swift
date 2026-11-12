@@ -130,6 +130,14 @@ public final class MDSSelect: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        // 메뉴가 열린 채로 화면에서 빠지면 window에 올린 overlay가 남아 다음 화면의 터치를 막는다.
+        if window == nil { dropdown?.dismiss() }
+    }
+
     // MARK: - Setup
 
     private func setupLayout() {
@@ -198,7 +206,8 @@ public final class MDSSelect: UIControl {
 
     /// 열 때마다 현재 선택 상태로 메뉴를 새로 만든다. 그래서 메뉴와 `selectedIndices`를 따로 맞출 필요가 없다.
     private func openMenu() {
-        guard !isOpen else { return }
+        // window가 없으면 띄우지 못하므로 열린 상태로 남지 않게 막는다.
+        guard !isOpen, window != nil else { return }
 
         let dropdown = MDSSelectDropdownView(menu: makeMenu(), width: menuWidth, maxHeight: menuMaxHeight)
         dropdown.onDismiss = { [weak self] in

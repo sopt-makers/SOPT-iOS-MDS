@@ -16,6 +16,7 @@ final class MDSSelectDropdownView: UIView {
     var onDismiss: (() -> Void)?
 
     private let menu: UIView
+    private let width: CGFloat?
     private let maxHeight: CGFloat?
     private var overlay: UIView?
 
@@ -35,6 +36,7 @@ final class MDSSelectDropdownView: UIView {
     ///   - maxHeight: 메뉴 최대 높이. `nil`이면 화면에 들어가는 만큼 늘어난다.
     init(menu: UIView, width: CGFloat?, maxHeight: CGFloat?) {
         self.menu = menu
+        self.width = width
         self.maxHeight = maxHeight
         super.init(frame: .zero)
         setupLayout(menu: menu, width: width, maxHeight: maxHeight)
@@ -73,7 +75,10 @@ final class MDSSelectDropdownView: UIView {
         ])
 
         if let width {
-            widthAnchor.constraint(equalToConstant: width).isActive = true
+            // 화면보다 넓게 지정되면 화면 여백 제약이 이기도록 필수보다 낮춘다.
+            let fixedWidth = widthAnchor.constraint(equalToConstant: width)
+            fixedWidth.priority = .defaultHigh
+            fixedWidth.isActive = true
         } else {
             // 글자 길이에 맞추도록 가능한 한 좁게 당긴다. 글자는 이 제약보다 우선해서 줄어들지 않는다.
             let fitWidth = widthAnchor.constraint(equalToConstant: 0)
@@ -114,10 +119,8 @@ final class MDSSelectDropdownView: UIView {
         let safeFrame = window.bounds.inset(by: window.safeAreaInsets)
         let spaceBelow = safeFrame.maxY - margin - (anchorFrame.maxY + gap)
         let spaceAbove = (anchorFrame.minY - gap) - (safeFrame.minY + margin)
-        let menuHeight = min(
-            menu.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height,
-            maxHeight ?? .greatestFiniteMagnitude
-        )
+        let fittingSize = menu.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        let menuHeight = min(fittingSize.height, maxHeight ?? .greatestFiniteMagnitude)
         let opensUpward = menuHeight > spaceBelow && spaceAbove > spaceBelow
 
         let verticalConstraints = opensUpward ? [
@@ -128,8 +131,15 @@ final class MDSSelectDropdownView: UIView {
             bottomAnchor.constraint(lessThanOrEqualTo: safeArea.bottomAnchor, constant: -margin),
         ]
 
+        // 기본은 anchor 왼쪽 끝에 맞추고, 오른쪽 화면 끝을 넘으면 넘는 만큼 왼쪽으로 당긴다.
+        // 화면보다 넓으면 왼쪽 여백에 붙이고 너비는 오른쪽 여백 제약으로 줄어든다.
+        let menuWidth = width ?? fittingSize.width
+        let minX = safeFrame.minX + margin
+        let maxX = safeFrame.maxX - margin - menuWidth
+        let originX = max(min(anchorFrame.minX, maxX), minX)
+
         NSLayoutConstraint.activate(verticalConstraints + [
-            leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: anchorFrame.minX),
+            leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: originX),
             trailingAnchor.constraint(lessThanOrEqualTo: safeArea.trailingAnchor, constant: -margin),
         ])
 
