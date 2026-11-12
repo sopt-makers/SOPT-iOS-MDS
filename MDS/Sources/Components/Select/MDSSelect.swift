@@ -204,8 +204,11 @@ public final class MDSSelect: UIControl {
         switch type {
         case .single:
             // 메뉴 자체에는 선택 상태가 없다. 값을 채우고 바로 닫는다.
+            // 이미 선택된 항목을 다시 탭하면 값이 바뀌지 않으므로 콜백은 호출하지 않는다.
+            let isChanged = selectedIndices != [index]
             selectedIndices = [index]
             dropdown?.dismiss()
+            guard isChanged else { return }
         case .multiple:
             // 메뉴가 체크를 토글한 것과 같게 맞춘다.
             selectedIndices.formSymmetricDifference([index])
