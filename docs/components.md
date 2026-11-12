@@ -432,26 +432,24 @@ let menu = MDSIconMenu(
 
 ## Select
 
-탭하면 아래에 메뉴가 열리는 선택 필드입니다. 선택 방식(`type`)과 열리는 메뉴의 종류(`menuType`)를 따로 정하며, 메뉴는 [Menu](#menu)의 공개 메뉴를 그대로 사용합니다.
+탭하면 아래에 메뉴가 열리는 선택 필드입니다. `type`으로 선택 방식과 열리는 메뉴를 함께 정하며, 메뉴는 [Menu](#menu)의 공개 메뉴를 그대로 사용합니다.
 
 ```swift
 // 단일 선택 — 항목을 탭하면 값이 채워지고 메뉴가 바로 닫힙니다.
 let single = MDSSelect(
-    type: .single,
-    menuType: .text([
+    type: .single(.text([
         .init(title: "Menu 1", description: "description..."),
         .init(title: "Menu 2", description: "description..."),
-    ]),
+    ])),
     placeholder: "Placeholder"
 )
 
 // 다중 선택 — 탭할 때마다 체크가 토글되고 메뉴는 열린 채로 남습니다.
 let multiple = MDSSelect(
-    type: .multiple,
-    menuType: .checkbox([
+    type: .multiple(.checkbox([
         .init(title: "Label 1", isChecked: true),
         .init(title: "Label 2"),
-    ]),
+    ])),
     placeholder: "Placeholder",
     menuMaxHeight: 240
 )
@@ -460,20 +458,20 @@ multiple.onSelectionChanged = { indices in /* ... */ }
 
 | 파라미터 | 타입 | 기본값 | 설명 |
 |---|---|---|---|
-| `type` | `SelectType` (`.single` / `.multiple`) | `.single` | 선택 방식. Figma Select의 Type 속성입니다 |
-| `menuType` | `MenuType` | 필수 | 열리는 메뉴의 종류와 항목. 아래 표 참고 |
+| `type` | `SelectType` | 필수 | 선택 방식과 열리는 메뉴. Figma Select의 Type 속성입니다. 아래 표 참고 |
 | `placeholder` | `String` | 필수 | 선택된 항목이 없을 때 표시 |
 | `menuWidth` | `CGFloat?` | `nil` | 메뉴 너비. `nil`이면 글자 길이에 맞추고 메뉴별 최소 너비는 지킵니다 |
 | `menuMaxHeight` | `CGFloat?` | `nil` | 메뉴 최대 높이. 넘치면 메뉴 안에서 스크롤됩니다. `nil`이면 화면에 들어가는 만큼 늘어납니다 |
 
-| `menuType` | 항목 타입 | `.single` | `.multiple` |
-|---|---|---|---|
-| `.text(_:)` | `[MDSTextMenu.Item]` | O | O (체크마크) |
-| `.checkbox(_:)` | `[MDSCheckboxMenu.Item]` | O | O (체크박스) |
-| `.icon(_:)` | `[MDSIconMenu.Item]` | O | X |
-| `.userList(_:)` | `[MDSUserListMenu.Item]` | O | X |
+| `type` | 메뉴 (`SingleMenu` / `MultipleMenu`) | 항목 타입 |
+|---|---|---|
+| `.single(_:)` | `.text(_:)` | `[MDSTextMenu.Item]` |
+| | `.icon(_:)` | `[MDSIconMenu.Item]` |
+| | `.userList(_:)` | `[MDSUserListMenu.Item]` |
+| `.multiple(_:)` | `.text(_:)` (체크마크) | `[MDSTextMenu.Item]` |
+| | `.checkbox(_:)` (체크박스) | `[MDSCheckboxMenu.Item]` |
 
-- Icon, UserList 메뉴는 선택 상태가 없어서 `.single`만 지원합니다. `.multiple`을 넘기면 디버그 빌드에서 `assert`로 알리고, 릴리즈 빌드에서는 `.single`로 동작합니다.
+- 선택 방식마다 쓸 수 있는 메뉴만 받으므로, 다중 선택 + Icon/UserList 메뉴처럼 지원하지 않는 조합은 컴파일 단계에서 막힙니다.
 - Text, Checkbox 항목의 `isChecked`가 처음 선택 상태가 됩니다. `.single`이면 체크된 항목 중 가장 앞의 하나만 남습니다.
 - `.single`은 메뉴에 선택 표시를 남기지 않습니다. 다시 열어도 체크가 보이지 않습니다.
 - 필드에는 선택된 항목 중 목록에서 가장 앞에 있는 항목의 제목이 표시되고, `.multiple`이면 오른쪽에 선택 개수 태그가 붙습니다.

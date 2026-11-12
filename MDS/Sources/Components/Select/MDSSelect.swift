@@ -26,7 +26,7 @@ public final class MDSSelect: UIControl {
     }
 
     private let type: SelectType
-    private let menuType: MenuType
+    private let isMultiple: Bool
     private let placeholder: String
     private let titles: [String]
     private let menuWidth: CGFloat?
@@ -77,30 +77,25 @@ public final class MDSSelect: UIControl {
     // MARK: - Init
 
     /// - Parameters:
-    ///   - type: 선택 방식. `.icon`, `.userList` 메뉴는 `.single`만 쓸 수 있다.
-    ///   - menuType: 열리는 메뉴의 종류와 항목. Text, Checkbox 항목의 `isChecked`가 처음 선택 상태가 된다.
+    ///   - type: 선택 방식과 열리는 메뉴. Text, Checkbox 항목의 `isChecked`가 처음 선택 상태가 된다.
     ///   - menuWidth: 메뉴 너비. `nil`이면 글자 길이에 맞춘다(최소 너비는 지킨다).
     ///   - menuMaxHeight: 메뉴 최대 높이. 넘치면 메뉴 안에서 스크롤된다. `nil`이면 화면에 들어가는 만큼 늘어난다.
     public init(
-        type: SelectType = .single,
-        menuType: MenuType,
+        type: SelectType,
         placeholder: String,
         menuWidth: CGFloat? = nil,
         menuMaxHeight: CGFloat? = nil
     ) {
-        // Icon, UserList 메뉴는 선택 상태가 없어서 다중 선택을 표시할 수 없다.
-        assert(type == .single || menuType.supportsMultiple, "\(menuType) 메뉴는 .single만 지원합니다.")
-        
-        self.type = menuType.supportsMultiple ? type : .single
-        self.menuType = menuType
+        self.type = type
+        if case .multiple = type { self.isMultiple = true } else { self.isMultiple = false }
         self.placeholder = placeholder
-        self.titles = menuType.titles
+        self.titles = type.titles
         self.menuWidth = menuWidth
         self.menuMaxHeight = menuMaxHeight
         super.init(frame: .zero)
         
         // init 안에서는 didSet이 불리지 않아서 직접 정리한다.
-        selectedIndices = normalize(menuType.checkedIndices)
+        selectedIndices = normalize(type.checkedIndices)
         setupLayout()
         updateAppearance()
 
@@ -157,7 +152,7 @@ public final class MDSSelect: UIControl {
     /// 범위를 벗어난 index는 버리고, `.single`이면 가장 앞의 하나만 남긴다.
     private func normalize(_ indices: Set<Int>) -> Set<Int> {
         let valid = indices.filter { titles.indices.contains($0) }
-        guard type == .single else { return valid }
+        guard !isMultiple else { return valid }
         return valid.min().map { [$0] } ?? []
     }
 
@@ -173,7 +168,7 @@ public final class MDSSelect: UIControl {
             textColor: title == nil ? SemanticColor.Fg.Neutral.subtle : SemanticColor.Fg.Neutral.bold
         )
 
-        countTag.isHidden = type == .single || selectedIndices.isEmpty
+        countTag.isHidden = !isMultiple || selectedIndices.isEmpty
         countTag.text = "\(selectedIndices.count)"
 
         layer.borderWidth = isOpen ? LayoutToken.activeBorderWidth : 0
@@ -183,7 +178,7 @@ public final class MDSSelect: UIControl {
         )
 
         accessibilityLabel = title ?? placeholder
-        accessibilityValue = type == .multiple && !selectedIndices.isEmpty ? "\(selectedIndices.count)" : nil
+        accessibilityValue = isMultiple && !selectedIndices.isEmpty ? "\(selectedIndices.count)" : nil
     }
 
     // MARK: - Action
@@ -206,17 +201,16 @@ public final class MDSSelect: UIControl {
     }
 
     private func menuItemTapped(_ index: Int) {
-        switch type {
-        case .single:
+        if isMultiple {
+            // 선택 상태의 기준은 `selectedIndices` 하나다. 메뉴가 스스로 토글한 체크는 `didSet`의 동기화로 덮어쓴다.
+            selectedIndices.formSymmetricDifference([index])
+        } else {
             // 메뉴 자체에는 선택 상태가 없다. 값을 채우고 바로 닫는다.
             // 이미 선택된 항목을 다시 탭하면 값이 바뀌지 않으므로 콜백은 호출하지 않는다.
             let isChanged = selectedIndices != [index]
             selectedIndices = [index]
             dropdown?.dismiss()
             guard isChanged else { return }
-        case .multiple:
-            // 선택 상태의 기준은 `selectedIndices` 하나다. 메뉴가 스스로 토글한 체크는 `didSet`의 동기화로 덮어쓴다.
-            selectedIndices.formSymmetricDifference([index])
         }
         onSelectionChanged?(selectedIndices)
     }
@@ -230,19 +224,21 @@ public final class MDSSelect: UIControl {
             self?.menuItemTapped(index)
         }
 
-        switch menuType {
-        case .text(let items):
-            let menu = MDSTextMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
-            setMenuChecked = type == .multiple ? { [weak menu] in menu?.setChecked($0, at: $1) } : nil
-            return menu
-        case .checkbox(let items):
-            let menu = MDSCheckboxMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
-            setMenuChecked = type == .multiple ? { [weak menu] in menu?.setChecked($0, at: $1) } : nil
-            return menu
-        case .icon(let items):
+        switch type {
+        case .single(.text(let items)):
+            return MDSTextMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+        case .single(.icon(let items)):
             return MDSIconMenu(items: items, onSelect: onSelect)
-        case .userList(let items):
+        case .single(.userList(let items)):
             return MDSUserListMenu(items: items, onSelect: onSelect)
+        case .multiple(.text(let items)):
+            let menu = MDSTextMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            setMenuChecked = { [weak menu] in menu?.setChecked($0, at: $1) }
+            return menu
+        case .multiple(.checkbox(let items)):
+            let menu = MDSCheckboxMenu(items: applyingSelection(to: items, isChecked: \.isChecked), onSelect: onSelect)
+            setMenuChecked = { [weak menu] in menu?.setChecked($0, at: $1) }
+            return menu
         }
     }
 
@@ -261,38 +257,31 @@ public final class MDSSelect: UIControl {
     private func applyingSelection<Item>(to items: [Item], isChecked: WritableKeyPath<Item, Bool>) -> [Item] {
         items.enumerated().map { index, item in
             var item = item
-            item[keyPath: isChecked] = type == .multiple && selectedIndices.contains(index)
+            item[keyPath: isChecked] = isMultiple && selectedIndices.contains(index)
             return item
         }
     }
 }
 
-// MARK: - Menu Type
+// MARK: - Select Type
 
-private extension MDSSelect.MenuType {
-    /// 선택 상태(체크)를 표시할 수 있는 메뉴인지. Icon, UserList는 선택 상태가 없다.
-    var supportsMultiple: Bool {
-        switch self {
-        case .text, .checkbox: true
-        case .icon, .userList: false
-        }
-    }
+private extension MDSSelect.SelectType {
 
     var titles: [String] {
         switch self {
-        case .text(let items): items.map(\.title)
-        case .checkbox(let items): items.map(\.title)
-        case .icon(let items): items.map(\.title)
-        case .userList(let items): items.map(\.title)
+        case .single(.text(let items)), .multiple(.text(let items)): items.map(\.title)
+        case .single(.icon(let items)): items.map(\.title)
+        case .single(.userList(let items)): items.map(\.title)
+        case .multiple(.checkbox(let items)): items.map(\.title)
         }
     }
 
     /// 처음 선택 상태. Icon, UserList 항목에는 선택 상태가 없다.
     var checkedIndices: Set<Int> {
         let isChecked: [Bool] = switch self {
-        case .text(let items): items.map(\.isChecked)
-        case .checkbox(let items): items.map(\.isChecked)
-        case .icon, .userList: []
+        case .single(.text(let items)), .multiple(.text(let items)): items.map(\.isChecked)
+        case .multiple(.checkbox(let items)): items.map(\.isChecked)
+        case .single(.icon), .single(.userList): []
         }
         return Set(isChecked.indices.filter { isChecked[$0] })
     }
