@@ -131,12 +131,15 @@ final class MDSSelectDropdownView: UIView {
             bottomAnchor.constraint(lessThanOrEqualTo: safeArea.bottomAnchor, constant: -margin),
         ]
 
-        // 기본은 anchor 왼쪽 끝에 맞추고, 오른쪽 화면 끝을 넘으면 넘는 만큼 왼쪽으로 당긴다.
+        // 기본은 anchor 왼쪽 끝에 맞추고, 오른쪽 화면 공간이 부족하면 anchor 오른쪽 끝에 맞춘다.
+        // 오른쪽 정렬로도 화면을 넘으면 최소 여백을 지키도록 보정한다.
         // 화면보다 넓으면 왼쪽 여백에 붙이고 너비는 오른쪽 여백 제약으로 줄어든다.
         let menuWidth = width ?? fittingSize.width
         let minX = safeFrame.minX + margin
         let maxX = safeFrame.maxX - margin - menuWidth
-        let originX = max(min(anchorFrame.minX, maxX), minX)
+        let fitsLeftAligned = anchorFrame.minX <= maxX
+        let preferredX = fitsLeftAligned ? anchorFrame.minX : anchorFrame.maxX - menuWidth
+        let originX = max(min(preferredX, maxX), minX)
 
         NSLayoutConstraint.activate(verticalConstraints + [
             leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: originX),
