@@ -23,6 +23,13 @@ final class MDSIconMenuItem: MDSMenuItemControl {
         return view
     }()
 
+    /// 제목 한 줄 높이의 영역. 아이콘이 설명까지 포함한 두 줄 전체가 아니라 제목 줄의 가운데에 놓이게 한다.
+    private let iconContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private let textStackView: MDSMenuTextStackView
 
     // MARK: - Init
@@ -37,7 +44,11 @@ final class MDSIconMenuItem: MDSMenuItemControl {
     // MARK: - Setup
 
     private func setupContent() {
-        contentStackView.addArrangedSubview(iconImageView)
+        // 아이콘과 제목은 제목 줄 기준으로 위쪽에 맞춘다.
+        contentStackView.alignment = .top
+
+        iconContainerView.addSubview(iconImageView)
+        contentStackView.addArrangedSubview(iconContainerView)
         contentStackView.addArrangedSubview(textStackView)
 
         // 아이콘이 숨겨지면 UIStackView가 너비 0 제약을 추가하므로 충돌하지 않도록 우선순위를 낮춘다.
@@ -47,6 +58,12 @@ final class MDSIconMenuItem: MDSMenuItemControl {
         NSLayoutConstraint.activate([
             iconWidthConstraint,
             iconImageView.heightAnchor.constraint(equalToConstant: LayoutToken.iconSize),
+
+            iconContainerView.heightAnchor.constraint(equalToConstant: MDSMenuTextStackView.titleLineHeight),
+            iconContainerView.widthAnchor.constraint(equalTo: iconImageView.widthAnchor),
+
+            iconImageView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: iconContainerView.centerYAnchor),
         ])
 
         updateIcon()
@@ -56,6 +73,7 @@ final class MDSIconMenuItem: MDSMenuItemControl {
 
     private func updateIcon() {
         iconImageView.setIcon(icon, tintColor: SemanticColor.Fg.Neutral.bold)
+        iconContainerView.isHidden = icon == nil
     }
 }
 
