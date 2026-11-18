@@ -166,7 +166,9 @@ public final class MDSSelect: UIControl {
         titleLabel.setTypography(
             Typography.label2,
             textColor: title == nil ? SemanticColor.Fg.Neutral.subtle : SemanticColor.Fg.Neutral.bold
-        )
+        ) {
+            $0.lineBreakMode = .byTruncatingTail
+        }
 
         countTag.isHidden = !isMultiple || selectedIndices.isEmpty
         countTag.text = "\(selectedIndices.count)"
