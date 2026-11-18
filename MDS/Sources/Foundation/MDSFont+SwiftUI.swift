@@ -8,7 +8,6 @@
 import SwiftUI
 
 public extension MDSFont {
-    var swiftUIFont: Font { Font(font) }
     var lineSpacing: CGFloat { max(lineHeight - font.lineHeight, 0) }
 }
 
@@ -27,7 +26,7 @@ private struct MDSTypographyModifier: ViewModifier {
 }
 
 public extension View {
-    func setTypography(_ style: MDSFont) -> some View {
+    func typography(_ style: MDSFont) -> some View {
         modifier(MDSTypographyModifier(style: style))
     }
 }
