@@ -63,10 +63,12 @@ private struct BaseTypographyRow: View {
     
     @ViewBuilder
     private var preview: some View {
+        let fontSize: CGFloat = 17
+        
         switch category {
         case "weight":
             Text(sample)
-                .font(.system(size: 17, weight: weight))
+                .font(.system(size: fontSize, weight: weight))
 
         case "size":
             Text(sample)
@@ -81,7 +83,6 @@ private struct BaseTypographyRow: View {
                 .padding(.top, extra)
 
         case "letterSpacing":
-            let fontSize: CGFloat = 17
             Text(sample)
                 .font(.system(size: fontSize))
                 .kerning(fontSize * (entry.value / 100))

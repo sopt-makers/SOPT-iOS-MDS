@@ -41,7 +41,7 @@ private struct TypographyTokenRow: View {
                 .foregroundStyle(.secondary)
 
             Text(sample)
-                .setTypography(item.mdsFont)
+                .typography(item.mdsFont)
                 .padding(.top, 4)
 
             Text(props)
