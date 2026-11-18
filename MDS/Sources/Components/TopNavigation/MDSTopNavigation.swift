@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class MDSNavigationBar: UIView {
+public final class MDSTopNavigation: UIView {
 
     // MARK: - Properties
 

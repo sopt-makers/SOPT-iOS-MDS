@@ -20,7 +20,7 @@ final class ComponentCategoryViewController: UIViewController {
         case snackBar = "SnackBar"
         case menu = "Menu"
         case select = "Select"
-        case navigationBar = "NavigationBar"
+        case topNavigation = "TopNavigation"
     }
 
 
@@ -99,8 +99,8 @@ extension ComponentCategoryViewController: UITableViewDataSource, UITableViewDel
             navigationController?.pushViewController(MenuCategoryViewController(), animated: true)
         case .select:
             navigationController?.pushViewController(SelectCategoryViewController(), animated: true)
-        case .navigationBar:
-            navigationController?.pushViewController(NavigationBarViewController(), animated: true)
+        case .topNavigation:
+            navigationController?.pushViewController(TopNavigationViewController(), animated: true)
         }
     }
 }

@@ -1,12 +1,12 @@
 //
-//  NavigationBarViewController.swift
+//  TopNavigationViewController.swift
 //  MDSStoryBook
 //
 
 import UIKit
 import MDS
 
-final class NavigationBarViewController: UIViewController {
+final class TopNavigationViewController: UIViewController {
 
     // MARK: - State (Figma Component properties)
 
@@ -16,7 +16,7 @@ final class NavigationBarViewController: UIViewController {
 
     // MARK: - Subviews
 
-    private let navigationBar = MDSNavigationBar(
+    private let navigationBar = MDSTopNavigation(
         leftIcon: true,
         title: .title("Title"),
         rightIcons: [.heartOutlined, .heartOutlined, .heartOutlined],
@@ -43,7 +43,7 @@ final class NavigationBarViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "NavigationBar"
+        title = "TopNavigation"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupContent()
@@ -114,7 +114,7 @@ final class NavigationBarViewController: UIViewController {
 
         let usageButton = MDSActionButton(variant: .secondary, size: .medium, title: "실제 사용 예시 보기")
         usageButton.addAction(UIAction { [weak self] _ in
-            self?.navigationController?.pushViewController(NavigationBarUsageHomeViewController(), animated: true)
+            self?.navigationController?.pushViewController(TopNavigationUsageHomeViewController(), animated: true)
         }, for: .touchUpInside)
         contentStack.addArrangedSubview(usageButton)
     }
