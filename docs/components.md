@@ -11,7 +11,7 @@ MDS가 제공하는 UIKit 컴포넌트의 공개 API와 사용법을 정리합�
 - [Callout](#callout)
 - [Chip](#chip)
 - [Dialog](#dialog)
-- [NavigationBar](#navigationbar)
+- [TopNavigation](#topnavigation)
 - [SnackBar](#snackbar)
 - [Menu](#menu)
 - [Select](#select)
@@ -274,20 +274,20 @@ dialog.onCheckBoxChanged = { isSelected in /* ... */ }
 
 ---
 
-## NavigationBar
+## TopNavigation
 
 화면 최상단에서 현재 위치를 알려주고, 뒤로가기와 주요 액션을 제공합니다. 파라미터는 Figma `TopNavigation (Mobile)`의 Component properties와 1:1로 대응합니다.
 
 ```swift
-let navigationBar = MDSNavigationBar(
+let topNavigation = MDSTopNavigation(
     leftIcon: true,
     title: .title("Title"),
     rightIcons: [.heartOutlined, .heartOutlined, .heartOutlined],
     rightButton: .textButton("text button")
 )
-navigationBar.onLeftIconTap = { /* 뒤로가기 */ }
-navigationBar.onRightIconTap = { index in /* rightIcons[index] */ }
-navigationBar.onRightButtonTap = { /* ... */ }
+topNavigation.onLeftIconTap = { /* 뒤로가기 */ }
+topNavigation.onRightIconTap = { index in /* rightIcons[index] */ }
+topNavigation.onRightButtonTap = { /* ... */ }
 ```
 
 | 파라미터 | Figma | 타입 | 기본값 | 설명 |
@@ -310,25 +310,25 @@ navigationBar.onRightButtonTap = { /* ... */ }
 
 > **사용처에서 직접 설정해야 합니다.** MDS는 바 UI와 탭 콜백만 제공합니다. `import MDS`만으로는 화면 부착, 뒤로가기, 시스템 바 숨김, 스와이프 뒤로가기가 처리되지 않으며, 아래 코드는 모두 앱에 작성하는 예시입니다.
 
-`MDSNavigationBar`는 `UIView`이므로 시스템 바 대신 화면에 subview로 붙입니다. 뒤로가기는 자동으로 연결되지 않으니 `onLeftIconTap`에 직접 지정하세요.
+`MDSTopNavigation`은 `UIView`이므로 시스템 바 대신 화면에 subview로 붙입니다. 뒤로가기는 자동으로 연결되지 않으니 `onLeftIconTap`에 직접 지정하세요.
 
 ```swift
 final class DetailViewController: UIViewController {
-    private let navigationBar = MDSNavigationBar(title: .title("상세"))
+    private let topNavigation = MDSTopNavigation(title: .title("상세"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = SemanticColor.Bg.Layer.basement // 상태바 영역 색을 바와 맞춥니다.
 
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(navigationBar)
+        topNavigation.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(topNavigation)
         NSLayoutConstraint.activate([
-            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topNavigation.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            topNavigation.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topNavigation.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        navigationBar.onLeftIconTap = { [weak self] in
+        topNavigation.onLeftIconTap = { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }
     }
@@ -353,12 +353,12 @@ final class AppNavigationController: UINavigationController, UIGestureRecognizer
 
 시스템 바 숨김은 스택 구성에 맞춰 아래 두 방식 중 하나만 사용하세요.
 
-**스택의 모든 화면이 `MDSNavigationBar`를 쓰는 경우**: 위 클래스를 그대로 사용합니다. 전역으로 숨겨지므로 VC별 숨김 코드는 넣지 마세요. `setNavigationBarHidden(false, ...)`를 호출하면 시스템 바가 다시 표시되어, 전역 숨김에 의존하는 다음 화면에 바가 나타납니다.
+**스택의 모든 화면이 `MDSTopNavigation`을 쓰는 경우**: 위 클래스를 그대로 사용합니다. 전역으로 숨겨지므로 VC별 숨김 코드는 넣지 마세요. `setNavigationBarHidden(false, ...)`를 호출하면 시스템 바가 다시 표시되어, 전역 숨김에 의존하는 다음 화면에 바가 나타납니다.
 
 **시스템 바를 쓰는 화면이 같은 스택에 섞여 있는 경우**: 위 클래스에서 `setNavigationBarHidden(true, animated: false)` 줄을 빼세요. 그대로 쓰면 그 화면들의 시스템 바도 사라집니다. 대신 각 화면의 `viewWillAppear`에서 그 화면에 맞게 바 상태를 설정합니다.
 
 ```swift
-// MDSNavigationBar를 쓰는 화면
+// MDSTopNavigation을 쓰는 화면
 override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.setNavigationBarHidden(true, animated: animated)

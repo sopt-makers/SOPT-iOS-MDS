@@ -1,5 +1,5 @@
 //
-//  MDSNavigationBar.swift
+//  MDSTopNavigation.swift
 //  MDS
 //
 //  Created by 최주리 on 11/3/26.
