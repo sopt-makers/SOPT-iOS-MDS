@@ -15,7 +15,7 @@ final class SingleSelectViewController: MenuCatalogViewController {
     }
 
     private func setupSections() {
-        let textItems = (1...5).map { MDSTextMenu.Item(title: "Menu \($0)", description: "description...") }
+        let textItems = (1...5).map { MDSTextMenu.Item(title: "Menu \($0)", description: "description.. longlonglong") }
         let text = MDSSelect(type: .single(.text(textItems)), placeholder: "Placeholder")
         let textLabel = Self.makeSelectionLabel(text: "선택: 없음")
         bindSelection(text, to: textLabel, titles: textItems.map(\.title))

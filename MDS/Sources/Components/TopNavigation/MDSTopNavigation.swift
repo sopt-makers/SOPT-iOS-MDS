@@ -1,5 +1,5 @@
 //
-//  MDSNavigationBar.swift
+//  MDSTopNavigation.swift
 //  MDS
 //
 //  Created by 최주리 on 11/3/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class MDSNavigationBar: UIView {
+public final class MDSTopNavigation: UIView {
 
     // MARK: - Properties
 

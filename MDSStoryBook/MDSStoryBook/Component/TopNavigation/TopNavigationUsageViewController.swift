@@ -1,19 +1,19 @@
 //
-//  NavigationBarUsageViewController.swift
+//  TopNavigationUsageHomeViewController.swift
 //  MDSStoryBook
 //
 
 import UIKit
 import MDS
 
-/// 일반 VC처럼 push로 진입하는 예시입니다. 각 화면이 시스템 바를 숨기고 `MDSNavigationBar`를 subview로 직접 가집니다.
+/// 일반 VC처럼 push로 진입하는 예시입니다. 각 화면이 시스템 바를 숨기고 `MDSTopNavigation`를 subview로 직접 가집니다.
 
 /// 목록 화면: 뒤로가기 + 로고
-final class NavigationBarUsageHomeViewController: UIViewController {
+final class TopNavigationUsageHomeViewController: UIViewController {
 
     private let posts = (1...5).map { "게시글 \($0)" }
 
-    private let navigationBar = MDSNavigationBar(title: .logo)
+    private let navigationBar = MDSTopNavigation(title: .logo)
 
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -61,7 +61,7 @@ final class NavigationBarUsageHomeViewController: UIViewController {
     }
 }
 
-extension NavigationBarUsageHomeViewController: UITableViewDataSource, UITableViewDelegate {
+extension TopNavigationUsageHomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         posts.count
     }
@@ -76,16 +76,16 @@ extension NavigationBarUsageHomeViewController: UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let detail = NavigationBarUsageDetailViewController(postTitle: posts[indexPath.row])
+        let detail = TopNavigationUsageDetailViewController(postTitle: posts[indexPath.row])
         navigationController?.pushViewController(detail, animated: true)
     }
 }
 
 /// 하위 화면: 뒤로가기 + 타이틀 + 우측 액션
-final class NavigationBarUsageDetailViewController: UIViewController {
+final class TopNavigationUsageDetailViewController: UIViewController {
 
     private let postTitle: String
-    private let navigationBar: MDSNavigationBar
+    private let navigationBar: MDSTopNavigation
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -102,7 +102,7 @@ final class NavigationBarUsageDetailViewController: UIViewController {
 
     init(postTitle: String) {
         self.postTitle = postTitle
-        self.navigationBar = MDSNavigationBar(
+        self.navigationBar = MDSTopNavigation(
             title: .title(postTitle),
             rightIcons: [.heartOutlined],
             rightButton: .actionButton("완료")
