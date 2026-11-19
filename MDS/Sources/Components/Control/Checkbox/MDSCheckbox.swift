@@ -159,9 +159,10 @@ public final class MDSCheckbox: UIControl {
     }
 }
 
-// MARK: - Color Token
+// MARK: - Size Token
 
-private extension MDSCheckbox {
+/// `MDSCheckboxMenuItem`이 체크박스 크기를 사용하도록 internal로 관리
+extension MDSCheckbox {
     struct SizeToken {
         let iconSize: CGFloat
         let boxSize: CGFloat
@@ -188,7 +189,11 @@ private extension MDSCheckbox {
             }
         }
     }
-    
+}
+
+// MARK: - Color Token
+
+private extension MDSCheckbox {
     struct ColorToken {
         let backgroundColor: UIColor
         let borderColor: UIColor
