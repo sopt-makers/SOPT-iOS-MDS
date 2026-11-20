@@ -19,7 +19,7 @@ final class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "MDS Catalog"
+        navigationItem.title = "MDS Catalog"
         view.backgroundColor = .systemGroupedBackground
         setupLayout()
         setupTableView()
