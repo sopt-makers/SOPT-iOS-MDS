@@ -36,6 +36,14 @@ public final class MDSCheckbox: UIControl {
         return stackView
     }()
 
+    /// 박스보다 한 단계 큰 바깥 영역. 레이아웃 크기와 터치 영역을 맡고, 박스는 이 안에서 가운데에 놓인다.
+    private let boxContainerView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private let boxView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = BaseRadius.Base.r4
@@ -86,8 +94,9 @@ public final class MDSCheckbox: UIControl {
 
     private func setupHierarchy() {
         addSubview(contentStackView)
-        contentStackView.addArrangedSubview(boxView)
+        contentStackView.addArrangedSubview(boxContainerView)
         contentStackView.addArrangedSubview(titleLabel)
+        boxContainerView.addSubview(boxView)
         boxView.addSubview(checkImageView)
     }
 
@@ -102,6 +111,11 @@ public final class MDSCheckbox: UIControl {
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
+            boxContainerView.widthAnchor.constraint(equalToConstant: sizeToken.containerSize),
+            boxContainerView.heightAnchor.constraint(equalToConstant: sizeToken.containerSize),
+
+            boxView.centerXAnchor.constraint(equalTo: boxContainerView.centerXAnchor),
+            boxView.centerYAnchor.constraint(equalTo: boxContainerView.centerYAnchor),
             boxView.widthAnchor.constraint(equalToConstant: sizeToken.boxSize),
             boxView.heightAnchor.constraint(equalToConstant: sizeToken.boxSize),
 
@@ -145,13 +159,17 @@ public final class MDSCheckbox: UIControl {
     }
 }
 
-// MARK: - Color Token
+// MARK: - Size Token
 
-private extension MDSCheckbox {
+/// `MDSCheckboxMenuItem`이 체크박스 크기를 사용하도록 internal로 관리
+extension MDSCheckbox {
     struct SizeToken {
         let iconSize: CGFloat
         let boxSize: CGFloat
+        /// 박스를 감싸는 바깥 영역(레이아웃 + 터치 영역) 크기
+        let containerSize: CGFloat
         let font: MDSFont
+        /// 바깥 영역과 제목 사이 가로 간격
         let padding: CGFloat
 
         init(size: Size) {
@@ -159,17 +177,23 @@ private extension MDSCheckbox {
             case .small:
                 iconSize = 12
                 boxSize = 16
+                containerSize = 20
                 font = Typography.label3
-                padding = BaseSpacing.Base.s6
+                padding = BaseSpacing.Base.s4
             case .large:
                 iconSize = 14
                 boxSize = 20
+                containerSize = 24
                 font = Typography.label2
-                padding = BaseSpacing.Base.s10
+                padding = BaseSpacing.Base.s8
             }
         }
     }
-    
+}
+
+// MARK: - Color Token
+
+private extension MDSCheckbox {
     struct ColorToken {
         let backgroundColor: UIColor
         let borderColor: UIColor

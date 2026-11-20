@@ -19,7 +19,7 @@ final class MDSCheckboxMenuItem: MDSMenuItemControl {
 
     private let checkbox: MDSCheckbox = {
         // 제목은 MDSMenuTextStackView가 보여주므로 박스만 그린다.
-        let checkbox = MDSCheckbox(size: .large)
+        let checkbox = MDSCheckbox(size: LayoutToken.checkboxSizeType)
         // 터치는 행 전체가 받고, 체크 토글은 컨테이너가 처리한다.
         checkbox.isUserInteractionEnabled = false
         return checkbox
@@ -30,13 +30,20 @@ final class MDSCheckboxMenuItem: MDSMenuItemControl {
     // MARK: - Init
 
     init(title: String, description: String? = nil, isChecked: Bool) {
-        self.textStackView = MDSMenuTextStackView(title: title, description: description)
+        // 체크박스(24)가 제목(22)보다 크므로 제목 줄 높이를 체크박스에 맞춘다. 설명은 그 아래에서 시작한다.
+        self.textStackView = MDSMenuTextStackView(
+            title: title,
+            description: description,
+            titleMinHeight: LayoutToken.checkboxSize.containerSize
+        )
         super.init(
             spacing: LayoutToken.contentSpacing,
             insets: LayoutToken.contentInsets,
             minWidth: nil,
             minHeight: LayoutToken.minHeight
         )
+        // 체크박스와 제목은 제목 줄 기준으로 위쪽에 맞춘다.
+        contentStackView.alignment = .top
         contentStackView.addArrangedSubview(checkbox)
         contentStackView.addArrangedSubview(textStackView)
         isSelected = isChecked
@@ -49,11 +56,12 @@ private extension MDSCheckboxMenuItem {
 
     enum LayoutToken {
         static let minHeight: CGFloat = 40
-        // 체크박스(20)와 텍스트 사이 간격. MDSCheckbox(large)의 박스-라벨 간격과 같다.
-        static let contentSpacing = BaseSpacing.Base.s10
+        static var checkboxSizeType: MDSCheckbox.Size { .large }
+        static let checkboxSize = MDSCheckbox.SizeToken(size: checkboxSizeType)
+        static let contentSpacing = checkboxSize.padding
         static let contentInsets = UIEdgeInsets(
             top: BaseSpacing.Base.s8,
-            left: BaseSpacing.Base.s10,
+            left: BaseSpacing.Base.s8,
             bottom: BaseSpacing.Base.s8,
             right: BaseSpacing.Base.s12
         )
