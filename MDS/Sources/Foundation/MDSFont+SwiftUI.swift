@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension MDSFont {
+private extension MDSFont {
     var lineSpacing: CGFloat { max(lineHeight - font.lineHeight, 0) }
 }
 
