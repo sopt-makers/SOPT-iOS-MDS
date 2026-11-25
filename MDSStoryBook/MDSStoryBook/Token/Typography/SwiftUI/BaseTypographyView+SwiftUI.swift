@@ -13,8 +13,7 @@ struct BaseTypographyView: View {
     
     var body: some View {
         List {
-            ForEach(groups.indices, id: \.self) { index in
-                let group = groups[index]
+            ForEach(groups, id: \.categoryName) { group in
                 Section {
                     ForEach(group.entries, id: \.name) { entry in
                         BaseTypographyRow(entry: entry, category: group.categoryName)
@@ -80,7 +79,7 @@ private struct BaseTypographyRow: View {
             Text("다람쥐 헌 쳇바퀴에\n타고파")
                 .font(.system(size: 14))
                 .lineSpacing(extra)
-                .padding(.top, extra)
+                .padding(.vertical, extra / 2)
 
         case "letterSpacing":
             Text(sample)
