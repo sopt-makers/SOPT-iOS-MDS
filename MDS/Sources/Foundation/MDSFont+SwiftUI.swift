@@ -25,7 +25,14 @@ private struct MDSTypographyModifier: ViewModifier {
     }
 }
 
-public extension View {
+public protocol MDSTypographyStylable: View {}
+
+extension Text: MDSTypographyStylable {}
+extension TextField: MDSTypographyStylable {}
+extension SecureField: MDSTypographyStylable {}
+extension TextEditor: MDSTypographyStylable {}
+
+public extension MDSTypographyStylable {
     func typography(_ style: MDSFont) -> some View {
         modifier(MDSTypographyModifier(style: style))
     }
