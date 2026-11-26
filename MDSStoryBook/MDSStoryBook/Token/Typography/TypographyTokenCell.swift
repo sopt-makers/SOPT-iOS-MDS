@@ -84,20 +84,6 @@ final class TypographyTokenCell: UITableViewCell {
         let mdsFont = item.mdsFont
         previewLabel.font = mdsFont.font
 
-        // letterSpacing을 % 로 역산
-        let letterSpacingPercent = mdsFont.font.pointSize > 0
-            ? mdsFont.letterSpacing / mdsFont.font.pointSize * 100
-            : 0
-        let weightName = (mdsFont.font.fontDescriptor.object(forKey: .face) as? String)
-            ?? mdsFont.font.fontName.components(separatedBy: "-").last
-            ?? ""
-
-        propsLabel.text = String(
-            format: "size: %.0fpx   weight: %@   lineHeight: %.0fpx\nletterSpacing: %.1f%%",
-            mdsFont.font.pointSize,
-            weightName,
-            mdsFont.lineHeight,
-            letterSpacingPercent
-        )
+        propsLabel.text = mdsFont.catalogDescription
     }
 }
